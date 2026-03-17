@@ -1,0 +1,368 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+:root {
+    --azul-profundo: #0f4c81;
+    --azul-medio: #1e88e5;
+    --verde-primario: #26a69a;
+    --verde-claro: #80cbc4;
+    --gris-fondo: #ffffff;
+    --texto: #000000;
+    --rojo: #ef5350;
+--amarillo: #ffb804;
+    /* Extended palette */
+    --azul-oscuro: #0a3560;
+    --azul-claro-bg: #e8f2fc;
+    --verde-bg: #e0f5f3;
+    --verde-oscuro: #1a7a70;
+    --gris-borde: #d0dde8;
+    --gris-suave: #f4f8fc;
+    --gris-texto: #4a5568;
+    --gris-fila: #f9fbfd;
+    --sombra: rgba(15, 76, 129, 0.12);
+    --sombra-hover: rgba(15, 76, 129, 0.22);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--gris-suave);
+    color: var(--texto);
+}
+
+/* ─── Container ─────────────────────────────────────── */
+.teachers-list-container {
+    max-width: 960px;
+    margin: 2.5rem auto;
+    padding: 0 1.25rem 3rem;
+    animation: fadeUp 0.5s ease both;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Header ─────────────────────────────────────────── */
+.list-header {
+    position: relative;
+    padding: 2.5rem 2.5rem 2rem;
+    background: linear-gradient(135deg, var(--azul-profundo) 0%, var(--azul-medio) 100%);
+    border-radius: 18px 18px 0 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.list-header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    pointer-events: none;
+}
+
+.list-header::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: 60px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(38, 166, 154, 0.18);
+    pointer-events: none;
+}
+
+.list-header h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ─── New teacher button ─────────────────────────────── */
+.btn-new {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.65rem 1.5rem;
+    border-radius: 10px;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--verde-primario) 0%, var(--verde-oscuro) 100%);
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s, filter 0.2s;
+    box-shadow: 0 4px 14px rgba(38, 166, 154, 0.35);
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+.btn-new:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(38, 166, 154, 0.42);
+    filter: brightness(1.07);
+}
+
+.btn-new:active {
+    transform: translateY(0);
+}
+
+/* ─── Success message ────────────────────────────────── */
+.success-message {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1.25rem;
+    background: var(--verde-bg);
+    border-left: 4px solid var(--verde-primario);
+    color: var(--verde-oscuro);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.message-icon {
+    font-size: 1.1rem;
+}
+
+/* ─── Table card ─────────────────────────────────────── */
+.table-card {
+    background: var(--gris-fondo);
+    border-radius: 0 0 18px 18px;
+    box-shadow: 0 8px 32px var(--sombra);
+    overflow: hidden;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    padding: 1.75rem 2rem 2rem;
+}
+
+/* ─── Table ──────────────────────────────────────────── */
+.teachers-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+}
+
+.teachers-table thead tr {
+    background: var(--azul-claro-bg);
+    border-bottom: 2px solid var(--verde-claro);
+}
+
+.teachers-table th {
+    font-family: 'Sora', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--azul-profundo);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.85rem 1rem;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.teachers-table th.center,
+.teachers-table td.center {
+    text-align: center;
+}
+
+.teachers-table tbody tr {
+    border-bottom: 1px solid var(--gris-borde);
+    transition: background 0.18s;
+}
+
+.teachers-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.teachers-table tbody tr:hover {
+    background: var(--gris-fila);
+}
+
+.teachers-table td {
+    padding: 0.85rem 1rem;
+    color: var(--gris-texto);
+    vertical-align: middle;
+}
+
+.td-num {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    color: var(--azul-medio);
+    font-size: 0.82rem;
+    width: 50px;
+}
+
+.td-name {
+    font-weight: 500;
+    color: var(--texto);
+}
+
+.td-email {
+    color: var(--gris-texto);
+    font-size: 0.88rem;
+}
+
+/* ─── Empty state ────────────────────────────────────── */
+.empty-state {
+    text-align: center;
+    padding: 3.5rem 1rem;
+    color: #a0aec0;
+}
+
+.empty-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.empty-state p {
+    font-size: 0.95rem;
+    font-style: italic;
+}
+
+/* ─── Action buttons ─────────────────────────────────── */
+.actions-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.btn-view {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.42rem 0.95rem;
+    border-radius: 8px;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #fffffc;
+    background: linear-gradient(135deg, var(--amarillo) 0%, var(--amarillo) 100%);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s, filter 0.2s;
+    box-shadow: 0 3px 10px rgba(229, 166, 30, 0.28);
+    white-space: nowrap;
+}
+
+.btn-view:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(231, 231, 14, 0.36);
+    filter: brightness(1.08);
+}
+.btn-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.42rem 0.95rem;
+    border-radius: 8px;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--azul-medio) 0%, var(--azul-profundo) 100%);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s, filter 0.2s;
+    box-shadow: 0 3px 10px rgba(30, 136, 229, 0.28);
+    white-space: nowrap;
+}
+
+.btn-edit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(30, 136, 229, 0.36);
+    filter: brightness(1.08);
+}
+
+.btn-delete {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.42rem 0.95rem;
+    border-radius: 8px;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--rojo) 0%, #c62828 100%);
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s, filter 0.2s;
+    box-shadow: 0 3px 10px rgba(239, 83, 80, 0.28);
+    white-space: nowrap;
+}
+
+.btn-delete:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(239, 83, 80, 0.36);
+    filter: brightness(1.08);
+}
+
+.btn-delete:active,
+.btn-edit:active {
+    transform: translateY(0);
+}
+
+/* Inline form reset */
+.delete-form {
+    display: inline-flex;
+}
+
+/* ─── Responsive ─────────────────────────────────────── */
+@media (max-width: 640px) {
+    .list-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.75rem 1.25rem 1.5rem;
+    }
+
+    .list-header h1 {
+        font-size: 1.35rem;
+    }
+
+    .btn-new {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .table-wrapper {
+        padding: 1rem;
+    }
+
+    .teachers-table th,
+    .teachers-table td {
+        padding: 0.7rem 0.6rem;
+    }
+
+    .actions-cell {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-edit,
+    .btn-delete,
+    .delete-form {
+        width: 100%;
+        justify-content: center;
+    }
+}

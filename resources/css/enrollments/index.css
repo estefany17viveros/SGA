@@ -1,0 +1,375 @@
+/* ===================================== */
+/* ========== VARIABLES ================ */
+/* ===================================== */
+
+:root {
+    --azul-profundo: #0f4c81;
+    --azul-medio: #1e88e5;
+    --azul-claro: #e3f2fd;
+    --verde-primario: #26a69a;
+    --verde-claro: #80cbc4;
+    --verde-muy-claro: #e0f2f1;
+    --gris-oscuro: #263238;
+    --gris-claro: #f5f7fa;
+    --blanco: #ffffff;
+    --texto: #263238;
+    --rojo: #ef5350;
+    --rojo-claro: #ffebee;
+    --naranja: #fb8c00;
+    --naranja-claro: #fff3e0;
+    --info: #0288d1;
+    --info-claro: #e1f5fe;
+    /* Status colors */
+    --status-matriculado-bg: #e3f2fd;
+    --status-matriculado-color: #1565c0;
+    --status-aprobado-bg: #e0f2f1;
+    --status-aprobado-color: #00695c;
+    --status-reprobado-bg: #ffebee;
+    --status-reprobado-color: #c62828;
+    --status-retirado-bg: #f3e5f5;
+    --status-retirado-color: #6a1b9a;
+}
+
+/* ===================================== */
+/* ========== CONTAINER ================ */
+/* ===================================== */
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    animation: fadeInUp 0.5s ease;
+}
+
+/* ===================================== */
+/* ========== PAGE TITLE =============== */
+/* ===================================== */
+
+.container h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--azul-profundo);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.container h2::before {
+    content: '🎓';
+    font-size: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background: var(--azul-claro);
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+/* ===================================== */
+/* ========== TOOLBAR ================== */
+/* ===================================== */
+
+.btn-primary.mb-3 {
+    display: inline-flex;
+    margin-bottom: 18px;
+}
+
+/* ===================================== */
+/* ========== FILTER FORM ============== */
+/* ===================================== */
+
+form.mb-3 {
+    background: var(--blanco);
+    border-radius: 10px;
+    padding: 14px 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+form.mb-3::before {
+    content: '🔍';
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+form.mb-3 select.form-control {
+    max-width: 280px;
+}
+
+/* ===================================== */
+/* ========== TABLE WRAPPER ============ */
+/* ===================================== */
+
+.table-wrapper {
+    background: var(--blanco);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    animation: slideIn 0.4s ease;
+}
+
+/* ===================================== */
+/* ========== TABLE ==================== */
+/* ===================================== */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.table.table-bordered thead {
+    background: linear-gradient(135deg, var(--azul-medio), var(--azul-profundo));
+}
+
+.table thead th {
+    padding: 15px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: white;
+    border: none;
+    white-space: nowrap;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.15s ease;
+}
+
+.table tbody tr:last-child { border-bottom: none; }
+
+.table tbody tr:nth-child(even) { background: var(--gris-claro); }
+
+.table tbody tr:hover { background: var(--azul-claro) !important; }
+
+.table td {
+    padding: 13px 16px;
+    vertical-align: middle;
+    color: var(--texto);
+    border: none;
+}
+
+/* ===================================== */
+/* ========== STATUS SELECT IN TABLE === */
+/* ===================================== */
+
+.table td form select.form-control {
+    padding: 6px 32px 6px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%23263238' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    transition: all 0.2s ease;
+    min-width: 130px;
+}
+
+/* Status colors dinámicos — se aplican via JS o con option:checked patterns */
+.table td form select.form-control:has(option[value="matriculado"]:checked) {
+    background-color: var(--status-matriculado-bg);
+    color: var(--status-matriculado-color);
+}
+
+.table td form select.form-control:has(option[value="aprobado"]:checked) {
+    background-color: var(--status-aprobado-bg);
+    color: var(--status-aprobado-color);
+}
+
+.table td form select.form-control:has(option[value="reprobado"]:checked) {
+    background-color: var(--status-reprobado-bg);
+    color: var(--status-reprobado-color);
+}
+
+.table td form select.form-control:has(option[value="retirado"]:checked) {
+    background-color: var(--status-retirado-bg);
+    color: var(--status-retirado-color);
+}
+
+/* Fallback general */
+.table td form select.form-control {
+    background-color: var(--status-matriculado-bg);
+    color: var(--status-matriculado-color);
+}
+
+/* ===================================== */
+/* ========== EMPTY STATE ============== */
+/* ===================================== */
+
+.table td[colspan] {
+    text-align: center;
+    color: #9e9e9e;
+    font-size: 15px;
+    padding: 40px 20px;
+}
+
+/* ===================================== */
+/* ========== FORM ELEMENTS ============ */
+/* ===================================== */
+
+.form-control {
+    width: 100%;
+    padding: 11px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: #fafafa;
+    box-sizing: border-box;
+    color: var(--texto);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--verde-primario);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(38, 166, 154, 0.1);
+}
+
+select.form-control {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23263238' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+    background-color: #fafafa;
+}
+
+/* ===================================== */
+/* ========== BUTTONS ================== */
+/* ===================================== */
+
+.btn {
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+}
+
+.btn:active { transform: scale(0.96); }
+
+.btn-primary {
+    padding: 10px 20px;
+    font-size: 14px;
+    background: linear-gradient(135deg, var(--azul-medio), var(--azul-profundo));
+    color: white;
+    box-shadow: 0 3px 8px rgba(30, 136, 229, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--azul-profundo), #084298);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(30, 136, 229, 0.4);
+}
+
+.btn-sm.btn-info {
+    background: var(--info-claro);
+    color: var(--info);
+}
+.btn-sm.btn-info:hover { background: #b3e5fc; transform: translateY(-1px); }
+
+.btn-sm.btn-warning {
+    background: var(--naranja-claro);
+    color: var(--naranja);
+}
+.btn-sm.btn-warning:hover { background: #ffe0b2; transform: translateY(-1px); }
+
+.btn-sm.btn-danger {
+    background: var(--rojo-claro);
+    color: var(--rojo);
+}
+.btn-sm.btn-danger:hover { background: #ffcdd2; transform: translateY(-1px); }
+
+form[style*="display:inline"],
+form[style*="display: inline"] {
+    display: inline !important;
+}
+
+/* ===================================== */
+/* ========== ANIMATIONS =============== */
+/* ===================================== */
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ===================================== */
+/* ========== RESPONSIVE =============== */
+/* ===================================== */
+
+@media (max-width: 900px) {
+    .container { padding: 20px 15px; }
+    .container h2 { font-size: 22px; }
+
+    .table thead { display: none; }
+
+    .table tbody tr {
+        display: block;
+        margin-bottom: 14px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        border: 1px solid #e0e0e0;
+        overflow: hidden;
+        background: white !important;
+    }
+
+    .table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 11px 16px;
+        border-bottom: 1px solid #f5f5f5;
+        font-size: 14px;
+    }
+
+    .table td:last-child { border-bottom: none; }
+
+    .table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--azul-profundo);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
+    form.mb-3 { flex-direction: column; align-items: stretch; }
+    form.mb-3 select.form-control { max-width: 100%; }
+
+    .btn-primary { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 480px) {
+    .container h2 { font-size: 19px; }
+    .btn { padding: 6px 10px; font-size: 12px; }
+}

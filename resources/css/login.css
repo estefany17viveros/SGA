@@ -1,0 +1,82 @@
+/* ====== FONDO LOGIN ====== */
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1e3a8a, #2563eb, #22c55e);
+    background-size: 300% 300%;
+    animation: gradientMove 10s ease infinite;
+}
+
+/* Animación sutil */
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ====== CARD ====== */
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 40px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+/* ====== INPUTS ====== */
+.login-card input[type="email"],
+.login-card input[type="password"] {
+    border-radius: 12px;
+    border: 1px solid #d1d5db;
+    padding: 10px 14px;
+    transition: all 0.3s ease;
+}
+
+.login-card input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    outline: none;
+}
+
+/* ====== BOTÓN ====== */
+.login-card button {
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #2563eb, #22c55e);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.login-card button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+}
+
+/* ====== LINK ====== */
+.login-card a {
+    color: #2563eb;
+    transition: 0.3s;
+}
+
+.login-card a:hover {
+    color: #1e40af;
+}
+
+/* ====== DARK MODE ====== */
+@media (prefers-color-scheme: dark) {
+    .login-card {
+        background: rgba(30, 41, 59, 0.95);
+        color: white;
+    }
+
+    .login-card input {
+        background: #1e293b;
+        border: 1px solid #334155;
+        color: white;
+    }
+}

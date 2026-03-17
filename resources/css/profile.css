@@ -1,0 +1,256 @@
+
+/* ===================================== */
+/* ========== VARIABLES ================= */
+/* ===================================== */
+
+:root {
+    --azul-profundo: #0f4c81;
+    --azul-medio: #1e88e5;
+    --verde-primario: #26a69a;
+    --verde-claro: #80cbc4;
+    --gris-fondo: #ffffff;
+    --texto: #000000;
+    --rojo: #ef5350;
+}
+
+/* ===================================== */
+/* ========== BODY & LAYOUT ============ */
+/* ===================================== */
+/* ===================================== */
+/* ========== CENTRADO GENERAL ========= */
+/* ===================================== */
+
+.app-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-card {
+    width: 200%;
+    max-width: 2000px;
+}
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--gris-fondo);
+    color: var(--texto);
+}
+
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--gris-fondo);
+}
+
+/* ===================================== */
+/* ========== HEADER =================== */
+/* ===================================== */
+
+.app-header {
+    text-align: center;
+    padding: 50px 0;
+    background: rgb(255, 255, 255);
+    border-radius: 12px;
+    margin: 20px 0;
+    box-shadow: 0 8px 12px rgba(39, 119, 224, 0.453);
+}
+
+.app-header h2 {
+    font-size: 50px;
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: 1px;
+    margin: 0 0 0 650px; /* mueve hacia la derecha */
+    text-align: left;
+    background: linear-gradient(135deg, var(--azul-medio), var(--verde-primario));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.app-header h2::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 7px;
+   margin: 0 0 0 50px; /* mueve hacia la derecha */
+    border-radius: 4px;
+    background: linear-gradient(135deg, var(--azul-medio), var(--verde-primario));
+}
+
+
+
+/* ===================================== */
+/* ========== LAYOUT =================== */
+/* ===================================== */
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--gris-fondo);
+    color: var(--texto);
+}
+
+.app-main {
+    display: flex;
+    justify-content: center;
+}
+
+.profile-card {
+    width: 100%;
+    max-width: 850px;
+}
+
+
+/* ===================================== */
+/* ========== PROFILE CARDS ============ */
+/* ===================================== */
+
+.profile-card {
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.profile-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+.profile-card header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--azul-profundo);
+    margin-bottom: 6px;
+}
+
+.profile-card header p {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+/* ===================================== */
+/* ========== INPUTS =================== */
+/* ===================================== */
+
+.profile-card input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    background-color: #f9fafb;
+    font-size: 14px;
+    transition: all 0.25s ease;
+}
+
+.profile-card input:focus {
+    outline: none;
+    border-color: var(--verde-primario);
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(38, 166, 154, 0.15);
+}
+
+/* ===================================== */
+/* ========== BOTONES ================== */
+/* ===================================== */
+
+.profile-card button {
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+/* Guardar */
+.profile-card .x-primary-button {
+    background: linear-gradient(135deg, var(--azul-medio), var(--verde-primario)) !important;
+    color: white !important;
+}
+
+.profile-card .x-primary-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(38, 166, 154, 0.35);
+}
+
+/* Cancelar */
+.profile-card .x-secondary-button {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+}
+
+/* ===================================== */
+/* ========== DANGER CARD ============== */
+/* ===================================== */
+
+.danger-card {
+    border: 1px solid #fecaca;
+    background: #fff5f5;
+}
+
+.danger-card header h2 {
+    color: var(--rojo);
+}
+
+.danger-card .x-danger-button {
+    background: linear-gradient(135deg, #ef5350, #e53935) !important;
+    color: white !important;
+}
+
+.danger-card .x-danger-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(239, 83, 80, 0.35);
+}
+
+/* ===================================== */
+/* ========== MODAL ==================== */
+/* ===================================== */
+
+[x-modal] {
+    backdrop-filter: blur(6px);
+}
+
+[x-modal] .bg-white {
+    border-radius: 18px;
+}
+
+/* ===================================== */
+/* ========== ANIMACIÓN ================= */
+/* ===================================== */
+
+.profile-card {
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===================================== */
+/* ========== RESPONSIVE =============== */
+/* ===================================== */
+
+@media (max-width: 768px) {
+
+    .profile-card {
+        padding: 25px 18px;
+    }
+
+    .app-header h2 {
+        font-size: 28px;
+    }
+
+    .profile-card button {
+        width: 100%;
+    }
+}

@@ -1,0 +1,369 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+:root {
+    --azul-profundo: #0f4c81;
+    --azul-medio: #1e88e5;
+    --verde-primario: #26a69a;
+    --verde-claro: #80cbc4;
+    --gris-fondo: #ffffff;
+    --texto: #000000;
+    --rojo: #ef5350;
+
+    --azul-oscuro: #0a3560;
+    --azul-claro-bg: #e8f2fc;
+    --verde-bg: #e0f5f3;
+    --verde-oscuro: #1a7a70;
+    --gris-borde: #d0dde8;
+    --gris-suave: #f4f8fc;
+    --gris-texto: #4a5568;
+    --gris-fila: #f9fbfd;
+    --sombra: rgba(15, 76, 129, 0.12);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--gris-suave);
+    color: var(--texto);
+}
+
+/* ─── Container ─────────────────────────────────────── */
+.container {
+    max-width: 900px;
+    margin: 2.5rem auto;
+    padding: 0 1.25rem 3rem;
+    animation: fadeUp 0.5s ease both;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Header ─────────────────────────────────────────── */
+.container h2 {
+    position: relative;
+    padding: 2.5rem 2.5rem 2rem;
+    background: linear-gradient(135deg, var(--azul-profundo) 0%, var(--azul-medio) 100%);
+    border-radius: 18px 18px 0 0;
+    overflow: hidden;
+    font-family: 'Sora', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.container h2::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    pointer-events: none;
+}
+
+.container h2::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: 60px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(38, 166, 154, 0.18);
+    pointer-events: none;
+}
+
+/* ─── Success alert ──────────────────────────────────── */
+.alert.alert-success {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1.5rem;
+    background: var(--verde-bg);
+    border-left: 4px solid var(--verde-primario);
+    color: var(--verde-oscuro);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 0;
+}
+
+/* ─── Create button ──────────────────────────────────── */
+.container > div[style] {
+    background: var(--gris-fondo);
+    padding: 1.25rem 2rem 0;
+    margin: 0;
+}
+
+.btn.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.65rem 1.5rem;
+    border-radius: 10px;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--verde-primario) 0%, var(--verde-oscuro) 100%);
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s, filter 0.2s;
+    box-shadow: 0 4px 14px rgba(38, 166, 154, 0.32);
+    white-space: nowrap;
+}
+
+.btn.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(38, 166, 154, 0.42);
+    filter: brightness(1.07);
+}
+
+.btn.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* ─── Table card ─────────────────────────────────────── */
+.container > table {
+    display: none; /* hide native table, re-rendered below */
+}
+
+/* We style the <table> that is a direct child of .container */
+.container table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    background: var(--gris-fondo);
+    border-radius: 0 0 18px 18px;
+    box-shadow: 0 8px 32px var(--sombra);
+    overflow: hidden;
+}
+
+/* Remove native border attribute */
+.container table[border] {
+    border: none;
+}
+
+/* ─── Table wrapper (simulate padding) ──────────────── */
+.container > div[style],
+.container table {
+    background: var(--gris-fondo);
+}
+
+/* Wrap everything in the white card: alert + div + table share bg */
+.container h2 ~ * {
+    background: var(--gris-fondo);
+}
+
+/* ─── thead ──────────────────────────────────────────── */
+.container table thead tr {
+    background: var(--azul-claro-bg);
+    border-bottom: 2px solid var(--verde-claro);
+}
+
+.container table th {
+    font-family: 'Sora', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--azul-profundo);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.9rem 1.25rem;
+    text-align: left;
+    white-space: nowrap;
+    border: none;
+}
+
+/* ─── tbody ──────────────────────────────────────────── */
+.container table tbody tr {
+    border-bottom: 1px solid var(--gris-borde);
+    transition: background 0.18s;
+}
+
+.container table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.container table tbody tr:hover {
+    background: var(--gris-fila);
+}
+
+.container table td {
+    padding: 0.9rem 1.25rem;
+    color: var(--gris-texto);
+    vertical-align: middle;
+    border: none;
+    font-size: 0.9rem;
+}
+
+/* Year column */
+.container table td:first-child {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    color: var(--azul-profundo);
+    font-size: 1rem;
+}
+
+/* Periods column */
+.container table td:nth-child(3) {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    color: var(--azul-medio);
+    text-align: center;
+}
+
+/* ─── Status badges ──────────────────────────────────── */
+.container table td span[style*="green"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    background: var(--verde-bg);
+    color: var(--verde-oscuro) !important;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.container table td span[style*="red"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    background: rgba(239, 83, 80, 0.08);
+    color: #c62828 !important;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+/* ─── Action links ───────────────────────────────────── */
+.container table td a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.42rem 0.95rem;
+    border-radius: 8px;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--azul-medio) 0%, var(--azul-profundo) 100%);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s, filter 0.2s;
+    box-shadow: 0 3px 10px rgba(30, 136, 229, 0.28);
+    white-space: nowrap;
+}
+
+.container table td a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(30, 136, 229, 0.36);
+    filter: brightness(1.08);
+}
+
+.container table td a:active {
+    transform: translateY(0);
+}
+
+/* ─── Empty state ────────────────────────────────────── */
+.container > p {
+    background: var(--gris-fondo);
+    border-radius: 0 0 18px 18px;
+    box-shadow: 0 8px 32px var(--sombra);
+    padding: 3.5rem 1rem;
+    text-align: center;
+    color: #a0aec0;
+    font-size: 0.95rem;
+    font-style: italic;
+    margin: 0;
+}
+
+/* ─── Card padding ───────────────────────────────────── */
+.container > div[style] {
+    padding: 1.5rem 2rem 1.25rem;
+}
+
+.container table {
+    margin: 0;
+}
+
+.container table thead tr th:first-child {
+    padding-left: 2rem;
+}
+
+.container table td:first-child {
+    padding-left: 2rem;
+}
+
+.container table thead tr th:last-child,
+.container table td:last-child {
+    padding-right: 2rem;
+}
+
+/* Bottom radius on last row */
+.container table tbody tr:last-child td:first-child {
+    border-radius: 0 0 0 18px;
+}
+
+.container table tbody tr:last-child td:last-child {
+    border-radius: 0 0 18px 0;
+}
+
+/* ─── Responsive ─────────────────────────────────────── */
+@media (max-width: 640px) {
+    .container h2 {
+        padding: 1.75rem 1.25rem 1.5rem;
+        font-size: 1.35rem;
+    }
+
+    .container > div[style] {
+        padding: 1rem 1.25rem;
+    }
+
+    .btn.btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .container table th,
+    .container table td {
+        padding: 0.7rem 0.75rem;
+        font-size: 0.82rem;
+    }
+
+    .container table thead tr th:first-child,
+    .container table td:first-child {
+        padding-left: 0.75rem;
+    }
+
+    .container table thead tr th:last-child,
+    .container table td:last-child {
+        padding-right: 0.75rem;
+    }
+
+    .container table td a {
+        padding: 0.38rem 0.7rem;
+        font-size: 0.78rem;
+    }
+}

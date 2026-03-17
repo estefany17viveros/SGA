@@ -1,0 +1,357 @@
+/* ===================================== */
+/* ========== VARIABLES ================ */
+/* ===================================== */
+
+:root {
+    --azul-profundo: #0f4c81;
+    --azul-medio: #1e88e5;
+    --azul-claro: #e3f2fd;
+    --verde-primario: #26a69a;
+    --verde-claro: #80cbc4;
+    --verde-muy-claro: #e0f2f1;
+    --gris-oscuro: #263238;
+    --gris-claro: #f5f7fa;
+    --blanco: #ffffff;
+    --texto: #263238;
+    --rojo: #ef5350;
+    --rojo-claro: #ffebee;
+    --naranja: #fb8c00;
+    --naranja-claro: #fff3e0;
+    --info: #0288d1;
+    --info-claro: #e1f5fe;
+}
+
+/* ===================================== */
+/* ========== CONTAINER ================ */
+/* ===================================== */
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    animation: fadeInUp 0.5s ease;
+}
+
+/* ===================================== */
+/* ========== HEADER ROW =============== */
+/* ===================================== */
+
+.d-flex.justify-content-between.align-items-center.mb-3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.container h4.mb-0 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--azul-profundo);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.container h4.mb-0::before {
+    content: '🗂️';
+    font-size: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--azul-claro);
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+/* ===================================== */
+/* ========== ALERTS =================== */
+/* ===================================== */
+
+.alert {
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    font-size: 14px;
+    font-weight: 500;
+    animation: slideIn 0.3s ease;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, var(--verde-muy-claro), #b2dfdb);
+    border-left: 5px solid var(--verde-primario);
+    color: #00695c;
+    box-shadow: 0 4px 12px rgba(38, 166, 154, 0.15);
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, var(--rojo-claro), #ffcdd2);
+    border-left: 5px solid var(--rojo);
+    color: #c62828;
+    box-shadow: 0 4px 12px rgba(239, 83, 80, 0.15);
+}
+
+/* ===================================== */
+/* ========== CARD / TABLE ============= */
+/* ===================================== */
+
+.card {
+    background: var(--blanco);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    animation: slideIn 0.4s ease;
+}
+
+.card-body {
+    padding: 0;
+}
+
+/* ===================================== */
+/* ========== TABLE ==================== */
+/* ===================================== */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.table.table-striped.align-middle thead {
+    background: linear-gradient(135deg, var(--azul-medio), var(--azul-profundo));
+}
+
+.table thead th {
+    padding: 16px 18px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: white;
+    border: none;
+    white-space: nowrap;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.15s ease;
+}
+
+.table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.table.table-striped tbody tr:nth-child(even) {
+    background: var(--gris-claro);
+}
+
+.table tbody tr:hover {
+    background: var(--azul-claro) !important;
+}
+
+.table td {
+    padding: 14px 18px;
+    vertical-align: middle;
+    color: var(--texto);
+}
+
+/* Columnas numéricas */
+.table td:nth-child(2),
+.table td:nth-child(3),
+.table td:nth-child(4) {
+    font-weight: 600;
+    color: var(--gris-oscuro);
+}
+
+/* Disponibles en verde */
+.table td:nth-child(4) {
+    color: var(--verde-primario);
+}
+
+/* ===================================== */
+/* ========== BADGES =================== */
+/* ===================================== */
+
+.badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+.bg-success {
+    background: var(--verde-muy-claro);
+    color: var(--verde-primario);
+}
+
+.bg-secondary {
+    background: #eceff1;
+    color: #607d8b;
+}
+
+/* ===================================== */
+/* ========== EMPTY STATE ============== */
+/* ===================================== */
+
+.text-center {
+    text-align: center;
+    color: #9e9e9e;
+    font-size: 15px;
+    padding: 40px 20px;
+}
+
+/* ===================================== */
+/* ========== BUTTONS ================== */
+/* ===================================== */
+
+.btn {
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+}
+
+.btn:active {
+    transform: scale(0.96);
+}
+
+/* Nuevo Grupo — azul grande */
+.btn-primary {
+    padding: 10px 20px;
+    font-size: 14px;
+    background: linear-gradient(135deg, var(--azul-medio), var(--azul-profundo));
+    color: white;
+    box-shadow: 0 3px 8px rgba(30, 136, 229, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--azul-profundo), #084298);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(30, 136, 229, 0.4);
+}
+
+/* Ver */
+.btn-sm.btn-info {
+    background: var(--info-claro);
+    color: var(--info);
+}
+
+.btn-sm.btn-info:hover {
+    background: #b3e5fc;
+    transform: translateY(-1px);
+}
+
+/* Editar */
+.btn-sm.btn-warning {
+    background: var(--naranja-claro);
+    color: var(--naranja);
+}
+
+.btn-sm.btn-warning:hover {
+    background: #ffe0b2;
+    transform: translateY(-1px);
+}
+
+/* Eliminar */
+.btn-sm.btn-danger {
+    background: var(--rojo-claro);
+    color: var(--rojo);
+}
+
+.btn-sm.btn-danger:hover {
+    background: #ffcdd2;
+    transform: translateY(-1px);
+}
+
+/* Formulario inline para eliminar */
+form.d-inline {
+    display: inline;
+}
+
+/* ===================================== */
+/* ========== ANIMATIONS =============== */
+/* ===================================== */
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ===================================== */
+/* ========== RESPONSIVE =============== */
+/* ===================================== */
+
+@media (max-width: 768px) {
+    .container { padding: 20px 15px; }
+
+    .d-flex.justify-content-between.align-items-center.mb-3 {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .table thead { display: none; }
+
+    .table tbody tr {
+        display: block;
+        margin-bottom: 15px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        border: 1px solid #e0e0e0;
+        overflow: hidden;
+    }
+
+    .table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 11px 16px;
+        border-bottom: 1px solid #f5f5f5;
+        font-size: 14px;
+    }
+
+    .table td:last-child { border-bottom: none; }
+
+    .table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--azul-profundo);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-right: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container h4.mb-0 { font-size: 20px; }
+
+    .btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}

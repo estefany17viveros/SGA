@@ -1,0 +1,211 @@
+/* ===================================== */
+/* ========== VARIABLES ================ */
+/* ===================================== */
+
+:root {
+    --azul-profundo: #0f4c81;
+    --azul-medio: #1e88e5;
+    --azul-claro: #e3f2fd;
+    --verde-primario: #26a69a;
+    --verde-claro: #80cbc4;
+    --verde-muy-claro: #e0f2f1;
+    --gris-oscuro: #263238;
+    --gris-claro: #f5f7fa;
+    --blanco: #ffffff;
+    --texto: #263238;
+    --rojo: #ef5350;
+    --rojo-claro: #ffebee;
+}
+
+/* ===================================== */
+/* ========== CONTAINER ================ */
+/* ===================================== */
+
+.container {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    animation: fadeInUp 0.5s ease;
+}
+
+/* ===================================== */
+/* ========== PAGE TITLE =============== */
+/* ===================================== */
+
+.container h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--azul-profundo);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.container h2::before {
+    content: '📝';
+    font-size: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background: var(--verde-muy-claro);
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+/* ===================================== */
+/* ========== FORM WRAPPER ============= */
+/* ===================================== */
+
+form {
+    background: var(--blanco);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 35px;
+    animation: slideIn 0.4s ease;
+}
+
+/* ===================================== */
+/* ========== FORM ELEMENTS ============ */
+/* ===================================== */
+
+.mb-3 {
+    margin-bottom: 22px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    color: var(--azul-profundo);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: #fafafa;
+    box-sizing: border-box;
+    color: var(--texto);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--verde-primario);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(38, 166, 154, 0.1);
+}
+
+.form-control:hover {
+    border-color: var(--verde-claro);
+}
+
+/* ===================================== */
+/* ========== SELECT =================== */
+/* ===================================== */
+
+select.form-control {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23263238' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+    background-color: #fafafa;
+}
+
+select.form-control:focus {
+    background-color: white;
+}
+
+/* ===================================== */
+/* ========== BUTTONS ================== */
+/* ===================================== */
+
+.btn {
+    padding: 11px 26px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
+    color: white;
+    box-shadow: 0 3px 8px rgba(38, 166, 154, 0.3);
+    margin-right: 10px;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #00897b, var(--verde-primario));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(38, 166, 154, 0.4);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
+    color: #424242;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #bdbdbd, #9e9e9e);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* ===================================== */
+/* ========== ANIMATIONS =============== */
+/* ===================================== */
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ===================================== */
+/* ========== RESPONSIVE =============== */
+/* ===================================== */
+
+@media (max-width: 768px) {
+    .container { padding: 20px 15px; }
+    .container h2 { font-size: 22px; }
+    form { padding: 25px 18px; }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container h2 { font-size: 19px; }
+    form { padding: 20px 14px; }
+    .btn { padding: 10px 20px; font-size: 14px; }
+}

@@ -1,0 +1,217 @@
+/* ===================================== */
+/* ========== VARIABLES ================ */
+/* ===================================== */
+
+:root {
+    --azul-profundo: #0f4c81;
+    --azul-medio: #1e88e5;
+    --azul-claro: #e3f2fd;
+    --verde-primario: #26a69a;
+    --verde-claro: #80cbc4;
+    --verde-muy-claro: #e0f2f1;
+    --gris-oscuro: #263238;
+    --gris-claro: #f5f7fa;
+    --blanco: #ffffff;
+    --texto: #263238;
+    --rojo: #ef5350;
+    --rojo-claro: #ffebee;
+    --naranja: #fb8c00;
+    --naranja-claro: #fff3e0;
+}
+
+/* ===================================== */
+/* ========== CONTAINER ================ */
+/* ===================================== */
+
+.container {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    animation: fadeInUp 0.5s ease;
+}
+
+/* ===================================== */
+/* ========== PAGE TITLE =============== */
+/* ===================================== */
+
+.container h4.mb-3 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--azul-profundo);
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.container h4.mb-3::before {
+    content: '📋';
+    font-size: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--verde-muy-claro);
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+/* ===================================== */
+/* ========== CARD ===================== */
+/* ===================================== */
+
+.card {
+    background: var(--blanco);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    animation: slideIn 0.4s ease;
+}
+
+/* Barra superior decorativa */
+.card::before {
+    content: '';
+    display: block;
+    height: 5px;
+    background: linear-gradient(90deg, var(--azul-medio), var(--verde-primario));
+}
+
+.card-body {
+    padding: 35px;
+}
+
+/* ===================================== */
+/* ========== DATA ROWS ================ */
+/* ===================================== */
+
+.card-body p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 0;
+    border-bottom: 1px solid #f0f4f8;
+    font-size: 15px;
+    gap: 12px;
+    margin: 0;
+}
+
+.card-body p:last-of-type {
+    border-bottom: none;
+}
+
+.card-body p strong {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--azul-profundo);
+    flex-shrink: 0;
+    opacity: 0.75;
+}
+
+/* Valor del dato */
+.card-body p > *:last-child,
+.card-body p:not(:has(strong)) {
+    font-weight: 500;
+    color: var(--texto);
+    text-align: right;
+}
+
+/* ===================================== */
+/* ========== BUTTONS ================== */
+/* ===================================== */
+
+.btn {
+    padding: 11px 26px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    margin-top: 28px;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, var(--naranja-claro), #ffe0b2);
+    color: var(--naranja);
+    border: 2px solid #ffe0b2;
+    box-shadow: 0 2px 8px rgba(251, 140, 0, 0.15);
+    margin-right: 10px;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #ffe0b2, #ffcc80);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 14px rgba(251, 140, 0, 0.25);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
+    color: #424242;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #bdbdbd, #9e9e9e);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* ===================================== */
+/* ========== ANIMATIONS =============== */
+/* ===================================== */
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ===================================== */
+/* ========== RESPONSIVE =============== */
+/* ===================================== */
+
+@media (max-width: 768px) {
+    .container { padding: 20px 15px; }
+    .container h4.mb-3 { font-size: 22px; }
+    .card-body { padding: 25px 20px; }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+        margin-right: 0;
+        margin-bottom: 10px;
+        margin-top: 16px;
+    }
+
+    .card-body p {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .card-body p > *:last-child {
+        text-align: left;
+    }
+}
+
+@media (max-width: 480px) {
+    .container h4.mb-3 { font-size: 19px; }
+    .card-body { padding: 20px 15px; }
+    .btn { padding: 10px 20px; font-size: 14px; }
+}

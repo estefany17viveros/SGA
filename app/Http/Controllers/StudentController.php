@@ -1,0 +1,310 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Student;
+use App\Models\Enrollment;
+use App\Models\AcademicYear;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+class StudentController extends Controller
+{
+
+    /**
+     * Listar estudiantes
+     */
+ public function index(Request $request)
+{
+
+$students = Student::query()
+
+->when($request->search, function ($query) use ($request) {
+
+$query->where('first_name','like','%'.$request->search.'%')
+      ->orWhere('last_name','like','%'.$request->search.'%')
+      ->orWhere('identification_number','like','%'.$request->search.'%');
+
+})
+
+->latest()
+->paginate(10);
+
+return view('admin.students.index', compact('students'));
+
+}
+
+    /**
+     * Formulario crear estudiante
+     */
+    public function create()
+    {
+        return view('admin.students.create');
+    }
+
+
+    /**
+     * Guardar estudiante
+     */
+    public function store(Request $request)
+{
+
+    $messages = [
+
+        'required' => 'El campo :attribute es obligatorio.',
+        'string' => 'El campo :attribute debe ser texto.',
+        'max' => 'El campo :attribute no debe superar :max caracteres.',
+        'image' => 'La foto debe ser una imagen válida.',
+        'date' => 'El campo :attribute debe ser una fecha válida.',
+        'in' => 'El valor seleccionado en :attribute no es válido.',
+        'unique' => 'El :attribute ya se encuentra registrado en el sistema.',
+        'file' => 'Debe subir un archivo válido.',
+        'mimes' => 'El archivo debe ser un PDF.',
+    ];
+
+    $attributes = [
+
+        'photo' => 'foto del estudiante',
+        'first_name' => 'nombre',
+        'last_name' => 'apellido',
+        'gender' => 'género',
+        'birth_date' => 'fecha de nacimiento',
+
+        'identification_type' => 'tipo de documento',
+        'identification_number' => 'número de documento',
+
+        'expedition_date' => 'fecha de expedición',
+        'expedition_department' => 'departamento de expedición',
+        'expedition_municipality' => 'municipio de expedición',
+
+        'address' => 'dirección',
+
+        'eps' => 'EPS',
+        'blood_type' => 'tipo de sangre',
+
+        'medical_conditions' => 'condiciones médicas',
+        'observations' => 'observaciones',
+
+        'certificate_file' => 'certificado en PDF'
+    ];
+
+    $request->validate([
+
+        'photo' => 'nullable|image|max:2048',
+
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'gender' => 'required|in:masculino,femenino',
+        'birth_date' => 'required|date',
+
+        'identification_type' => 'required|in:registro_civil,tarjeta_identidad,cedula_ciudadania,cedula_extranjeria,pasaporte,permiso_proteccion_temporal',
+        'identification_number' => 'required|string|unique:students,identification_number',
+
+        'expedition_date' => 'required|date',
+        'expedition_department' => 'required|string|max:255',
+        'expedition_municipality' => 'required|string|max:255',
+
+        'address' => 'required|string|max:255',
+
+        'eps' => 'required|string|max:255',
+        'blood_type' => 'required|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
+
+        'medical_conditions' => 'nullable|string',
+        'observations' => 'nullable|string',
+
+        'certificate_file' => 'nullable|file|mimes:pdf|max:2048'
+
+    ], $messages, $attributes);
+
+
+    $data = $request->all();
+
+    if ($request->hasFile('photo')) {
+
+        $data['photo'] = $request->file('photo')
+            ->store('students/photos', 'public');
+    }
+
+    if ($request->hasFile('certificate_file')) {
+
+        $data['certificate_file'] = $request->file('certificate_file')
+            ->store('students/certificates', 'public');
+    }
+
+   $student = Student::create($data);
+
+return redirect()->route('admin.guardians.create', $student->id)
+        ->with('success', 'Estudiante creado. Ahora registra el acudiente.');
+}
+
+    /**
+     * Mostrar estudiante
+     */
+public function show(Student $student)
+{
+
+  $student->load([
+    'enrollments' => function($query){
+        $query->with('grade','group','academicYear')
+              ->orderBy('academic_year_id','asc');
+    },
+    'guardians'
+]);
+
+    return view('admin.students.show', compact('student'));
+}
+
+
+    /**
+     * Formulario editar
+     */
+    public function edit(Student $student)
+    {
+        return view('admin.students.edit', compact('student'));
+    }
+
+
+    /**
+     * Actualizar estudiante
+     */
+    public function update(Request $request, Student $student)
+    {
+
+        $request->validate([
+
+            // foto
+            'photo' => 'nullable|image|max:2048',
+
+            // datos personales
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'gender' => 'required|in:masculino,femenino',
+            'birth_date' => 'required|date',
+
+            // documento
+            'identification_type' => 'required|in:registro_civil,tarjeta_identidad,cedula_ciudadania,cedula_extranjeria,pasaporte,permiso_proteccion_temporal',
+
+            'identification_number' =>
+            'required|string|unique:students,identification_number,' . $student->id,
+
+            // expedición
+            'expedition_date' => 'required|date',
+            'expedition_department' => 'required|string|max:255',
+            'expedition_municipality' => 'required|string|max:255',
+
+            // dirección
+            'address' => 'required|string|max:255',
+
+            // salud
+            'eps' => 'required|string|max:255',
+            'blood_type' => 'required|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
+
+            // opcionales
+            'medical_conditions' => 'nullable|string',
+            'observations' => 'nullable|string',
+
+            'certificate_file' => 'nullable|file|mimes:pdf|max:2048',
+
+        ]);
+
+        $data = $request->all();
+
+        /*
+        |---------------------------------
+        | Actualizar foto
+        |---------------------------------
+        */
+        if ($request->hasFile('photo')) {
+
+            if ($student->photo && Storage::disk('public')->exists($student->photo)) {
+
+                Storage::disk('public')->delete($student->photo);
+            }
+
+            $data['photo'] = $request->file('photo')
+                ->store('students/photos', 'public');
+        }
+
+        /*
+        |---------------------------------
+        | Actualizar certificado
+        |---------------------------------
+        */
+        if ($request->hasFile('certificate_file')) {
+
+            if ($student->certificate_file && Storage::disk('public')->exists($student->certificate_file)) {
+
+                Storage::disk('public')->delete($student->certificate_file);
+            }
+
+            $data['certificate_file'] = $request->file('certificate_file')
+                ->store('students/certificates', 'public');
+        }
+
+        $student->update($data);
+
+        return redirect()->route('admin.students.index')
+            ->with('success', 'Estudiante actualizado correctamente.');
+    }
+
+
+    /**
+     * Eliminar estudiante
+     */
+    public function destroy(Student $student)
+    {
+
+        if ($student->photo && Storage::disk('public')->exists($student->photo)) {
+
+            Storage::disk('public')->delete($student->photo);
+        }
+
+        if ($student->certificate_file && Storage::disk('public')->exists($student->certificate_file)) {
+
+            Storage::disk('public')->delete($student->certificate_file);
+        }
+
+        $student->delete();
+
+        return redirect()->route('admin.students.index')
+            ->with('success', 'Estudiante eliminado correctamente.');
+    }
+
+
+    /**
+     * Promover estudiantes al siguiente año
+     */
+    public function promoteStudents()
+    {
+
+        $currentYear = AcademicYear::where('is_active', 1)->first();
+
+        $nextYear = AcademicYear::where('year', $currentYear->year + 1)->first();
+
+        if (!$nextYear) {
+
+            return back()->with('error', 'No existe el siguiente año académico.');
+        }
+
+        $enrollments = Enrollment::where('academic_year_id', $currentYear->id)->get();
+
+        foreach ($enrollments as $enrollment) {
+
+            if ($enrollment->status == 'aprobado') {
+
+                Enrollment::create([
+
+                    'student_id' => $enrollment->student_id,
+                    'grade_id' => $enrollment->grade_id + 1,
+                    'group_id' => $enrollment->group_id,
+                    'academic_year_id' => $nextYear->id,
+                    'status' => 'matriculado'
+
+                ]);
+            }
+        }
+
+        return back()->with('success', 'Estudiantes promovidos correctamente.');
+    }
+
+}
