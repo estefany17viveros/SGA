@@ -263,21 +263,24 @@
             </td>
 
             <td>
+@if(
+    ($enrollment->status == 'aprobado' && $enrollment->grade->level == 11)
+    || $enrollment->status == 'graduado'
+)
+    <span class="badge bg-primary">🎓 Graduado</span>
 
-            @if($enrollment->status == 'aprobado')
-            <span class="badge bg-success">Aprobado</span>
+@elseif($enrollment->status == 'aprobado')
+    <span class="badge bg-success">Aprobado</span>
 
-            @elseif($enrollment->status == 'reprobado')
-            <span class="badge bg-danger">Reprobado</span>
+@elseif($enrollment->status == 'reprobado')
+    <span class="badge bg-danger">Reprobado</span>
 
-            @elseif($enrollment->status == 'matriculado')
-            <span class="badge bg-warning">Matriculado</span>
+@elseif($enrollment->status == 'matriculado')
+    <span class="badge bg-warning">Matriculado</span>
 
-            @elseif($enrollment->status == 'retirado')
-            <span class="badge bg-secondary">Retirado</span>
-
-            @endif
-
+@elseif($enrollment->status == 'retirado')
+    <span class="badge bg-secondary">Retirado</span>
+@endif
             </td>
 
             </tr>

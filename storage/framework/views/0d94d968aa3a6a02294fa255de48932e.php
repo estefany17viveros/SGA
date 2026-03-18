@@ -274,21 +274,24 @@
             </td>
 
             <td>
+<?php if(
+    ($enrollment->status == 'aprobado' && $enrollment->grade->level == 11)
+    || $enrollment->status == 'graduado'
+): ?>
+    <span class="badge bg-primary">🎓 Graduado</span>
 
-            <?php if($enrollment->status == 'aprobado'): ?>
-            <span class="badge bg-success">Aprobado</span>
+<?php elseif($enrollment->status == 'aprobado'): ?>
+    <span class="badge bg-success">Aprobado</span>
 
-            <?php elseif($enrollment->status == 'reprobado'): ?>
-            <span class="badge bg-danger">Reprobado</span>
+<?php elseif($enrollment->status == 'reprobado'): ?>
+    <span class="badge bg-danger">Reprobado</span>
 
-            <?php elseif($enrollment->status == 'matriculado'): ?>
-            <span class="badge bg-warning">Matriculado</span>
+<?php elseif($enrollment->status == 'matriculado'): ?>
+    <span class="badge bg-warning">Matriculado</span>
 
-            <?php elseif($enrollment->status == 'retirado'): ?>
-            <span class="badge bg-secondary">Retirado</span>
-
-            <?php endif; ?>
-
+<?php elseif($enrollment->status == 'retirado'): ?>
+    <span class="badge bg-secondary">Retirado</span>
+<?php endif; ?>
             </td>
 
             </tr>

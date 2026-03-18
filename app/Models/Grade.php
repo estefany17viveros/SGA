@@ -24,4 +24,15 @@ class Grade extends Model
     {
         return $this->hasMany(Enrollment::class);
     }
+    // esta se hace para que cuanod este en 11 no permita promover a otro grado
+
+  public function isFinal()
+{
+    $name = strtolower(trim($this->name));
+
+    return $name == '11'
+        || $name == 'once'
+        || str_contains($name, '11')
+        || str_contains($name, 'once');
+}
 }

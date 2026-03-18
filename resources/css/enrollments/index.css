@@ -19,15 +19,19 @@
     --naranja-claro: #fff3e0;
     --info: #0288d1;
     --info-claro: #e1f5fe;
-    /* Status colors */
-    --status-matriculado-bg: #e3f2fd;
+    --oscuro: #37474f;
+    --oscuro-claro: #eceff1;
+    --borde: #e0e7ef;
+    --sombra: 0 4px 20px rgba(0, 0, 0, 0.08);
+    /* Status */
+    --status-matriculado-bg:    #e3f2fd;
     --status-matriculado-color: #1565c0;
-    --status-aprobado-bg: #e0f2f1;
-    --status-aprobado-color: #00695c;
-    --status-reprobado-bg: #ffebee;
-    --status-reprobado-color: #c62828;
-    --status-retirado-bg: #f3e5f5;
-    --status-retirado-color: #6a1b9a;
+    --status-aprobado-bg:       #e0f2f1;
+    --status-aprobado-color:    #00695c;
+    --status-reprobado-bg:      #ffebee;
+    --status-reprobado-color:   #c62828;
+    --status-retirado-bg:       #f3e5f5;
+    --status-retirado-color:    #6a1b9a;
 }
 
 /* ===================================== */
@@ -49,10 +53,10 @@
     font-size: 28px;
     font-weight: 700;
     color: var(--azul-profundo);
-    margin-bottom: 20px;
+    margin-bottom: 22px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .container h2::before {
@@ -69,49 +73,124 @@
 }
 
 /* ===================================== */
-/* ========== TOOLBAR ================== */
+/* ========== BARRA DE ACCIONES ======== */
 /* ===================================== */
 
-.btn-primary.mb-3 {
+/* Agrupamos visualmente los primeros botones y el form de aprobar */
+.container > .btn.mb-3,
+.container > form.mb-3:has(.btn-success) {
     display: inline-flex;
+    margin-right: 8px;
+    margin-bottom: 20px;
+    vertical-align: middle;
+}
+
+.mb-3 { margin-bottom: 20px; }
+
+/* ===================================== */
+/* ========== ALERTS =================== */
+/* ===================================== */
+
+.alert {
+    padding: 14px 18px;
+    border-radius: 10px;
     margin-bottom: 18px;
+    font-size: 14px;
+    font-weight: 500;
+    animation: slideIn 0.3s ease;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, var(--verde-muy-claro), #b2dfdb);
+    border-left: 5px solid var(--verde-primario);
+    color: #00695c;
+    box-shadow: 0 4px 12px rgba(38, 166, 154, 0.12);
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, var(--rojo-claro), #ffcdd2);
+    border-left: 5px solid var(--rojo);
+    color: #c62828;
+    box-shadow: 0 4px 12px rgba(239, 83, 80, 0.12);
 }
 
 /* ===================================== */
-/* ========== FILTER FORM ============== */
+/* ========== FILTRO DE GRADO ========== */
 /* ===================================== */
 
-form.mb-3 {
-    background: var(--blanco);
-    border-radius: 10px;
-    padding: 14px 18px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    margin-bottom: 22px;
+form.mb-3:has(select[name="grade_id"]) {
     display: flex;
     align-items: center;
     gap: 12px;
+    background: linear-gradient(135deg, var(--azul-claro), var(--verde-muy-claro));
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 22px;
+    box-shadow: var(--sombra);
+    position: relative;
 }
 
-form.mb-3::before {
-    content: '🔍';
-    font-size: 16px;
-    flex-shrink: 0;
+form.mb-3:has(select[name="grade_id"])::before {
+    content: 'Filtrar por grado';
+    position: absolute;
+    top: -10px;
+    left: 18px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--azul-profundo);
+    opacity: 0.6;
+    background: var(--azul-claro);
+    padding: 2px 8px;
+    border-radius: 4px;
 }
 
-form.mb-3 select.form-control {
-    max-width: 280px;
+form.mb-3 > select.form-control {
+    flex: 1;
+    min-width: 200px;
+    max-width: 320px;
+    padding: 10px 38px 10px 14px;
+    border: 2px solid #d0dae4;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--texto);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23263238' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-color: var(--blanco);
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+form.mb-3 > select.form-control:focus {
+    border-color: var(--verde-primario);
+    box-shadow: 0 0 0 4px rgba(38, 166, 154, 0.1);
+}
+
+form.mb-3 > select.form-control:hover {
+    border-color: var(--verde-claro);
 }
 
 /* ===================================== */
 /* ========== TABLE WRAPPER ============ */
 /* ===================================== */
 
-.table-wrapper {
-    background: var(--blanco);
+.table-responsive {
+    overflow-x: auto;
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
+    box-shadow: var(--sombra);
     animation: slideIn 0.4s ease;
+}
+
+/* Opcional: mejora visual */
+.table {
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
 /* ===================================== */
@@ -123,6 +202,7 @@ form.mb-3 select.form-control {
     border-collapse: collapse;
     font-size: 14px;
     font-family: inherit;
+    background: var(--blanco);
 }
 
 .table.table-bordered thead {
@@ -158,56 +238,21 @@ form.mb-3 select.form-control {
     border: none;
 }
 
-/* ===================================== */
-/* ========== STATUS SELECT IN TABLE === */
-/* ===================================== */
-
-.table td form select.form-control {
-    padding: 6px 32px 6px 10px;
-    font-size: 13px;
+/* Nombre estudiante */
+.table td:first-child {
     font-weight: 600;
-    border-radius: 20px;
-    border: none;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%23263238' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    transition: all 0.2s ease;
-    min-width: 130px;
+    color: var(--azul-profundo);
 }
 
-/* Status colors dinámicos — se aplican via JS o con option:checked patterns */
-.table td form select.form-control:has(option[value="matriculado"]:checked) {
-    background-color: var(--status-matriculado-bg);
-    color: var(--status-matriculado-color);
+/* Año — monospace */
+.table td:nth-child(2) {
+    font-family: monospace;
+    font-size: 13px;
+    color: #546e7a;
+    font-weight: 600;
 }
 
-.table td form select.form-control:has(option[value="aprobado"]:checked) {
-    background-color: var(--status-aprobado-bg);
-    color: var(--status-aprobado-color);
-}
-
-.table td form select.form-control:has(option[value="reprobado"]:checked) {
-    background-color: var(--status-reprobado-bg);
-    color: var(--status-reprobado-color);
-}
-
-.table td form select.form-control:has(option[value="retirado"]:checked) {
-    background-color: var(--status-retirado-bg);
-    color: var(--status-retirado-color);
-}
-
-/* Fallback general */
-.table td form select.form-control {
-    background-color: var(--status-matriculado-bg);
-    color: var(--status-matriculado-color);
-}
-
-/* ===================================== */
-/* ========== EMPTY STATE ============== */
-/* ===================================== */
-
+/* Estado vacío */
 .table td[colspan] {
     text-align: center;
     color: #9e9e9e;
@@ -216,45 +261,60 @@ form.mb-3 select.form-control {
 }
 
 /* ===================================== */
-/* ========== FORM ELEMENTS ============ */
+/* ========== STATUS SELECT ============ */
 /* ===================================== */
 
-.form-control {
-    width: 100%;
-    padding: 11px 16px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: inherit;
-    transition: all 0.3s ease;
-    background: #fafafa;
-    box-sizing: border-box;
-    color: var(--texto);
+.table td form {
+    margin: 0;
 }
 
-.form-control:focus {
-    outline: none;
-    border-color: var(--verde-primario);
-    background: white;
-    box-shadow: 0 0 0 4px rgba(38, 166, 154, 0.1);
-}
-
-select.form-control {
+.table td form select.form-control {
+    padding: 6px 30px 6px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 20px;
+    border: none;
     cursor: pointer;
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23263238' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%23263238' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 14px center;
-    padding-right: 40px;
-    background-color: #fafafa;
+    background-position: right 9px center;
+    transition: opacity 0.2s ease;
+    min-width: 128px;
+    outline: none;
+}
+
+.table td form select.form-control:hover { opacity: 0.82; }
+
+/* Colores dinámicos por estado */
+.table td form select.form-control:has(option[value="matriculado"]:checked) {
+    background-color: var(--status-matriculado-bg);
+    color: var(--status-matriculado-color);
+}
+.table td form select.form-control:has(option[value="aprobado"]:checked) {
+    background-color: var(--status-aprobado-bg);
+    color: var(--status-aprobado-color);
+}
+.table td form select.form-control:has(option[value="reprobado"]:checked) {
+    background-color: var(--status-reprobado-bg);
+    color: var(--status-reprobado-color);
+}
+.table td form select.form-control:has(option[value="retirado"]:checked) {
+    background-color: var(--status-retirado-bg);
+    color: var(--status-retirado-color);
+}
+/* Fallback */
+.table td form select.form-control {
+    background-color: var(--status-matriculado-bg);
+    color: var(--status-matriculado-color);
 }
 
 /* ===================================== */
-/* ========== BUTTONS ================== */
+/* ========== BOTONES ================== */
 /* ===================================== */
 
 .btn {
-    padding: 7px 14px;
+    padding: 7px 16px;
     border-radius: 8px;
     font-weight: 600;
     font-size: 13px;
@@ -264,48 +324,85 @@ select.form-control {
     font-family: inherit;
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
     text-decoration: none;
 }
 
 .btn:active { transform: scale(0.96); }
 
+/* Nueva Matrícula */
 .btn-primary {
-    padding: 10px 20px;
-    font-size: 14px;
     background: linear-gradient(135deg, var(--azul-medio), var(--azul-profundo));
     color: white;
-    box-shadow: 0 3px 8px rgba(30, 136, 229, 0.3);
+    box-shadow: 0 3px 8px rgba(30, 136, 229, 0.28);
+    padding: 10px 22px;
+    font-size: 14px;
 }
 
 .btn-primary:hover {
     background: linear-gradient(135deg, var(--azul-profundo), #084298);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(30, 136, 229, 0.4);
+    box-shadow: 0 6px 16px rgba(30, 136, 229, 0.38);
 }
 
+/* Ver Graduados */
+.btn-dark {
+    background: linear-gradient(135deg, #546e7a, var(--oscuro));
+    color: white;
+    box-shadow: 0 3px 8px rgba(55, 71, 79, 0.25);
+    padding: 10px 22px;
+    font-size: 14px;
+}
+
+.btn-dark:hover {
+    background: linear-gradient(135deg, var(--oscuro), #1c313a);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(55, 71, 79, 0.35);
+}
+
+/* Aprobar todos */
+.btn-success {
+    background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
+    color: white;
+    box-shadow: 0 3px 8px rgba(38, 166, 154, 0.28);
+    padding: 10px 22px;
+    font-size: 14px;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #00897b, var(--verde-primario));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(38, 166, 154, 0.38);
+}
+
+/* Ver */
 .btn-sm.btn-info {
     background: var(--info-claro);
     color: var(--info);
+    padding: 5px 12px;
+    font-size: 12px;
 }
 .btn-sm.btn-info:hover { background: #b3e5fc; transform: translateY(-1px); }
 
+/* Editar */
 .btn-sm.btn-warning {
     background: var(--naranja-claro);
     color: var(--naranja);
+    padding: 5px 12px;
+    font-size: 12px;
 }
 .btn-sm.btn-warning:hover { background: #ffe0b2; transform: translateY(-1px); }
 
+/* Eliminar */
 .btn-sm.btn-danger {
     background: var(--rojo-claro);
     color: var(--rojo);
+    padding: 5px 12px;
+    font-size: 12px;
 }
 .btn-sm.btn-danger:hover { background: #ffcdd2; transform: translateY(-1px); }
 
-form[style*="display:inline"],
-form[style*="display: inline"] {
-    display: inline !important;
-}
+form[style*="display:inline"] { display: inline !important; }
 
 /* ===================================== */
 /* ========== ANIMATIONS =============== */
@@ -325,10 +422,39 @@ form[style*="display: inline"] {
 /* ========== RESPONSIVE =============== */
 /* ===================================== */
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
     .container { padding: 20px 15px; }
     .container h2 { font-size: 22px; }
 
+    /* Botones superiores en columna */
+    .container > .btn.mb-3 {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        margin-right: 0;
+    }
+
+    .container > form.mb-3:has(.btn-success) {
+        display: flex;
+        width: 100%;
+    }
+
+    .container > form.mb-3:has(.btn-success) .btn-success {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Filtro de grado */
+    form.mb-3:has(select[name="grade_id"]) {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    form.mb-3 > select.form-control {
+        max-width: 100%;
+    }
+
+    /* Tabla → tarjetas */
     .table thead { display: none; }
 
     .table tbody tr {
@@ -336,7 +462,7 @@ form[style*="display: inline"] {
         margin-bottom: 14px;
         border-radius: 12px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-        border: 1px solid #e0e0e0;
+        border: 1px solid var(--borde);
         overflow: hidden;
         background: white !important;
     }
@@ -347,7 +473,7 @@ form[style*="display: inline"] {
         align-items: center;
         padding: 11px 16px;
         border-bottom: 1px solid #f5f5f5;
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .table td:last-child { border-bottom: none; }
@@ -356,20 +482,21 @@ form[style*="display: inline"] {
         content: attr(data-label);
         font-weight: 700;
         color: var(--azul-profundo);
-        font-size: 12px;
+        font-size: 11px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         margin-right: 10px;
         flex-shrink: 0;
     }
 
-    form.mb-3 { flex-direction: column; align-items: stretch; }
-    form.mb-3 select.form-control { max-width: 100%; }
+    .table td:first-child,
+    .table td:nth-child(2) { font-family: inherit; }
 
-    .btn-primary { width: 100%; justify-content: center; }
+    .table td form select.form-control { min-width: 110px; }
 }
 
 @media (max-width: 480px) {
     .container h2 { font-size: 19px; }
-    .btn { padding: 6px 10px; font-size: 12px; }
+    .btn { font-size: 12px; }
+    .btn-sm { padding: 5px 9px; }
 }

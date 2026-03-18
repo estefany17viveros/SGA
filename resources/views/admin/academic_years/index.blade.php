@@ -92,6 +92,8 @@
             @endforelse
         </tbody>
     </table>
-
+        <div class="mt-3">
+            {{ $academicYears->links() }}
+        </div>
 </div>
 @endsection

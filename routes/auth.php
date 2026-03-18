@@ -113,8 +113,7 @@ Route::middleware(['auth', 'role:admin'])
     
     
     // Enrollments
-            Route::resource('enrollments', EnrollmentController::class);
-
+           
             Route::patch('enrollments/{enrollment}/promote',
                 [EnrollmentController::class, 'promote']
             )->name('enrollments.promote');
@@ -126,6 +125,18 @@ Route::middleware(['auth', 'role:admin'])
             Route::put('enrollments/{enrollment}/status',
                 [EnrollmentController::class,'updateStatus']
             )->name('enrollments.updateStatus');
+            Route::put('enrollments/approve-all',
+                        [EnrollmentController::class,'approveAll']
+                    )->name('enrollments.approveAll');
+                    //esta es la vista de los estudiantesgraduados
+            Route::get('enrollments/graduated',
+                [EnrollmentController::class,'graduated']
+            )->name('enrollments.graduated');
+            //esta es la vista de los estudiantes reirados
+            Route::get('/enrollments/retired', [EnrollmentController::class, 'retired'])
+                ->name('enrollments.retired');
+
+         Route::resource('enrollments', EnrollmentController::class);
 
 
         //cerrar año académico

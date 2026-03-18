@@ -14,12 +14,13 @@ class AcademicYearController extends Controller
     /**
      * Listar años académicos
      */
-    public function index()
-    {
-        $academicYears = AcademicYear::orderBy('year', 'desc')->get();
-        return view('admin.academic_years.index', compact('academicYears'));
-    }
+  public function index()
+{
+    $academicYears = AcademicYear::orderBy('year', 'desc')
+        ->paginate(10);
 
+    return view('admin.academic_years.index', compact('academicYears'));
+}
     /**
      * Formulario crear
      */

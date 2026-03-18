@@ -48,7 +48,13 @@ return view('admin.students.index', compact('students'));
      */
     public function store(Request $request)
 {
+$graduated = Enrollment::where('student_id', $request->student_id)
+    ->where('status', 'graduado')
+    ->exists();
 
+if ($graduated) {
+    return back()->with('error', '❌ Este estudiante ya está graduado y no puede ser matriculado nuevamente.');
+}
     $messages = [
 
         'required' => 'El campo :attribute es obligatorio.',
@@ -274,37 +280,100 @@ public function show(Student $student)
     /**
      * Promover estudiantes al siguiente año
      */
+    // public function promoteStudents()
+    // {
+
+    //     $currentYear = AcademicYear::where('is_active', 1)->first();
+
+    //     $nextYear = AcademicYear::where('year', $currentYear->year + 1)->first();
+
+    //     if (!$nextYear) {
+
+    //         return back()->with('error', 'No existe el siguiente año académico.');
+    //     }
+
+    //     $enrollments = Enrollment::where('academic_year_id', $currentYear->id)->get();
+
+    //     foreach ($enrollments as $enrollment) {
+
+    //         if ($enrollment->status == 'aprobado') {
+
+    //             Enrollment::create([
+
+    //                 'student_id' => $enrollment->student_id,
+    //                 'grade_id' => $enrollment->grade_id + 1,
+    //                 'group_id' => $enrollment->group_id,
+    //                 'academic_year_id' => $nextYear->id,
+    //                 'status' => 'matriculado'
+
+    //             ]);
+    //         }
+    //     }
+
+    //     return back()->with('success', 'Estudiantes promovidos correctamente.');
+    // }
+
     public function promoteStudents()
-    {
+{
+    $currentYear = AcademicYear::where('status', 'activo')->first();
 
-        $currentYear = AcademicYear::where('is_active', 1)->first();
+    if (!$currentYear) {
+        return back()->with('error', 'No hay año académico activo');
+    }
 
-        $nextYear = AcademicYear::where('year', $currentYear->year + 1)->first();
+    $lastYear = AcademicYear::where('id', '<', $currentYear->id)
+        ->orderBy('id', 'desc')
+        ->first();
 
-        if (!$nextYear) {
+    if (!$lastYear) {
+        return back()->with('error', 'No existe un año anterior');
+    }
 
-            return back()->with('error', 'No existe el siguiente año académico.');
+    $students = Enrollment::with('grade')
+        ->where('academic_year_id', $lastYear->id)
+        ->get();
+
+    foreach ($students as $enrollment) {
+
+        // 🔴 BLOQUE PRINCIPAL (LA CLAVE)
+        if ($enrollment->status == 'graduado') {
+            continue; // 🚫 NO hacer nada, se queda en su último año
         }
 
-        $enrollments = Enrollment::where('academic_year_id', $currentYear->id)->get();
+        if ($enrollment->status == 'retirado') {
+            continue;
+        }
 
-        foreach ($enrollments as $enrollment) {
+        $gradeId = $enrollment->grade_id;
 
-            if ($enrollment->status == 'aprobado') {
+        if ($enrollment->status == 'aprobado') {
+            $nextGrade = Grade::where('level', $enrollment->grade->level + 1)->first();
 
-                Enrollment::create([
-
-                    'student_id' => $enrollment->student_id,
-                    'grade_id' => $enrollment->grade_id + 1,
-                    'group_id' => $enrollment->group_id,
-                    'academic_year_id' => $nextYear->id,
-                    'status' => 'matriculado'
-
-                ]);
+            if ($nextGrade) {
+                $gradeId = $nextGrade->id;
             }
         }
 
-        return back()->with('success', 'Estudiantes promovidos correctamente.');
+        if ($enrollment->status == 'reprobado') {
+            $gradeId = $enrollment->grade_id;
+        }
+
+        // Evitar duplicados
+        $exists = Enrollment::where('student_id', $enrollment->student_id)
+            ->where('academic_year_id', $currentYear->id)
+            ->exists();
+
+        if (!$exists) {
+            Enrollment::create([
+                'student_id' => $enrollment->student_id,
+                'grade_id' => $gradeId,
+                'group_id' => null,
+                'academic_year_id' => $currentYear->id,
+                'status' => 'matriculado'
+            ]);
+        }
     }
 
+    return back()->with('success', 'Promoción realizada correctamente');
+}
 }

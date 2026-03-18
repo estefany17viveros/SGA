@@ -28,6 +28,14 @@
  <a href="{{ route('admin.enrollments.index') }}">
             matriculas
         </a>
+          </a>
+ <a href="{{ route('admin.enrollments.graduated') }}">
+            graduados
+        </a> 
+          </a>
+ <a href="{{ route('admin.enrollments.retired') }}">
+            retirados
+        </a> 
          </a>
  <a href="{{ route('admin.students.index') }}">
             estudiantes

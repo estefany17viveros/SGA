@@ -21,7 +21,8 @@ return new class extends Migration
                 'matriculado',
                 'aprobado',
                 'reprobado',
-                'retirado'
+                'retirado',
+                'graduado'
             ])->default('matriculado');
             $table->unique(['student_id', 'academic_year_id']);
             $table->timestamps();

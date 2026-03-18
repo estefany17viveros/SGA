@@ -28,6 +28,14 @@
  <a href="<?php echo e(route('admin.enrollments.index')); ?>">
             matriculas
         </a>
+          </a>
+ <a href="<?php echo e(route('admin.enrollments.graduated')); ?>">
+            graduados
+        </a> 
+          </a>
+ <a href="<?php echo e(route('admin.enrollments.retired')); ?>">
+            retirados
+        </a> 
          </a>
  <a href="<?php echo e(route('admin.students.index')); ?>">
             estudiantes

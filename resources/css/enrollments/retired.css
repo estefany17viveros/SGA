@@ -1,0 +1,460 @@
+/* ===================================== */
+/* ========== VARIABLES ================ */
+/* ===================================== */
+
+:root {
+    --azul-profundo: #0f4c81;
+    --azul-medio: #1e88e5;
+    --azul-claro: #e3f2fd;
+    --verde-primario: #26a69a;
+    --verde-claro: #80cbc4;
+    --verde-muy-claro: #e0f2f1;
+    --gris-oscuro: #263238;
+    --gris-claro: #f5f7fa;
+    --blanco: #ffffff;
+    --texto: #263238;
+    --rojo: #ef5350;
+    --rojo-claro: #ffebee;
+    --rojo-medio: #e53935;
+    --rojo-oscuro: #b71c1c;
+    --naranja: #fb8c00;
+    --naranja-claro: #fff3e0;
+    --info: #0288d1;
+    --info-claro: #e1f5fe;
+    --borde: #e0e7ef;
+    --sombra: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ===================================== */
+/* ========== CONTAINER ================ */
+/* ===================================== */
+
+.container {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    animation: fadeInUp 0.5s ease;
+}
+
+/* ===================================== */
+/* ========== PAGE TITLE =============== */
+/* ===================================== */
+
+.container h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--azul-profundo);
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.container h2::before {
+    content: '🚫';
+    font-size: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background: var(--rojo-claro);
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+/* ===================================== */
+/* ========== ALERTS =================== */
+/* ===================================== */
+
+.alert {
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    font-size: 14px;
+    font-weight: 500;
+    animation: slideIn 0.3s ease;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, var(--verde-muy-claro), #b2dfdb);
+    border-left: 5px solid var(--verde-primario);
+    color: #00695c;
+    box-shadow: 0 4px 12px rgba(38, 166, 154, 0.12);
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, var(--rojo-claro), #ffcdd2);
+    border-left: 5px solid var(--rojo);
+    color: #c62828;
+    box-shadow: 0 4px 12px rgba(239, 83, 80, 0.12);
+}
+
+/* ===================================== */
+/* ========== FILTROS ================== */
+/* ===================================== */
+
+form.row.mb-3 {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 14px;
+    align-items: end;
+    background: linear-gradient(135deg, var(--rojo-claro), #fff5f5);
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 16px rgba(239, 83, 80, 0.1);
+    border: 1.5px solid #ffcdd2;
+    position: relative;
+}
+
+form.row.mb-3::before {
+    content: 'Filtrar estudiantes retirados';
+    position: absolute;
+    top: -11px;
+    left: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--rojo-medio);
+    background: var(--rojo-claro);
+    padding: 2px 12px;
+    border-radius: 20px;
+    border: 1px solid #ffcdd2;
+}
+
+.col-md-4 { grid-column: span 4; }
+
+/* ===================================== */
+/* ========== FORM CONTROLS ============ */
+/* ===================================== */
+
+.form-control {
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid #ffcdd2;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--blanco);
+    color: var(--texto);
+    transition: all 0.3s ease;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    border-color: var(--rojo);
+    box-shadow: 0 0 0 4px rgba(239, 83, 80, 0.12);
+}
+
+.form-control:hover { border-color: var(--rojo); }
+
+.form-control::placeholder {
+    color: #b0b0b0;
+    opacity: 0.85;
+}
+
+select.form-control {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23e53935' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 13px center;
+    padding-right: 38px;
+    background-color: var(--blanco);
+}
+
+/* ===================================== */
+/* ========== BOTONES ================== */
+/* ===================================== */
+
+.btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+
+.btn:active { transform: scale(0.96); }
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--rojo-medio), var(--rojo-oscuro));
+    color: white;
+    box-shadow: 0 3px 10px rgba(229, 57, 53, 0.35);
+    margin-right: 8px;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--rojo-oscuro), #7f0000);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(229, 57, 53, 0.45);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
+    color: #424242;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #bdbdbd, #9e9e9e);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* ===================================== */
+/* ========== TABLE WRAPPER ============ */
+/* ===================================== */
+
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 16px;
+    box-shadow: var(--sombra);
+    animation: slideIn 0.4s ease;
+}
+
+/* Opcional: mejora visual */
+.table {
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* ===================================== */
+/* ========== TABLE ==================== */
+/* ===================================== */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--blanco);
+}
+
+.table.table-bordered thead {
+    background: linear-gradient(135deg, var(--rojo-medio), var(--rojo-oscuro));
+}
+
+.table thead th {
+    padding: 15px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: white;
+    border: none;
+    white-space: nowrap;
+}
+
+/* Línea roja clara bajo cabecera */
+.table thead::after {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #ef9a9a, var(--rojo), #ef9a9a, transparent);
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #fce8e8;
+    transition: background 0.15s ease;
+}
+
+.table tbody tr:last-child { border-bottom: none; }
+
+.table tbody tr:nth-child(even) { background: #fff8f8; }
+
+.table tbody tr:hover { background: var(--rojo-claro) !important; }
+
+.table td {
+    padding: 13px 16px;
+    vertical-align: middle;
+    color: var(--texto);
+    border: none;
+}
+
+/* Nombre estudiante */
+.table td:first-child {
+    font-weight: 600;
+    color: var(--azul-profundo);
+}
+
+/* Año */
+.table td:nth-child(2) {
+    font-family: monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--rojo-medio);
+    background: #fff0f0;
+}
+
+/* Estado vacío */
+.table td[colspan] {
+    text-align: center;
+    color: #9e9e9e;
+    font-size: 15px;
+    padding: 48px 20px;
+}
+
+/* ===================================== */
+/* ========== BADGE RETIRADO =========== */
+/* ===================================== */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.bg-danger {
+    background: linear-gradient(135deg, var(--rojo), var(--rojo-medio));
+    color: white;
+    box-shadow: 0 3px 8px rgba(239, 83, 80, 0.35);
+}
+
+/* ===================================== */
+/* ========== PAGINACIÓN =============== */
+/* ===================================== */
+
+.mt-3 {
+    margin-top: 20px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.pagination .page-item .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1.5px solid #ffcdd2;
+    color: var(--rojo-medio);
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, var(--rojo), var(--rojo-medio));
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 3px 8px rgba(239, 83, 80, 0.3);
+}
+
+.pagination .page-item .page-link:hover {
+    background: var(--rojo-claro);
+    border-color: var(--rojo);
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #bdbdbd;
+    border-color: #e0e0e0;
+    cursor: not-allowed;
+}
+
+/* ===================================== */
+/* ========== ANIMATIONS =============== */
+/* ===================================== */
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ===================================== */
+/* ========== RESPONSIVE =============== */
+/* ===================================== */
+
+@media (max-width: 860px) {
+    .container { padding: 20px 15px; }
+    .container h2 { font-size: 22px; }
+
+    form.row.mb-3 {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .col-md-4 { grid-column: span 1; }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+        margin-right: 0;
+        margin-bottom: 8px;
+    }
+
+    /* Tabla → tarjetas */
+    .table thead { display: none; }
+
+    .table tbody tr {
+        display: block;
+        margin-bottom: 14px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(239, 83, 80, 0.1);
+        border: 1.5px solid #ffcdd2;
+        overflow: hidden;
+        background: white !important;
+    }
+
+    .table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 11px 16px;
+        border-bottom: 1px solid #fce8e8;
+        font-size: 13px;
+    }
+
+    .table td:last-child { border-bottom: none; }
+
+    .table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--rojo-medio);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
+    .table td:nth-child(2) {
+        background: transparent;
+        font-family: inherit;
+    }
+}
+
+@media (max-width: 480px) {
+    .container h2 { font-size: 19px; }
+    .btn { font-size: 13px; padding: 9px 16px; }
+}
