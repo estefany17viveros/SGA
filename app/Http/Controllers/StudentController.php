@@ -16,22 +16,50 @@ class StudentController extends Controller
      */
  public function index(Request $request)
 {
+    $currentYear = AcademicYear::where('status','activo')->first();
 
-$students = Student::query()
+    $students = Student::query();
 
-->when($request->search, function ($query) use ($request) {
+    // 🔥 SOLO si hay año activo
+    if ($currentYear) {
+        $students->with(['enrollments' => function($query) use ($currentYear){
+            $query->where('academic_year_id', $currentYear->id)
+                  ->with('grade');
+        }]);
+    } else {
+        // 👇 evita que rompa si no hay año
+        $students->with('enrollments.grade');
+    }
 
-$query->where('first_name','like','%'.$request->search.'%')
-      ->orWhere('last_name','like','%'.$request->search.'%')
-      ->orWhere('identification_number','like','%'.$request->search.'%');
+    // 🔍 BUSCADOR
+    $students->when($request->search, function ($query) use ($request) {
+        $query->where(function($q) use ($request){
+            $q->where('first_name','like','%'.$request->search.'%')
+              ->orWhere('last_name','like','%'.$request->search.'%')
+              ->orWhere('identification_number','like','%'.$request->search.'%');
+        });
+    });
 
-})
+    // 🔥 FILTRO APELLIDO
+    $students->when($request->last_name, function ($query) use ($request) {
+        $query->where('last_name','like','%'.$request->last_name.'%');
+    });
 
-->latest()
-->paginate(10);
+    // 🔥 FILTRO GRADO (solo si hay año activo)
+    if ($currentYear) {
+        $students->when($request->grade_id, function ($query) use ($request, $currentYear) {
+            $query->whereHas('enrollments', function($q) use ($request, $currentYear){
+                $q->where('academic_year_id', $currentYear->id)
+                  ->where('grade_id', $request->grade_id);
+            });
+        });
+    }
 
-return view('admin.students.index', compact('students'));
+    $students = $students->latest()->paginate(10);
 
+    $grades = \App\Models\Grade::all();
+
+    return view('admin.students.index', compact('students','grades'));
 }
 
     /**
@@ -65,6 +93,7 @@ if ($graduated) {
         'in' => 'El valor seleccionado en :attribute no es válido.',
         'unique' => 'El :attribute ya se encuentra registrado en el sistema.',
         'file' => 'Debe subir un archivo válido.',
+      'required_if' => 'Debe subir el certificado si selecciona una población especial.',
         'mimes' => 'El archivo debe ser un PDF.',
     ];
 
@@ -90,7 +119,8 @@ if ($graduated) {
 
         'medical_conditions' => 'condiciones médicas',
         'observations' => 'observaciones',
-
+        'population_type' => 'tipo de población',
+            'population_certificate' => 'certificado de población',
         'certificate_file' => 'certificado en PDF'
     ];
 
@@ -118,8 +148,16 @@ if ($graduated) {
         'medical_conditions' => 'nullable|string',
         'observations' => 'nullable|string',
 
-        'certificate_file' => 'nullable|file|mimes:pdf|max:2048'
+        'certificate_file' => 'nullable|file|mimes:pdf|max:2048',
 
+            'population_type' => 'required|in:ninguno,afro,indigena,desplazado',
+
+            'population_certificate' => [
+                'nullable',
+                'file',
+                'mimes:pdf',
+                'required_if:population_type,afro,indigena,desplazado'
+            ]
     ], $messages, $attributes);
 
 
@@ -136,6 +174,12 @@ if ($graduated) {
         $data['certificate_file'] = $request->file('certificate_file')
             ->store('students/certificates', 'public');
     }
+     // 🔥 CERTIFICADO DE POBLACIÓN
+        if ($request->hasFile('population_certificate')) {
+            $data['population_certificate'] = $request->file('population_certificate')
+                ->store('students/population', 'public');
+        }
+
 
    $student = Student::create($data);
 
@@ -210,8 +254,15 @@ public function show(Student $student)
             'observations' => 'nullable|string',
 
             'certificate_file' => 'nullable|file|mimes:pdf|max:2048',
+ 'population_type' => 'required|in:ninguno,afro,indigena,desplazado',
 
-        ]);
+            'population_certificate' => [
+                'nullable',
+                'file',
+                'mimes:pdf',
+                'required_if:population_type,afro,indigena,desplazado'
+            ]
+                ]);
 
         $data = $request->all();
 
@@ -246,6 +297,16 @@ public function show(Student $student)
             $data['certificate_file'] = $request->file('certificate_file')
                 ->store('students/certificates', 'public');
         }
+ // 🔥 CERTIFICADO POBLACIÓN
+        if ($request->hasFile('population_certificate')) {
+
+            if ($student->population_certificate && Storage::disk('public')->exists($student->population_certificate)) {
+                Storage::disk('public')->delete($student->population_certificate);
+            }
+
+            $data['population_certificate'] = $request->file('population_certificate')
+                ->store('students/population', 'public');
+        }
 
         $student->update($data);
 
@@ -268,6 +329,9 @@ public function show(Student $student)
         if ($student->certificate_file && Storage::disk('public')->exists($student->certificate_file)) {
 
             Storage::disk('public')->delete($student->certificate_file);
+        }
+ if ($student->population_certificate && Storage::disk('public')->exists($student->population_certificate)) {
+            Storage::disk('public')->delete($student->population_certificate);
         }
 
         $student->delete();

@@ -44,10 +44,18 @@ value="{{ $student->full_name }}" readonly>
 <div class="row">
 
 <div class="col-md-6 mb-3">
-<label class="form-label">Nombre Completo del Acudiente</label>
-<input type="text" name="full_name"
+<label class="form-label">Nombre del Acudiente</label>
+<input type="text" name="first_name"
 class="form-control"
-value="{{ old('full_name') }}"
+value="{{ old('first_name') }}"
+required>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label">Apellido del Acudiente</label>
+<input type="text" name="last_name"
+class="form-control"
+value="{{ old('last_name') }}"
 required>
 </div>
 

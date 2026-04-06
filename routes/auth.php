@@ -78,11 +78,12 @@ Route::middleware(['auth', 'role:admin'])
     ->name('admin.')
     ->group(function () {
 
-        // Teacher Profiles
-        Route::resource('teacher-profiles', TeacherProfileController::class);
-
+    
         // Academic Years
-        Route::resource('academic_years', AcademicYearController::class);
+        //no permite las rutas editar por que la verdad daña el sistema si hace cambio alguno 
+       Route::resource('academic_years', AcademicYearController::class)
+    ->except(['edit', 'update']);
+
         Route::patch('academic_years/{academicYear}/activate', [AcademicYearController::class, 'activate'])
             ->name('academic_years.activate');
         Route::patch('academic_years/{academicYear}/close', [AcademicYearController::class, 'closeYear'])
@@ -143,4 +144,76 @@ Route::middleware(['auth', 'role:admin'])
             Route::put('academic_years/{id}/close',
     [AcademicYearController::class, 'close']
 )->name('admin.academic_years.close');
+
+
+//teacher
+
+Route::resource('teachers', TeacherController::class);
+
+
+
+//subjets
+
+Route::resource('subjects', SubjectController::class);
+
+
+//teacher_subjets
+
+Route::resource('teacher-subjects', TeacherSubjectController::class);
+
+//periods 
+
+ // 📋 Listar periodos por año
+    Route::get('periods/{year}', [PeriodController::class, 'index'])
+        ->name('periods.index');
+
+    // 👁️ Ver detalle
+    Route::get('periods/show/{id}', [PeriodController::class, 'show'])
+        ->name('periods.show');
+
+    // ✏️ Editar
+    Route::get('periods/edit/{id}', [PeriodController::class, 'edit'])
+        ->name('periods.edit');
+
+    // 🔄 Actualizar
+    Route::put('periods/{id}', [PeriodController::class, 'update'])
+        ->name('periods.update');
+
+    // 🔒 Cerrar periodo
+    Route::get('periods/{id}/close', [PeriodController::class, 'close'])
+        ->name('periods.close');
+
+    // 🔓 Activar periodo
+    Route::get('periods/{id}/open', [PeriodController::class, 'open'])
+        ->name('periods.open');
+
+    // ❌ Eliminar
+    Route::delete('periods/{id}', [PeriodController::class, 'destroy'])
+        ->name('periods.destroy');
+
 });
+
+
+// --------------------------------------------------------------------------
+// RUTAS TEACHER
+// --------------------------------------------------------------------------
+Route::middleware(['auth', 'role:teacher'])
+    ->prefix('teacher')
+    ->name('teacher.')
+    ->group(function () {
+
+
+
+    
+
+//  IMPORTANTE: Las rutas de actividades y notas deben ir al final para evitar conflictos con otras rutas
+
+        // Activities and scores
+        Route::resource('activities', ActivityController::class);
+Route::get('scores/{activity}/create', [ScoreController::class, 'create'])->name('scores.create');
+Route::post('scores', [ScoreController::class, 'store'])->name('scores.store');
+Route::get('scores/{activity}', [ScoreController::class, 'show'])->name('scores.show');
+Route::get('score/{id}/edit', [ScoreController::class, 'edit'])->name('scores.edit');
+Route::put('score/{id}', [ScoreController::class, 'update'])->name('scores.update');
+Route::delete('score/{id}', [ScoreController::class, 'destroy'])->name('scores.destroy');
+    });

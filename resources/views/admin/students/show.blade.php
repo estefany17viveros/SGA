@@ -197,7 +197,52 @@
 
                 <div class="divider"></div>
 
+<div class="divider"></div>
 
+<!-- POBLACIÓN -->
+<div class="info-block">
+
+    <h5 class="block-title">Población Especial</h5>
+
+    <div class="info-grid">
+
+        <div class="info-item">
+            <span class="info-label">Tipo:</span>
+            <span class="info-value">
+                @if($student->population_type && $student->population_type != 'ninguno')
+                    {{ ucfirst($student->population_type) }}
+                @else
+                    No aplica
+                @endif
+            </span>
+        </div>
+
+        <div class="info-item full-width">
+            <span class="info-label">Certificado:</span>
+
+            @if($student->population_certificate)
+
+                <a href="{{ asset('storage/'.$student->population_certificate) }}"
+                   target="_blank"
+                   class="btn-certificate">
+                    📄 Ver Certificado
+                </a>
+
+                <a href="{{ asset('storage/'.$student->population_certificate) }}"
+                   download
+                   class="btn-certificate">
+                    ⬇ Descargar
+                </a>
+
+            @else
+                <span class="info-value">No tiene certificado</span>
+            @endif
+
+        </div>
+
+    </div>
+
+</div>
                 <!-- CERTIFICADO -->
                 <div class="info-block">
 
@@ -333,6 +378,7 @@
                         <thead>
                             <tr>
                                 <th>Nombre</th>
+                                    <th>Apellido</th>
                                 <th>Parentesco</th>
                                 <th>Teléfono</th>
                                 <th>Acciones</th>
@@ -345,7 +391,9 @@
 
                             <tr>
 
-                                <td>{{ $guardian->full_name }}</td>
+                                <td>{{ $guardian->first_name }}</td>
+
+                                <td>{{ $guardian->last_name }}</td>
 
                                 <td>{{ $guardian->relationship }}</td>
 

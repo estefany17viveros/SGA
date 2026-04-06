@@ -1,0 +1,338 @@
+/* ===================================== */
+/* ========== VARIABLES ================ */
+/* ===================================== */
+
+:root {
+    --azul-profundo:   #0f4c81;
+    --azul-medio:      #1e88e5;
+    --azul-claro:      #e3f2fd;
+    --verde-primario:  #26a69a;
+    --verde-claro:     #80cbc4;
+    --verde-muy-claro: #e0f2f1;
+    --gris-oscuro:     #263238;
+    --gris-claro:      #f5f7fa;
+    --gris-borde:      #e0e0e0;
+    --blanco:          #ffffff;
+    --texto:           #263238;
+    --texto-suave:     #607d8b;
+    --rojo:            #ef5350;
+    --rojo-claro:      #ffebee;
+    --naranja:         #fb8c00;
+    --naranja-claro:   #fff3e0;
+}
+
+/* ===================================== */
+/* ========== BASE ===================== */
+/* ===================================== */
+
+/* ==============================
+   📦 CONTENEDORES PRINCIPALES
+============================== */
+
+.container,
+section.content,
+div.content,
+main {
+    /* 📐 Layout */
+    width: 100%;
+    max-width: 720px; /* un poco más amplio y moderno */
+    margin-inline: auto; /* mejor que margin: 0 auto */
+    
+    /* 📏 Espaciado adaptable */
+    padding: clamp(20px, 4vw, 40px);
+
+    /* 🎨 Apariencia */
+    box-sizing: border-box;
+
+    /* ✨ Animación */
+    animation: fadeInUp 0.5s ease both;
+}
+
+/* ==============================
+   📱 RESPONSIVE (pantallas grandes)
+============================== */
+@media (min-width: 1024px) {
+    .container,
+    section.content,
+    div.content,
+    main {
+        max-width: 900px;
+        padding: 48px 24px;
+    }
+}
+
+/* ==============================
+   📱 MOBILE (pantallas pequeñas)
+============================== */
+@media (max-width: 480px) {
+    .container,
+    section.content,
+    div.content,
+    main {
+        padding: 20px 16px;
+    }
+}
+/* ===================================== */
+/* ========== TÍTULO h1 ================ */
+/* ===================================== */
+
+h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--azul-profundo);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    letter-spacing: -0.01em;
+}
+
+h1::before {
+    content: '';
+    display: inline-flex;
+    width: 6px;
+    height: 32px;
+    background: linear-gradient(180deg, var(--azul-medio), var(--verde-primario));
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+/* ===================================== */
+/* ========== TARJETA DETALLE ========== */
+/* ===================================== */
+
+/* Reemplaza el div[style="border:1px solid #ccc;..."] */
+div[style*="border:1px solid #ccc"],
+div[style*="border: 1px solid #ccc"],
+.sga-detail-card,
+.detail-card {
+    background: var(--blanco) !important;
+    border: none !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.09) !important;
+    padding: 0 !important;
+    overflow: hidden;
+    animation: slideIn 0.4s ease;
+}
+
+/* Franja de color superior de la tarjeta */
+div[style*="border:1px solid #ccc"]::before,
+div[style*="border: 1px solid #ccc"]::before {
+    content: '';
+    display: block;
+    height: 5px;
+    background: linear-gradient(90deg, var(--azul-profundo), var(--azul-medio), var(--verde-primario));
+    border-radius: 16px 16px 0 0;
+}
+
+/* Padding interno del contenido */
+div[style*="border:1px solid #ccc"] > *,
+div[style*="border: 1px solid #ccc"] > * {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+div[style*="border:1px solid #ccc"] > p:first-of-type,
+div[style*="border: 1px solid #ccc"] > p:first-of-type {
+    padding-top: 28px;
+}
+
+div[style*="border:1px solid #ccc"] > p:last-of-type,
+div[style*="border: 1px solid #ccc"] > p:last-of-type {
+    padding-bottom: 28px;
+}
+
+/* ===================================== */
+/* ========== PÁRRAFOS DETALLE ========= */
+/* ===================================== */
+
+div[style*="border:1px solid #ccc"] p,
+div[style*="border: 1px solid #ccc"] p {
+    margin: 0;
+    padding: 14px 30px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    border-bottom: 1px solid #f4f4f4;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    color: var(--texto);
+    transition: background-color 0.15s;
+}
+
+div[style*="border:1px solid #ccc"] p:last-of-type,
+div[style*="border: 1px solid #ccc"] p:last-of-type {
+    border-bottom: none;
+}
+
+div[style*="border:1px solid #ccc"] p:hover,
+div[style*="border: 1px solid #ccc"] p:hover {
+    background-color: #fafcff;
+}
+
+/* Labels strong */
+div[style*="border:1px solid #ccc"] p strong,
+div[style*="border: 1px solid #ccc"] p strong {
+    color: var(--texto-suave);
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+    min-width: 90px;
+    flex-shrink: 0;
+}
+
+/* ===================================== */
+/* ========== BADGES DE ESTADO ========= */
+/* ===================================== */
+
+/* Activo */
+span[style*="color:green"],
+span[style*="color: green"],
+.badge-active {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 12px !important;
+    background: var(--verde-muy-claro) !important;
+    color: #00695c !important;
+    border: 1px solid var(--verde-claro);
+    border-radius: 20px;
+    font-size: 12.5px !important;
+    font-weight: 600;
+}
+
+span[style*="color:green"]::before,
+span[style*="color: green"]::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background: var(--verde-primario);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Inactivo */
+span[style*="color:red"],
+span[style*="color: red"],
+.badge-inactive {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 12px !important;
+    background: var(--rojo-claro) !important;
+    color: #c62828 !important;
+    border: 1px solid #ffcdd2;
+    border-radius: 20px;
+    font-size: 12.5px !important;
+    font-weight: 600;
+}
+
+span[style*="color:red"]::before,
+span[style*="color: red"]::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background: var(--rojo);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ===================================== */
+/* ========== BOTONES DE ACCIÓN ======== */
+/* ===================================== */
+
+/* Contenedor de links de acción debajo de la tarjeta */
+a[href*="subjects.index"],
+a[href*="subjects.edit"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 20px;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    margin-top: 20px;
+    margin-right: 10px;
+}
+
+/* Botón "Volver" */
+a[href*="subjects.index"] {
+    color: var(--azul-medio);
+    background: var(--azul-claro);
+    border: 1.5px solid #bbdefb;
+}
+
+a[href*="subjects.index"]:hover {
+    background: var(--azul-medio);
+    color: var(--blanco);
+    border-color: var(--azul-medio);
+    transform: translateX(-2px);
+}
+
+/* Botón "Editar" */
+a[href*="subjects.edit"] {
+    color: #e65100;
+    background: var(--naranja-claro);
+    border: 1.5px solid #ffcc80;
+}
+
+a[href*="subjects.edit"]:hover {
+    background: var(--naranja);
+    color: var(--blanco);
+    border-color: var(--naranja);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(251, 140, 0, 0.3);
+}
+
+/* ===================================== */
+/* ========== OCULTAR <br> ============= */
+/* ===================================== */
+
+br { display: none; }
+
+/* ===================================== */
+/* ========== ANIMACIONES ============== */
+/* ===================================== */
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-18px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ===================================== */
+/* ========== RESPONSIVE =============== */
+/* ===================================== */
+
+@media (max-width: 640px) {
+    h1 { font-size: 21px; }
+
+    div[style*="border:1px solid #ccc"] p,
+    div[style*="border: 1px solid #ccc"] p {
+        flex-direction: column;
+        gap: 4px;
+        padding: 12px 20px;
+    }
+
+    div[style*="border:1px solid #ccc"] p strong,
+    div[style*="border: 1px solid #ccc"] p strong {
+        min-width: unset;
+    }
+
+    a[href*="subjects.index"],
+    a[href*="subjects.edit"] {
+        width: 100%;
+        justify-content: center;
+        margin-right: 0;
+    }
+}

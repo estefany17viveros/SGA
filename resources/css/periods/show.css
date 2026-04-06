@@ -1,0 +1,33 @@
+/* ==============================
+   👁 DETALLE DE PERIODO
+============================== */
+
+.show-container {
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}
+
+.show-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.show-item {
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.show-item strong {
+    color: #0f172a;
+}
+
+.show-back {
+    display: inline-block;
+    margin-top: 15px;
+    color: #2563eb;
+}

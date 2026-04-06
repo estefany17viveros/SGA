@@ -9,6 +9,7 @@
 @section('content')
 
 <div class="students-container">
+
 <div class="page-header">
     <div class="header-content">
         <h3>👨‍🎓 Estudiantes</h3>
@@ -21,37 +22,46 @@
     </a>
 </div>
 
-
 @if(session('success'))
-
 <div class="success-message">
-<span class="message-icon">✓</span>
-{{ session('success') }}
+    <span class="message-icon">✓</span>
+    {{ session('success') }}
 </div>
 @endif
 
-<!-- BUSCADOR -->
-
+<!-- 🔍 BUSCADOR + FILTROS -->
 <div class="search-container">
 
 <form method="GET" action="{{ route('admin.students.index') }}">
 
 <div class="search-box">
 
-<input
-type="text"
-name="search"
-value="{{ request('search') }}"
-placeholder="Buscar por nombre, apellido o documento"
-class="search-input">
+    <!-- BUSCADOR -->
+    <input
+        type="text"
+        name="search"
+        value="{{ request('search') }}"
+        placeholder="Buscar por nombre, apellido o documento"
+        class="search-input">
 
-<button class="btn-search">
-🔍 Buscar
-</button>
+    <!-- FILTRO POR GRADO -->
+    <select name="grade_id" class="search-input">
+        <option value="">Todos los grados</option>
 
-<a href="{{ route('admin.students.index') }}" class="btn-reset">
-Limpiar
-</a>
+        @foreach($grades as $grade)
+            <option value="{{ $grade->id }}"
+                {{ request('grade_id') == $grade->id ? 'selected' : '' }}>
+                {{ $grade->name }}
+            </option>
+        @endforeach
+    </select>
+
+    <!-- BOTONES -->
+    <button class="btn-search">🔍 Buscar</button>
+
+    <a href="{{ route('admin.students.index') }}" class="btn-reset">
+        Limpiar
+    </a>
 
 </div>
 
@@ -59,6 +69,7 @@ Limpiar
 
 </div>
 
+<!-- TABLA -->
 <div class="table-container">
 <table class="students-table">
 
@@ -69,6 +80,7 @@ Limpiar
 <th>Documento</th>
 <th>Edad</th>
 <th>EPS</th>
+<th>Grado</th>
 <th>Acciones</th>
 </tr>
 </thead>
@@ -81,11 +93,11 @@ Limpiar
 
 <td class="photo-cell">
 @if($student->photo)
-<img src="{{ asset('storage/'.$student->photo) }}" class="student-photo">
+    <img src="{{ asset('storage/'.$student->photo) }}" class="student-photo">
 @else
-<div class="photo-placeholder">
-<span class="placeholder-icon">👤</span>
-</div>
+    <div class="photo-placeholder">
+        <span class="placeholder-icon">👤</span>
+    </div>
 @endif
 </td>
 
@@ -103,6 +115,20 @@ Limpiar
 
 <td>
 {{ $student->eps }}
+</td>
+
+<td>
+@php
+    $enrollment = $student->enrollments->first();
+@endphp
+
+@if($enrollment && $enrollment->grade)
+    <span class="badge-grade">
+        {{ $enrollment->grade->name }}
+    </span>
+@else
+    <span class="badge-grade">Sin asignar</span>
+@endif
 </td>
 
 <td class="actions-cell">
@@ -123,7 +149,8 @@ Limpiar
 type="submit"
 class="btn-action btn-delete"
 onclick="return confirm('¿Está seguro de eliminar a {{ $student->full_name }}?')">
-🗑️ Eliminar </button>
+🗑️ Eliminar
+</button>
 
 </form>
 
@@ -134,7 +161,7 @@ onclick="return confirm('¿Está seguro de eliminar a {{ $student->full_name }}?
 @empty
 
 <tr>
-<td colspan="6" class="empty-state">
+<td colspan="7" class="empty-state">
 <div class="empty-content">
 <span class="empty-icon">📚</span>
 <p>No se encontraron estudiantes</p>
@@ -154,6 +181,7 @@ Mostrar todos
 </table>
 </div>
 
+<!-- PAGINACIÓN -->
 <div class="pagination-container">
 {{ $students->appends(request()->query())->links() }}
 </div>

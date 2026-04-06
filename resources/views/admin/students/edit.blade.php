@@ -119,7 +119,67 @@
                         required
                     >
                 </div>
+<!-- Tipo de población -->
+<div class="form-group">
+    <label>
+        <span class="label-icon">🌎</span>
+        Tipo de población
+    </label>
 
+    <select name="population_type" class="form-input" id="population_type">
+
+        <option value="ninguno"
+            {{ old('population_type', $student->population_type) == 'ninguno' ? 'selected' : '' }}>
+            Ninguno
+        </option>
+
+        <option value="afro"
+            {{ old('population_type', $student->population_type) == 'afro' ? 'selected' : '' }}>
+            Afro
+        </option>
+
+        <option value="indigena"
+            {{ old('population_type', $student->population_type) == 'indigena' ? 'selected' : '' }}>
+            Indígena
+        </option>
+
+        <option value="desplazado"
+            {{ old('population_type', $student->population_type) == 'desplazado' ? 'selected' : '' }}>
+            Desplazado
+        </option>
+
+    </select>
+</div>
+
+
+<!-- Certificado población -->
+<div class="form-group full-width" id="certificado_container">
+    <label>
+        <span class="label-icon">📄</span>
+        Certificado población (PDF)
+    </label>
+
+    @if($student->population_certificate)
+        <div class="current-photo">
+            <a href="{{ asset('storage/'.$student->population_certificate) }}"
+               target="_blank"
+               class="btn-certificate">
+               📄 Ver certificado actual
+            </a>
+        </div>
+    @endif
+
+    <input 
+        type="file" 
+        name="population_certificate"
+        class="form-input file-input"
+        accept="application/pdf"
+    >
+
+    <small class="form-hint">
+        Solo PDF. Subir solo si deseas cambiarlo.
+    </small>
+</div>
                 <!-- Foto -->
                 <div class="form-group full-width">
                     <label for="photo">

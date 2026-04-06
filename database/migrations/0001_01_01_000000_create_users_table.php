@@ -20,6 +20,8 @@ return new class extends Migration
             $table->rememberToken();
             //el usuarios administrador solo el pueded crear los usuarios de los profesores
             $table->string('role')->default('teacher');
+            // 🔴 CONTROL DE ACCESO
+            $table->boolean('is_active')->default(true);    
             $table->timestamps();
         });
 

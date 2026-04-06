@@ -9,6 +9,7 @@
 <?php $__env->startSection('content'); ?>
 
 <div class="students-container">
+
 <div class="page-header">
     <div class="header-content">
         <h3>👨‍🎓 Estudiantes</h3>
@@ -21,38 +22,48 @@
     </a>
 </div>
 
-
 <?php if(session('success')): ?>
-
 <div class="success-message">
-<span class="message-icon">✓</span>
-<?php echo e(session('success')); ?>
+    <span class="message-icon">✓</span>
+    <?php echo e(session('success')); ?>
 
 </div>
 <?php endif; ?>
 
-<!-- BUSCADOR -->
-
+<!-- 🔍 BUSCADOR + FILTROS -->
 <div class="search-container">
 
 <form method="GET" action="<?php echo e(route('admin.students.index')); ?>">
 
 <div class="search-box">
 
-<input
-type="text"
-name="search"
-value="<?php echo e(request('search')); ?>"
-placeholder="Buscar por nombre, apellido o documento"
-class="search-input">
+    <!-- BUSCADOR -->
+    <input
+        type="text"
+        name="search"
+        value="<?php echo e(request('search')); ?>"
+        placeholder="Buscar por nombre, apellido o documento"
+        class="search-input">
 
-<button class="btn-search">
-🔍 Buscar
-</button>
+    <!-- FILTRO POR GRADO -->
+    <select name="grade_id" class="search-input">
+        <option value="">Todos los grados</option>
 
-<a href="<?php echo e(route('admin.students.index')); ?>" class="btn-reset">
-Limpiar
-</a>
+        <?php $__currentLoopData = $grades; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $grade): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <option value="<?php echo e($grade->id); ?>"
+                <?php echo e(request('grade_id') == $grade->id ? 'selected' : ''); ?>>
+                <?php echo e($grade->name); ?>
+
+            </option>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    </select>
+
+    <!-- BOTONES -->
+    <button class="btn-search">🔍 Buscar</button>
+
+    <a href="<?php echo e(route('admin.students.index')); ?>" class="btn-reset">
+        Limpiar
+    </a>
 
 </div>
 
@@ -60,6 +71,7 @@ Limpiar
 
 </div>
 
+<!-- TABLA -->
 <div class="table-container">
 <table class="students-table">
 
@@ -70,6 +82,7 @@ Limpiar
 <th>Documento</th>
 <th>Edad</th>
 <th>EPS</th>
+<th>Grado</th>
 <th>Acciones</th>
 </tr>
 </thead>
@@ -82,11 +95,11 @@ Limpiar
 
 <td class="photo-cell">
 <?php if($student->photo): ?>
-<img src="<?php echo e(asset('storage/'.$student->photo)); ?>" class="student-photo">
+    <img src="<?php echo e(asset('storage/'.$student->photo)); ?>" class="student-photo">
 <?php else: ?>
-<div class="photo-placeholder">
-<span class="placeholder-icon">👤</span>
-</div>
+    <div class="photo-placeholder">
+        <span class="placeholder-icon">👤</span>
+    </div>
 <?php endif; ?>
 </td>
 
@@ -108,6 +121,21 @@ Limpiar
 
 </td>
 
+<td>
+<?php
+    $enrollment = $student->enrollments->first();
+?>
+
+<?php if($enrollment && $enrollment->grade): ?>
+    <span class="badge-grade">
+        <?php echo e($enrollment->grade->name); ?>
+
+    </span>
+<?php else: ?>
+    <span class="badge-grade">Sin asignar</span>
+<?php endif; ?>
+</td>
+
 <td class="actions-cell">
 
 <a href="<?php echo e(route('admin.students.show', $student->id)); ?>" class="btn-action btn-view">
@@ -126,7 +154,8 @@ Limpiar
 type="submit"
 class="btn-action btn-delete"
 onclick="return confirm('¿Está seguro de eliminar a <?php echo e($student->full_name); ?>?')">
-🗑️ Eliminar </button>
+🗑️ Eliminar
+</button>
 
 </form>
 
@@ -137,7 +166,7 @@ onclick="return confirm('¿Está seguro de eliminar a <?php echo e($student->ful
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
 <tr>
-<td colspan="6" class="empty-state">
+<td colspan="7" class="empty-state">
 <div class="empty-content">
 <span class="empty-icon">📚</span>
 <p>No se encontraron estudiantes</p>
@@ -157,6 +186,7 @@ Mostrar todos
 </table>
 </div>
 
+<!-- PAGINACIÓN -->
 <div class="pagination-container">
 <?php echo e($students->appends(request()->query())->links()); ?>
 
@@ -165,5 +195,4 @@ Mostrar todos
 </div>
 
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\SGA\resources\views/admin/students/index.blade.php ENDPATH**/ ?>

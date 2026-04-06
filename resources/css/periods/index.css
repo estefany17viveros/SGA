@@ -1,0 +1,75 @@
+/* ==============================
+   📊 LISTA DE PERIODOS
+============================== */
+
+.period-container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}
+
+.period-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.period-total {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.period-success {
+    background: #dcfce7;
+    color: #166534;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.period-error {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+/* TABLA */
+.period-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.period-table th {
+    background: #f1f5f9;
+    padding: 10px;
+    text-align: left;
+}
+
+.period-table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.period-table tr:hover {
+    background: #f9fafb;
+}
+
+/* última fila */
+.period-last {
+    background: #eef;
+}
+
+/* acciones */
+.period-actions a {
+    margin-right: 5px;
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.period-actions a:hover {
+    text-decoration: underline;
+}

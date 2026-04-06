@@ -28,4 +28,8 @@ class Group extends Model
     {
         return $this->hasMany(Enrollment::class);
     }
+    public function teachers()
+{
+    return $this->belongsToMany(Teacher::class);
+}
 }

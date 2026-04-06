@@ -205,7 +205,53 @@
 
                 <div class="divider"></div>
 
+<div class="divider"></div>
 
+<!-- POBLACIÓN -->
+<div class="info-block">
+
+    <h5 class="block-title">Población Especial</h5>
+
+    <div class="info-grid">
+
+        <div class="info-item">
+            <span class="info-label">Tipo:</span>
+            <span class="info-value">
+                <?php if($student->population_type && $student->population_type != 'ninguno'): ?>
+                    <?php echo e(ucfirst($student->population_type)); ?>
+
+                <?php else: ?>
+                    No aplica
+                <?php endif; ?>
+            </span>
+        </div>
+
+        <div class="info-item full-width">
+            <span class="info-label">Certificado:</span>
+
+            <?php if($student->population_certificate): ?>
+
+                <a href="<?php echo e(asset('storage/'.$student->population_certificate)); ?>"
+                   target="_blank"
+                   class="btn-certificate">
+                    📄 Ver Certificado
+                </a>
+
+                <a href="<?php echo e(asset('storage/'.$student->population_certificate)); ?>"
+                   download
+                   class="btn-certificate">
+                    ⬇ Descargar
+                </a>
+
+            <?php else: ?>
+                <span class="info-value">No tiene certificado</span>
+            <?php endif; ?>
+
+        </div>
+
+    </div>
+
+</div>
                 <!-- CERTIFICADO -->
                 <div class="info-block">
 
@@ -345,6 +391,7 @@
                         <thead>
                             <tr>
                                 <th>Nombre</th>
+                                    <th>Apellido</th>
                                 <th>Parentesco</th>
                                 <th>Teléfono</th>
                                 <th>Acciones</th>
@@ -357,7 +404,9 @@
 
                             <tr>
 
-                                <td><?php echo e($guardian->full_name); ?></td>
+                                <td><?php echo e($guardian->first_name); ?></td>
+
+                                <td><?php echo e($guardian->last_name); ?></td>
 
                                 <td><?php echo e($guardian->relationship); ?></td>
 

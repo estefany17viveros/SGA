@@ -57,9 +57,6 @@
                         <a href="{{ route('admin.academic_years.show', $year->id) }}"
                            class="btn btn-info btn-sm">Ver</a>
 
-                        <a href="{{ route('admin.academic_years.edit', $year->id) }}"
-                           class="btn btn-warning btn-sm">Editar</a>
-
                         @if($year->status === 'activo')
                             <form action="{{ route('admin.academic_years.close', $year->id) }}"
                                   method="POST"

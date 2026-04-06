@@ -274,6 +274,50 @@ class="form-control @error('blood_type') is-invalid @enderror">
 class="form-control">{{ old('medical_conditions') }}</textarea>
 
 </div>
+<!-- TIPO DE POBLACIÓN -->
+<div class="col-md-6 mt-3">
+    <label>Tipo de población</label>
+
+    <select name="population_type"
+        class="form-control @error('population_type') is-invalid @enderror">
+
+        <option value="">Seleccione</option>
+
+        <option value="ninguno" {{ old('population_type')=='ninguno'?'selected':'' }}>
+            Ninguno
+        </option>
+
+        <option value="afro" {{ old('population_type')=='afro'?'selected':'' }}>
+            Afro
+        </option>
+
+        <option value="indigena" {{ old('population_type')=='indigena'?'selected':'' }}>
+            Indígena
+        </option>
+
+        <option value="desplazado" {{ old('population_type')=='desplazado'?'selected':'' }}>
+            Desplazado
+        </option>
+
+    </select>
+
+    @error('population_type')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
+
+<!-- CERTIFICADO DE POBLACIÓN -->
+<div class="col-md-6 mt-3">
+    <label>Certificado población (PDF)</label>
+
+    <input type="file" name="population_certificate"
+        class="form-control @error('population_certificate') is-invalid @enderror">
+
+    @error('population_certificate')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
 
 </div>
 

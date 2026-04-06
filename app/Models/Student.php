@@ -58,7 +58,15 @@ class Student extends Model
         'blood_type',
         'medical_conditions',
 
-        /*
+         /*
+        |---------------------------------
+        | Población Especial
+        |---------------------------------
+        */
+        'population_type',
+        'population_certificate',
+
+         /*
         |---------------------------------
         | Documentos
         |---------------------------------

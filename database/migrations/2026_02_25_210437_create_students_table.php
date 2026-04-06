@@ -15,18 +15,10 @@ return new class extends Migration
 
             $table->id();
 
-            /*
-            |---------------------------------
-            | Foto del estudiante (NO obligatorio)
-            |---------------------------------
-            */
+            // 📷 Foto (opcional)
             $table->string('photo')->nullable();
 
-            /*
-            |---------------------------------
-            | Datos personales (OBLIGATORIOS)
-            |---------------------------------
-            */
+            // 👤 Datos personales
             $table->string('first_name');
             $table->string('last_name');
 
@@ -37,11 +29,7 @@ return new class extends Migration
 
             $table->date('birth_date');
 
-            /*
-            |---------------------------------
-            | Documento de identidad
-            |---------------------------------
-            */
+            // 🆔 Documento
             $table->enum('identification_type', [
                 'registro_civil',
                 'tarjeta_identidad',
@@ -53,29 +41,15 @@ return new class extends Migration
 
             $table->string('identification_number')->unique();
 
-            /*
-            |---------------------------------
-            | Expedición del documento
-            |---------------------------------
-            */
+            // 📍 Expedición
             $table->date('expedition_date');
-
             $table->string('expedition_department');
-
             $table->string('expedition_municipality');
 
-            /*
-            |---------------------------------
-            | Dirección
-            |---------------------------------
-            */
+            // 🏠 Dirección
             $table->string('address');
 
-            /*
-            |---------------------------------
-            | Salud (OBLIGATORIOS)
-            |---------------------------------
-            */
+            // 🏥 Salud
             $table->string('eps');
 
             $table->enum('blood_type', [
@@ -85,22 +59,25 @@ return new class extends Migration
                 'O+','O-'
             ]);
 
-            /*
-            |---------------------------------
-            | Información adicional (NO obligatoria)
-            |---------------------------------
-            */
+            // 📝 Información adicional
             $table->text('medical_conditions')->nullable();
-
             $table->text('observations')->nullable();
 
+            // 📄 Certificado general
             $table->string('certificate_file')->nullable();
 
-            /*
-            |---------------------------------
-            | Control del sistema
-            |---------------------------------
-            */
+            // 🌎 Tipo de población
+            $table->enum('population_type', [
+                'ninguno',
+                'afro',
+                'indigena',
+                'desplazado'
+            ])->default('ninguno');
+
+            // 📄 Certificado de población
+            $table->string('population_certificate')->nullable();
+
+            // ⏱️ Control del sistema
             $table->timestamps();
 
         });

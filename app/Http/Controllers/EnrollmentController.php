@@ -263,9 +263,10 @@ class EnrollmentController extends Controller
         return back()->with('success','Eliminado correctamente');
     }
 
-    /**
+     /**
      * APROBAR TODOS
      */
+    
     public function approveAll()
     {
         try {
@@ -276,9 +277,7 @@ class EnrollmentController extends Controller
                 return back()->with('error','No hay año activo');
             }
 
-            $enrollments = Enrollment::with('grade')
-                ->where('academic_year_id',$currentYear->id)
-                ->get();
+            $enrollments = Enrollment::where('academic_year_id',$currentYear->id)->get();
 
             foreach ($enrollments as $enrollment) {
 
@@ -286,58 +285,56 @@ class EnrollmentController extends Controller
                     continue;
                 }
 
-                if ($enrollment->grade->level == 11) {
-                    $enrollment->status = 'graduado';
-                } else {
-                    $enrollment->status = 'aprobado';
-                }
-
+                // ✅ TODOS a aprobado
+                $enrollment->status = 'aprobado';
                 $enrollment->save();
             }
 
-            return back()->with('success','Estados actualizados');
+            return back()->with('success','Todos aprobados');
 
         } catch (\Exception $e) {
             return back()->with('error','Error');
         }
     }
-
     /**
      * GRADUADOS (CON PAGINACIÓN Y FILTROS)
      */
     public function graduated(Request $request)
-    {
-        $query = Enrollment::with(['student','grade','group','academicYear'])
-        ->where(function($query){
+{
+    $query = Enrollment::with(['student','grade','group','academicYear'])
+    ->where(function($query){
 
-            $query->where('status','graduado')
+        $query->where('status','graduado')
 
-            ->orWhereHas('grade', function($q){
-                $q->where('level',11);
-            });
-
+        ->orWhere(function($q){
+            $q->whereHas('grade', function($g){
+                $g->where('level',11);
+            })
+            ->where('status','aprobado'); // ✅ CLAVE AQUÍ
         });
 
-        if($request->last_name){
-            $query->whereHas('student', function($q) use ($request){
-                $q->where('last_name','like','%'.$request->last_name.'%');
-            });
-        }
+    });
 
-        if($request->year){
-            $query->whereHas('academicYear', function($q) use ($request){
-                $q->where('year',$request->year);
-            });
-        }
-
-        $enrollments = $query->orderBy('academic_year_id','desc')
-            ->paginate(10)
-            ->withQueryString();
-
-        $years = AcademicYear::orderBy('year','desc')->get();
-
-        return view('admin.enrollments.graduated', compact('enrollments','years'));
+    if($request->last_name){
+        $query->whereHas('student', function($q) use ($request){
+            $q->where('last_name','like','%'.$request->last_name.'%');
+        });
     }
+
+    if($request->year){
+        $query->whereHas('academicYear', function($q) use ($request){
+            $q->where('year',$request->year);
+        });
+    }
+
+    $enrollments = $query->orderBy('academic_year_id','desc')
+        ->paginate(10)
+        ->withQueryString();
+
+    $years = AcademicYear::orderBy('year','desc')->get();
+
+    return view('admin.enrollments.graduated', compact('enrollments','years'));
+}
     /**
  * LISTAR RETIRADOS
  */

@@ -1,0 +1,256 @@
+/* ===================================== */
+/* ========== VARIABLES ================ */
+/* ===================================== */
+
+:root {
+    --azul-profundo:   #0f4c81;
+    --azul-medio:      #1e88e5;
+    --azul-claro:      #e3f2fd;
+    --verde-primario:  #26a69a;
+    --verde-claro:     #80cbc4;
+    --verde-muy-claro: #e0f2f1;
+    --gris-oscuro:     #263238;
+    --gris-claro:      #f5f7fa;
+    --blanco:          #ffffff;
+    --texto:           #263238;
+    --texto-suave:     #607d8b;
+    --rojo:            #ef5350;
+    --rojo-claro:      #ffebee;
+    --naranja:         #fb8c00;
+    --naranja-claro:   #fff3e0;
+}
+
+/* ===================================== */
+/* ========== BASE ===================== */
+/* ===================================== */
+
+.container,
+section.content,
+div.content,
+main {
+    /* 📐 Layout */
+    width: 100%;
+    max-width: 720px; /* un poco más amplio y moderno */
+    margin-inline: auto; /* mejor que margin: 0 auto */
+    
+    /* 📏 Espaciado adaptable */
+    padding: clamp(20px, 4vw, 40px);
+
+    /* 🎨 Apariencia */
+    box-sizing: border-box;
+
+    /* ✨ Animación */
+    animation: fadeInUp 0.5s ease both;
+}
+
+/* ==============================
+   📱 RESPONSIVE (pantallas grandes)
+============================== */
+@media (min-width: 1024px) {
+    .container,
+    section.content,
+    div.content,
+    main {
+        max-width: 900px;
+        padding: 48px 24px;
+    }
+}
+
+/* ==============================
+   📱 MOBILE (pantallas pequeñas)
+============================== */
+@media (max-width: 480px) {
+    .container,
+    section.content,
+    div.content,
+    main {
+        padding: 20px 16px;
+    }
+}   
+/* ===================================== */
+/* ========== TÍTULO h2 ================ */
+/* ===================================== */
+
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--azul-profundo);
+    margin: 0 0 26px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    letter-spacing: -0.01em;
+}
+
+/* Acento naranja para "editar" */
+h2::before {
+    content: '';
+    display: inline-flex;
+    width: 6px;
+    height: 30px;
+    background: linear-gradient(180deg, var(--naranja), var(--azul-medio));
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+/* ===================================== */
+/* ========== ERRORES ================== */
+/* ===================================== */
+
+div[style*="color:red"],
+.alert-errors {
+    background: var(--rojo-claro) !important;
+    border: 1px solid #ffcdd2;
+    border-left: 4px solid var(--rojo);
+    border-radius: 10px;
+    padding: 13px 18px;
+    margin-bottom: 22px;
+    color: #c62828 !important;
+    font-size: 14px;
+    animation: fadeInUp 0.3s ease;
+}
+
+div[style*="color:red"] p {
+    margin: 4px 0;
+    line-height: 1.5;
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+}
+
+/* ===================================== */
+/* ========== FORMULARIO TARJETA ======= */
+/* ===================================== */
+
+form[method="POST"] {
+    background: var(--blanco);
+    border-radius: 16px;
+    /* Borde naranja superior = modo editar */
+    border-top: 4px solid var(--naranja);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    animation: slideIn 0.4s ease;
+}
+
+/* ===================================== */
+/* ========== LABELS =================== */
+/* ===================================== */
+
+form[method="POST"] label {
+    display: block;
+    font-weight: 600;
+    color: var(--azul-profundo);
+    font-size: 13px;
+    letter-spacing: 0.01em;
+    margin-bottom: 7px;
+    margin-top: 18px;
+}
+
+form[method="POST"] label:first-of-type {
+    margin-top: 0;
+}
+
+/* ===================================== */
+/* ========== SELECTS ================== */
+/* ===================================== */
+
+form[method="POST"] select {
+    width: 100%;
+    padding: 11px 40px 11px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 9px;
+    font-size: 14.5px;
+    font-family: inherit;
+    color: var(--texto);
+    background-color: #fafafa;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23263238' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.2s;
+}
+
+form[method="POST"] select:hover {
+    border-color: var(--verde-claro);
+}
+
+form[method="POST"] select:focus {
+    border-color: var(--verde-primario);
+    background-color: var(--blanco);
+    box-shadow: 0 0 0 4px rgba(38, 166, 154, 0.12);
+}
+
+/* ===================================== */
+/* ========== OCULTAR <br> ============= */
+/* ===================================== */
+
+form[method="POST"] br {
+    display: none;
+}
+
+/* ===================================== */
+/* ========== BOTÓN ACTUALIZAR ========= */
+/* ===================================== */
+
+form[method="POST"] button[type="submit"] {
+    align-self: flex-start;
+    margin-top: 28px;
+    padding: 11px 30px;
+    background: linear-gradient(135deg, var(--naranja), #ffa726);
+    color: var(--blanco);
+    border: none;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 3px 10px rgba(251, 140, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+form[method="POST"] button[type="submit"]:hover {
+    background: linear-gradient(135deg, #e65100, var(--naranja));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(251, 140, 0, 0.4);
+}
+
+form[method="POST"] button[type="submit"]:active {
+    transform: scale(0.97);
+}
+
+/* ===================================== */
+/* ========== ANIMACIONES ============== */
+/* ===================================== */
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-18px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ===================================== */
+/* ========== RESPONSIVE =============== */
+/* ===================================== */
+
+@media (max-width: 640px) {
+    form[method="POST"] { padding: 24px 18px; }
+    h2 { font-size: 20px; }
+    form[method="POST"] button[type="submit"] {
+        width: 100%;
+        justify-content: center;
+    }
+}

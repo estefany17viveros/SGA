@@ -19,7 +19,8 @@ return new class extends Migration
                   ->constrained()
                   ->cascadeOnDelete();
 
-            $table->string('full_name');
+         $table->string('first_name');
+            $table->string('last_name');
             $table->string('relationship'); // padre, madre, tutor
             $table->string('identification_number')->nullable();
             $table->string('phone');

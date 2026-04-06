@@ -15,7 +15,9 @@
 
 <div class="card-body">
 
-<p><strong>Nombre:</strong> <?php echo e($guardian->full_name); ?></p>
+<p><strong>Nombre:</strong> <?php echo e($guardian->first_name); ?></p>
+
+<p><strong>Apellido:</strong> <?php echo e($guardian->last_name); ?></p>
 
 <p><strong>Parentesco:</strong> <?php echo e($guardian->relationship); ?></p>
 

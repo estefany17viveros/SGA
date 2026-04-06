@@ -442,6 +442,78 @@ unset($__errorArgs, $__bag); ?>
 class="form-control"><?php echo e(old('medical_conditions')); ?></textarea>
 
 </div>
+<!-- TIPO DE POBLACIÓN -->
+<div class="col-md-6 mt-3">
+    <label>Tipo de población</label>
+
+    <select name="population_type"
+        class="form-control <?php $__errorArgs = ['population_type'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+
+        <option value="">Seleccione</option>
+
+        <option value="ninguno" <?php echo e(old('population_type')=='ninguno'?'selected':''); ?>>
+            Ninguno
+        </option>
+
+        <option value="afro" <?php echo e(old('population_type')=='afro'?'selected':''); ?>>
+            Afro
+        </option>
+
+        <option value="indigena" <?php echo e(old('population_type')=='indigena'?'selected':''); ?>>
+            Indígena
+        </option>
+
+        <option value="desplazado" <?php echo e(old('population_type')=='desplazado'?'selected':''); ?>>
+            Desplazado
+        </option>
+
+    </select>
+
+    <?php $__errorArgs = ['population_type'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+        <div class="invalid-feedback"><?php echo e($message); ?></div>
+    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+</div>
+
+
+<!-- CERTIFICADO DE POBLACIÓN -->
+<div class="col-md-6 mt-3">
+    <label>Certificado población (PDF)</label>
+
+    <input type="file" name="population_certificate"
+        class="form-control <?php $__errorArgs = ['population_certificate'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+
+    <?php $__errorArgs = ['population_certificate'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+        <div class="invalid-feedback"><?php echo e($message); ?></div>
+    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+</div>
 
 </div>
 

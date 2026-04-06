@@ -68,6 +68,7 @@ Limpiar </a>
 <tr>
 <th>ID</th>
 <th>Nombre</th>
+<th>Apellido</th>
 <th>Parentesco</th>
 <th>Teléfono</th>
 <th>Estudiante</th>
@@ -83,7 +84,9 @@ Limpiar </a>
 
 <td>{{ $guardian->id }}</td>
 
-<td>{{ $guardian->full_name }}</td>
+<td>{{ $guardian->first_name }}</td>
+
+<td>{{ $guardian->last_name }}</td>
 
 <td>{{ $guardian->relationship }}</td>
 

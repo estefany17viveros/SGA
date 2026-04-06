@@ -21,7 +21,7 @@ $guardians = Guardian::with('student')
 
 $query->whereHas('student', function($q) use ($request){
 
-$q->where('last_name','like','%'.$request->apellido.'%');
+$q->where('first_name','like','%'.$request->apellido.'%');
 
 });
 
@@ -50,7 +50,8 @@ public function create($student_id)
 {
     $request->validate([
         'student_id' => 'required|exists:students,id',
-        'full_name' => 'required|string|max:255',
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
         'relationship' => 'required|string|max:100',
         'phone' => 'required|string|max:20',
         'identification_number' => 'nullable|string|max:50',
@@ -61,7 +62,8 @@ public function create($student_id)
 
     Guardian::create([
         'student_id' => $request->student_id,
-        'full_name' => $request->full_name,
+        'first_name' => $request->first_name,
+        'last_name' => $request->last_name,
         'relationship' => $request->relationship,
         'identification_number' => $request->identification_number,
         'phone' => $request->phone,
@@ -105,7 +107,8 @@ public function create($student_id)
 
         $request->validate([
             'student_id' => 'required|exists:students,id',
-            'full_name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'relationship' => 'required|string|max:50',
             'identification_number' => 'nullable|string|max:50',
             'phone' => 'required|string|max:20',
@@ -118,7 +121,8 @@ public function create($student_id)
 
         $guardian->update([
             'student_id' => $request->student_id,
-            'full_name' => $request->full_name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
             'relationship' => $request->relationship,
             'identification_number' => $request->identification_number,
             'phone' => $request->phone,

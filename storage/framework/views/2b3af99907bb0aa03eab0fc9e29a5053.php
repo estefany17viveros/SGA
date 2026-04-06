@@ -59,9 +59,6 @@
                         <a href="<?php echo e(route('admin.academic_years.show', $year->id)); ?>"
                            class="btn btn-info btn-sm">Ver</a>
 
-                        <a href="<?php echo e(route('admin.academic_years.edit', $year->id)); ?>"
-                           class="btn btn-warning btn-sm">Editar</a>
-
                         <?php if($year->status === 'activo'): ?>
                             <form action="<?php echo e(route('admin.academic_years.close', $year->id)); ?>"
                                   method="POST"

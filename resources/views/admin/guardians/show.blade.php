@@ -15,7 +15,9 @@
 
 <div class="card-body">
 
-<p><strong>Nombre:</strong> {{ $guardian->full_name }}</p>
+<p><strong>Nombre:</strong> {{ $guardian->first_name }}</p>
+
+<p><strong>Apellido:</strong> {{ $guardian->last_name }}</p>
 
 <p><strong>Parentesco:</strong> {{ $guardian->relationship }}</p>
 

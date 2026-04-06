@@ -31,7 +31,7 @@
 <option value="{{ $student->id }}"
 {{ $guardian->student_id == $student->id ? 'selected' : '' }}>
 
-{{ $student->full_name }}
+{{ $student->first_name }} {{ $student->last_name }}
 
 </option>
 
@@ -45,9 +45,18 @@
 <label>Nombre Completo</label>
 
 <input type="text"
-name="full_name"
+name="first_name"
 class="form-control"
-value="{{ $guardian->full_name }}">
+value="{{ $guardian->first_name }}">
+</div>
+
+<div class="col-md-6">
+<label>Apellido</label>
+
+<input type="text"
+name="last_name"
+class="form-control"
+value="{{ $guardian->last_name }}">
 </div>
 
 <div class="col-md-6">

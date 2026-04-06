@@ -69,6 +69,7 @@ Limpiar </a>
 <tr>
 <th>ID</th>
 <th>Nombre</th>
+<th>Apellido</th>
 <th>Parentesco</th>
 <th>Teléfono</th>
 <th>Estudiante</th>
@@ -84,7 +85,9 @@ Limpiar </a>
 
 <td><?php echo e($guardian->id); ?></td>
 
-<td><?php echo e($guardian->full_name); ?></td>
+<td><?php echo e($guardian->first_name); ?></td>
+
+<td><?php echo e($guardian->last_name); ?></td>
 
 <td><?php echo e($guardian->relationship); ?></td>
 

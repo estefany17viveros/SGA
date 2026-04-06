@@ -54,6 +54,9 @@ class AcademicYearController extends Controller
                 'periods' => $request->periods,
             ]);
 
+              // 🔥 AQUI VA ESTO (CREA LOS PERIODOS)
+        $this->createPeriods($newYear);
+
             // Clonar estructura y promover estudiantes
             if ($oldYear) {
                  $this->promoteStudents($oldYear, $newYear);
@@ -106,7 +109,43 @@ class AcademicYearController extends Controller
     }
 
     }
+  private function createPeriods($academicYear)
+{
+    $totalPeriods = $academicYear->periods;
 
+    $start = \Carbon\Carbon::parse($academicYear->start_date);
+    $end   = \Carbon\Carbon::parse($academicYear->end_date);
+
+    $daysPerPeriod = floor($start->diffInDays($end) / $totalPeriods);
+
+    // 🔥 dividir porcentaje
+    $basePercentage = floor((100 / $totalPeriods) * 100) / 100; // 2 decimales
+    $totalAssigned = 0;
+
+    for ($i = 1; $i <= $totalPeriods; $i++) {
+
+        $periodStart = $start->copy()->addDays(($i - 1) * $daysPerPeriod);
+        $periodEnd   = $start->copy()->addDays(($i * $daysPerPeriod) - 1);
+
+        // 🔥 último periodo ajusta sobrante
+        if ($i == $totalPeriods) {
+            $percentage = 100 - $totalAssigned;
+        } else {
+            $percentage = $basePercentage;
+            $totalAssigned += $percentage;
+        }
+
+        \App\Models\Period::create([
+            'academic_year_id' => $academicYear->id,
+            'number' => $i,
+            'name' => "Periodo $i",
+            'start_date' => $periodStart,
+            'end_date' => $periodEnd,
+            'percentage' => $percentage,
+            'status' => $i == 1 ? 'activo' : 'cerrado'
+        ]);
+    }
+}
     /**
      * Cerrar año académico
      */
@@ -132,38 +171,7 @@ class AcademicYearController extends Controller
         return view('admin.academic_years.show', compact('academicYear'));
     }
 
-    /**
-     * Editar
-     */
-    public function edit($id)
-    {
-        $academicYear = AcademicYear::findOrFail($id);
-        return view('admin.academic_years.edit', compact('academicYear'));
-    }
-
-    /**
-     * Actualizar
-     */
-    public function update(Request $request, $id)
-    {
-        $academicYear = AcademicYear::findOrFail($id);
-
-        $request->validate([
-            'year' => 'required|integer|unique:academic_years,year,' . $academicYear->id,
-            'calendar' => 'required|in:A,B',
-            'periods' => 'required|integer|min:1',
-        ]);
-
-        $academicYear->update([
-            'year' => $request->year,
-            'calendar' => $request->calendar,
-            'periods' => $request->periods,
-        ]);
-
-        return redirect()->route('admin.academic_years.index')
-            ->with('success', 'Año académico actualizado correctamente.');
-    }
-
+// no lleva la funcion edit para no dañar el sistema completo ni año ni periodo ni calendario
     /**
      * Eliminar
      */
