@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title', 'Años Académicos'); ?>
 <?php $__env->startPush('styles'); ?>
 <?php echo app('Illuminate\Foundation\Vite')('resources/css/academic_years/index.css'); ?>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Editar Matrícula')
 @push('styles')
-@vite('resources/css/enrollments/edit.css')
+@vite('resources/css/admin/enrollments/edit.css')
 @endpush
 @section('content')
 

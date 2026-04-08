@@ -3,7 +3,7 @@
 @section('title', 'Editar Estudiante')
 
 @push('styles')
-@vite('resources/css/students/edit.css')    
+@vite('resources/css/admin/students/edit.css')    
 @endpush
 
 @section('content')

@@ -14,14 +14,22 @@ return new class extends Migration
         Schema::create('scores', function (Blueprint $table) {
     $table->id();
 
-    $table->foreignId('activity_id')->constrained()->cascadeOnDelete();
+    // 🔗 RELACIONES
     $table->foreignId('student_id')->constrained()->cascadeOnDelete();
+    $table->foreignId('teacher_subject_id')->constrained()->cascadeOnDelete();
 
-    $table->decimal('score', 5, 2); // 0 a 5
+    // 🧠 NOTAS
+    $table->decimal('saber', 5, 2)->nullable();
+    $table->decimal('hacer', 5, 2)->nullable();
+    $table->decimal('ser', 5, 2)->nullable();
+
+    // 💬 COMENTARIO
+    $table->text('comment')->nullable();
 
     $table->timestamps();
 
-    $table->unique(['activity_id', 'student_id']); // 🔥 evita duplicados
+    // 🔒 UN SOLO REGISTRO POR ESTUDIANTE
+    $table->unique(['student_id', 'teacher_subject_id']);
 });
     }
 

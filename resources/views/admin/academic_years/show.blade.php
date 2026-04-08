@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @push('styles')
-@vite('resources/css/academic_years/show.css')
+@vite('resources/css/admin/academic_years/show.css')
 @endpush
 @section('content')
 <div class="container">

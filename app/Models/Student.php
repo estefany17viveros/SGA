@@ -98,6 +98,10 @@ class Student extends Model
     |------------------------------------------------------------------
     */
 
+            public function scores()
+        {
+            return $this->hasMany(Score::class);
+        }
     /**
      * Matrículas del estudiante
      * Un estudiante puede tener muchas matrículas

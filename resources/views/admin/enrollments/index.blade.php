@@ -3,7 +3,7 @@
 @section('title', 'Gestión de Matrículas')
 
 @push('styles')
-@vite('resources/css/enrollments/index.css')
+@vite('resources/css/admin/enrollments/index.css')
 @endpush
 
 @section('content')

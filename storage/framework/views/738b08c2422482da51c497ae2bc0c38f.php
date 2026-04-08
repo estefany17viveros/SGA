@@ -1,4 +1,3 @@
-
 <?php $__env->startPush('styles'); ?>
 <?php echo app('Illuminate\Foundation\Vite')('resources/css/subjects/create.css'); ?>
 <?php $__env->stopPush(); ?>

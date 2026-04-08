@@ -3,7 +3,7 @@
 @section('title', 'Crear Perfil de Profesor')
 
 @push('styles')
-    @vite('resources/css/teachers/create.css')
+    @vite('resources/css/admin/teachers/create.css')
 @endpush
 
 @section('content')
@@ -149,11 +149,6 @@
             <div class="form-group full-width">
                 <label>Correo Electrónico</label>
                 <input type="email" name="email" class="form-input" value="{{ old('email') }}" required>
-            </div>
-
-            <div class="form-group full-width">
-                <label>Contraseña</label>
-                <input type="password" name="password" class="form-input" required minlength="6">
             </div>
         </div>
 

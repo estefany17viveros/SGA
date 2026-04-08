@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Detalle del Estudiante'); ?>
 
 <?php $__env->startPush('styles'); ?>

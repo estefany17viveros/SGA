@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title','Acudientes'); ?>
 
 <?php $__env->startPush('styles'); ?>

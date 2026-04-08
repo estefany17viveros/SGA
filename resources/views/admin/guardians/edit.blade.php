@@ -3,7 +3,7 @@
 
 @section('title','Editar Acudiente')
 @push('styles')
-@vite('resources/css/guardians/edit.css')
+@vite('resources/css/admin/guardians/edit.css')
 @endpush
 @section('content')
 

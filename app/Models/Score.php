@@ -1,27 +1,26 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Score extends Model
 {
     protected $fillable = [
-        'activity_id',
         'student_id',
-        'score'
+        'teacher_subject_id',
+        'saber',
+        'hacer',
+        'ser',
+        'comment'
     ];
-
-    // 🔗 Relaciones
-
-    public function activity()
-    {
-        return $this->belongsTo(Activity::class);
-    }
 
     public function student()
     {
         return $this->belongsTo(Student::class);
+    }
+
+    public function teacherSubject()
+    {
+        return $this->belongsTo(TeacherSubject::class);
     }
 }

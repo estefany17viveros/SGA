@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Str;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -37,7 +37,6 @@ class TeacherController extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
 
             'document_number' => 'required|unique:teachers',
             'gender' => 'required',
@@ -53,7 +52,7 @@ class TeacherController extends Controller
         $user = User::create([
             'name' => $request->first_name . ' ' . $request->last_name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make(Str::random(10)), // ✅ CLAVE AUTOMÁTICA
             'is_active' => true
         ]);
 

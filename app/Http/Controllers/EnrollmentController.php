@@ -40,20 +40,45 @@ class EnrollmentController extends Controller
      * FORMULARIO CREAR MATRÍCULA
      */
     public function create(Request $request)
-    {
-        $students = Student::orderBy('first_name')->get();
-        $grades = Grade::orderBy('level')->get();
+{
+    // 🔥 Si viene desde flujo automático (desde acudiente)
+    $student = null;
 
-        $groups = [];
-        if ($request->grade_id) {
-            $groups = Group::where('grade_id', $request->grade_id)->get();
-        }
-
-        $year = AcademicYear::where('status', 'activo')->first();
-
-        return view('admin.enrollments.create', compact('students', 'grades', 'groups', 'year'));
+    if ($request->student_id) {
+        $student = Student::findOrFail($request->student_id);
     }
 
+    // 📚 Grados
+    $grades = Grade::orderBy('level')->get();
+
+    // 👥 Grupos (vacío inicialmente)
+    $groups = [];
+
+    if ($request->grade_id) {
+        $groups = Group::where('grade_id', $request->grade_id)->get();
+    }
+
+    // 📅 Año activo
+    $year = AcademicYear::where('status', 'activo')->first();
+
+    if (!$year) {
+        return back()->with('error', '❌ No hay año académico activo.');
+    }
+
+    // 👨‍🎓 Solo cargar lista de estudiantes si NO viene uno específico
+    $students = null;
+    if (!$student) {
+        $students = Student::orderBy('first_name')->get();
+    }
+
+    return view('admin.enrollments.create', compact(
+        'student', // 🔥 uno solo (flujo automático)
+        'students', // 🔥 lista (modo manual)
+        'grades',
+        'groups',
+        'year'
+    ));
+}
     /**
      * GUARDAR MATRÍCULA
      */

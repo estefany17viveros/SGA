@@ -2,81 +2,80 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Score;
-use App\Models\Activity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\TeacherSubject;
+use App\Models\Student;
+use App\Models\Score;
+use App\Models\AcademicYear;
 
 class ScoreController extends Controller
 {
     /**
-     * GUARDAR / ACTUALIZAR NOTAS MASIVAS
+     * 📊 VER NOTAS (TABLA)
+     */
+    public function index($id)
+    {
+        $user = Auth::user();
+
+        // 🔒 Validar profesor
+        if (!$user || !$user->teacher) {
+            abort(403);
+        }
+
+        $teacher = $user->teacher;
+
+        // 🔥 Asignación del profesor
+        $assignment = TeacherSubject::where('teacher_id', $teacher->id)
+            ->with(['subject', 'grade'])
+            ->findOrFail($id);
+
+        // 🔥 Año activo
+        $year = AcademicYear::where('status', 'activo')->first();
+
+        if (!$year) {
+            return back()->with('error', 'No hay año académico activo');
+        }
+
+        // 👨‍🎓 Estudiantes del grado
+        $students = Student::whereHas('enrollments', function ($q) use ($assignment, $year) {
+            $q->where('grade_id', $assignment->grade_id)
+              ->where('academic_year_id', $year->id);
+        })->get();
+
+        // 🔥 Traer notas existentes
+        $scores = Score::where('teacher_subject_id', $assignment->id)
+            ->get()
+            ->keyBy('student_id');
+
+        return view('teacher.scores.index', compact('students', 'assignment', 'scores'));
+    }
+
+    /**
+     * 💾 GUARDAR NOTAS
      */
     public function store(Request $request)
     {
         $request->validate([
-            'activity_id' => 'required|exists:activities,id',
-            'scores' => 'required|array',
-            'scores.*.student_id' => 'required|exists:students,id',
-            'scores.*.score' => 'required|numeric|min:0|max:5',
+            'teacher_subject_id' => 'required|exists:teacher_subjects,id'
         ]);
 
-        $activity = Activity::findOrFail($request->activity_id);
-
-        foreach ($request->scores as $item) {
+        foreach ($request->scores as $student_id => $data) {
 
             Score::updateOrCreate(
                 [
-                    'activity_id' => $activity->id,
-                    'student_id' => $item['student_id']
+                    'student_id' => $student_id,
+                    'teacher_subject_id' => $request->teacher_subject_id
                 ],
                 [
-                    'score' => $item['score']
+                    'saber' => $data['saber'] ?? null,
+                    'hacer' => $data['hacer'] ?? null,
+                    'ser' => $data['ser'] ?? null,
+                    'comment' => $data['comment'] ?? null
                 ]
             );
         }
 
-        return view('activities.show', compact('activity'));
-        
-    }
-
-    /**
-     * LISTAR NOTAS DE UNA ACTIVIDAD
-     */
-    public function index($activityId)
-    {
-        $scores = Score::with('student')
-            ->where('activity_id', $activityId)
-            ->get();
-
-        return view('scores.index', compact('scores'));
-    }
-
-    /**
-     * ACTUALIZAR UNA NOTA INDIVIDUAL
-     */
-    public function update(Request $request, $id)
-    {
-        $score = Score::findOrFail($id);
-
-        $request->validate([
-            'score' => 'required|numeric|min:0|max:5'
-        ]);
-
-        $score->update([
-            'score' => $request->score
-        ]);
-
-        return view('activities.show', ['activity' => $score->activity]);
-    }
-
-    /**
-     * ELIMINAR NOTA
-     */
-    public function destroy($id)
-    {
-        $score = Score::findOrFail($id);
-        $score->delete();
-
-        return view('activities.show', ['activity' => $score->activity]);
+        return back()->with('success', '✅ Notas guardadas correctamente');
     }
 }

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Grados')
 @push('styles')
-@vite('resources/css/grades/index.css')
+@vite('resources/css/admin/grades/index.css')
 @endpush
 @section('content')
 <div class="container">

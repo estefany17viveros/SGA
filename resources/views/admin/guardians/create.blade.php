@@ -3,7 +3,7 @@
 
 @section('title','Registrar Acudiente')
 @push('styles')
-@vite('resources/css/guardians/create.css')
+@vite('resources/css/admin/guardians/create.css')
 @endpush
 @section('content')
 

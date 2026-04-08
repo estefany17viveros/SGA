@@ -2,7 +2,7 @@
 @extends('layouts.app')
 
 @push('styles')
-@vite('resources/css/students/create.css')
+@vite('resources/css/admin/students/create.css')
 
 @endpush
 

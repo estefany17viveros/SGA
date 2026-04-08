@@ -185,6 +185,10 @@ if ($graduated) {
 
 return redirect()->route('admin.guardians.create', $student->id)
         ->with('success', 'Estudiante creado. Ahora registra el acudiente.');
+ // 🔥 REDIRECCIÓN OBLIGATORIA A MATRÍCULA
+    return redirect()->route('admin.enrollments.create', [
+        'student_id' => $request->student_id
+    ])->with('success', 'Acudiente registrado. Ahora debes matricular al estudiante.');
 }
 
     /**

@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title', 'Profesores'); ?>
 <?php $__env->startPush('styles'); ?>
     <?php echo app('Illuminate\Foundation\Vite')('resources/css/teachers/show.css'); ?>

@@ -1,9 +1,6 @@
-
-
-
 <?php $__env->startSection('title','Registrar Acudiente'); ?>
 <?php $__env->startPush('styles'); ?>
-<?php echo app('Illuminate\Foundation\Vite')('resources/css/guardians/create.css'); ?>
+<?php echo app('Illuminate\Foundation\Vite')('resources/css/admin/guardians/create.css'); ?>
 <?php $__env->stopPush(); ?>
 <?php $__env->startSection('content'); ?>
 

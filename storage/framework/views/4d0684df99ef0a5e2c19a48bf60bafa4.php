@@ -1,5 +1,6 @@
-
-
+<?php $__env->startPush('styles'); ?>
+<?php echo app('Illuminate\Foundation\Vite')('resources/css/teachersubjects/show.css'); ?>
+<?php $__env->stopPush(); ?>
 <?php $__env->startSection('content'); ?>
 
 <h2>Detalle de Asignación</h2>

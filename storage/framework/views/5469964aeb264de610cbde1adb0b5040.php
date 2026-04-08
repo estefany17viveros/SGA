@@ -1,6 +1,5 @@
-
 <?php $__env->startPush('styles'); ?>
-<?php echo app('Illuminate\Foundation\Vite')('resources/css/teachersubjects/index.css'); ?>
+<?php echo app('Illuminate\Foundation\Vite')('resources/css/admin/teachersubjects/index.css'); ?>
 <?php $__env->stopPush(); ?>
 <?php $__env->startSection('content'); ?>
 

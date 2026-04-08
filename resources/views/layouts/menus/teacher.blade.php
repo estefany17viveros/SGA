@@ -6,9 +6,8 @@
 
     <div id="menu5" class="hidden absolute bg-white text-black mt-2 rounded shadow-lg w-48 z-50">
 
-        <a href="{{ route('teacher.activities.index') }}" class="block px-4 py-2 hover:bg-gray-200">
-            Ver actividades
+  <a href="{{ route('teacher.dashboard') }}" class="block px-4 py-2 hover:bg-gray-200">
+            Ver panel de control
         </a>
-
     </div>
 </div>

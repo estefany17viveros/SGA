@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @push('styles')
-@vite('resources/css/periods/index.css')
+@vite('resources/css/admin/periods/index.css')
 @endpush
 @section('content')
 

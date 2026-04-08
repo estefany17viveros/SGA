@@ -72,10 +72,13 @@ public function create($student_id)
         'address' => $request->address,
     ]);
 
-    return redirect()->route('admin.students.show', $request->student_id)
-        ->with('success','Acudiente registrado correctamente');
-}
+    // 🔥 AQUÍ ESTÁ LA MAGIA
+    return redirect()->route('admin.enrollments.create', [
+        'student_id' => $request->student_id
+    ])->with('success', 'Acudiente registrado. Ahora debes matricular al estudiante.');
 
+
+    }
     /**
      * VER ACUDIENTE
      */

@@ -3,7 +3,7 @@
 <?php $__env->startSection('title', 'Gestión de Matrículas'); ?>
 
 <?php $__env->startPush('styles'); ?>
-<?php echo app('Illuminate\Foundation\Vite')('resources/css/enrollments/index.css'); ?>
+<?php echo app('Illuminate\Foundation\Vite')('resources/css/admin/enrollments/index.css'); ?>
 <?php $__env->stopPush(); ?>
 
 <?php $__env->startSection('content'); ?>

@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Crear Perfil de Profesor'); ?>
 
 <?php $__env->startPush('styles'); ?>
@@ -150,11 +148,6 @@
             <div class="form-group full-width">
                 <label>Correo Electrónico</label>
                 <input type="email" name="email" class="form-input" value="<?php echo e(old('email')); ?>" required>
-            </div>
-
-            <div class="form-group full-width">
-                <label>Contraseña</label>
-                <input type="password" name="password" class="form-input" required minlength="6">
             </div>
         </div>
 

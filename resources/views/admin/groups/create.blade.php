@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Crear Grupo')
 @push('styles')
-@vite('resources/css/groups/create.css')
+@vite('resources/css/admin/groups/create.css')
 @endpush
 @section('content')
 <div class="container">

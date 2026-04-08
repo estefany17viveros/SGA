@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Crear Año Académico')
 @push('styles')
-@vite('resources/css/academic_years/create.css')
+@vite('resources/css/admin/academic_years/create.css')
 @endpush
 @section('content')
 <div class="container">

@@ -2,7 +2,7 @@
 
 @section('title', 'Estudiantes Retirados')
 @push('styles')
-@vite('resources/css/enrollments/retired.css')
+@vite('resources/css/admin/enrollments/retired.css')
 @endpush
 @section('content')
 

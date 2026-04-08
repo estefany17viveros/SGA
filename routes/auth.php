@@ -202,18 +202,30 @@ Route::middleware(['auth', 'role:teacher'])
     ->name('teacher.')
     ->group(function () {
 
+//   Route::get('/dashboard', [TeacherDashboardController::class, 'index'])
+//             ->name('dashboard');
+  
+       // 📚 Dashboard
+        Route::get('dashboard', [TeacherDashboardController::class, 'index'])
+            ->name('dashboard');
 
+        // 🎓 Grados por materia
+        Route::get('subject/{subject}/grades', [TeacherDashboardController::class, 'grades'])
+            ->name('subject.grades');
+
+        // 👨‍🎓 Estudiantes por grado
+        Route::get('subject/{subject}/grade/{grade}/students', [TeacherDashboardController::class, 'students'])
+            ->name('subject.students');
 
     
 
-//  IMPORTANTE: Las rutas de actividades y notas deben ir al final para evitar conflictos con otras rutas
+            Route::get('scores/{id}', [ScoreController::class, 'index'])
+    ->name('scores.index');
 
-        // Activities and scores
-        Route::resource('activities', ActivityController::class);
-Route::get('scores/{activity}/create', [ScoreController::class, 'create'])->name('scores.create');
-Route::post('scores', [ScoreController::class, 'store'])->name('scores.store');
-Route::get('scores/{activity}', [ScoreController::class, 'show'])->name('scores.show');
-Route::get('score/{id}/edit', [ScoreController::class, 'edit'])->name('scores.edit');
-Route::put('score/{id}', [ScoreController::class, 'update'])->name('scores.update');
-Route::delete('score/{id}', [ScoreController::class, 'destroy'])->name('scores.destroy');
-    });
+// 💾 Guardar notas
+Route::post('scores', [ScoreController::class, 'store'])
+    ->name('scores.store');
+
+
+    
+            });

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Grupos del Grado')
 @push('styles')
-@vite('resources/css/groups/index.css')
+@vite('resources/css/admin/groups/index.css')
 @endpush
 @section('content')
 <div class="container">

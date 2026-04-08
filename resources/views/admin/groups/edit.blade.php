@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Editar Grupo')
 @push('styles')
-@vite('resources/css/groups/edit.css')
+@vite('resources/css/admin/groups/edit.css')
 
 @endpush
 @section('content')

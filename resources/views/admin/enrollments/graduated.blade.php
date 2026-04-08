@@ -2,7 +2,7 @@
 
 @section('title', 'Estudiantes Graduados')
 @push('styles')
-@vite('resources/css/enrollments/graduated.css')
+@vite('resources/css/admin/enrollments/graduated.css')
 @endpush
 @section('content')
 

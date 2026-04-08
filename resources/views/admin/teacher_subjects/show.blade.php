@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @push('styles')
-@vite('resources/css/teachersubjects/show.css')
+@vite('resources/css/admin/teachersubjects/show.css')
 @endpush
 @section('content')
 
