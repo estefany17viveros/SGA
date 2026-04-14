@@ -2,28 +2,42 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 class AdminUserSeeder extends Seeder
 {
-public function run()
-{
-    if (!User::where('email', 'admin@academico.com')->exists()) {
+    public function run(): void
+    {
+        $admins = [
+            [
+                'name' => 'Administrador Principal',
+                'email' => 'admin@academico.com',
+            ],
+            [
+                'name' => 'Administrador Secundario',
+                'email' => 'admin2@academico.com',
+            ],
+        ];
 
-        User::create([
-            'name' => 'Administrador',
-            'email' => 'admin@academico.com',
-            'password' => Hash::make('admin123'), // contraseña temporal
-            'role' => 'admin',
-        ]);
+        foreach ($admins as $admin) {
 
-        echo "Administrador creado.\n";
-        echo "Email: admin@academico.com\n";
-        echo "Password temporal: admin123\n";
-        echo "IMPORTANTE: Cambiar contraseña al iniciar sesión.\n";
+            // Evitar duplicados
+            if (!User::where('email', $admin['email'])->exists()) {
+
+                User::create([
+                    'name' => $admin['name'],
+                    'email' => $admin['email'],
+                    'password' => Hash::make('admin123'),
+                    'role' => 'admin',
+                ]);
+            }
+        }
+
+        $this->command->info('✅ Administradores creados correctamente');
+        $this->command->info('📧 admin@academico.com / admin2@academico.com');
+        $this->command->info('🔑 Password: admin123');
+        $this->command->warn('⚠️ Recuerda cambiar las contraseñas después del login');
     }
-}
 }

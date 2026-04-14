@@ -345,42 +345,6 @@ public function show(Student $student)
     }
 
 
-    /**
-     * Promover estudiantes al siguiente año
-     */
-    // public function promoteStudents()
-    // {
-
-    //     $currentYear = AcademicYear::where('is_active', 1)->first();
-
-    //     $nextYear = AcademicYear::where('year', $currentYear->year + 1)->first();
-
-    //     if (!$nextYear) {
-
-    //         return back()->with('error', 'No existe el siguiente año académico.');
-    //     }
-
-    //     $enrollments = Enrollment::where('academic_year_id', $currentYear->id)->get();
-
-    //     foreach ($enrollments as $enrollment) {
-
-    //         if ($enrollment->status == 'aprobado') {
-
-    //             Enrollment::create([
-
-    //                 'student_id' => $enrollment->student_id,
-    //                 'grade_id' => $enrollment->grade_id + 1,
-    //                 'group_id' => $enrollment->group_id,
-    //                 'academic_year_id' => $nextYear->id,
-    //                 'status' => 'matriculado'
-
-    //             ]);
-    //         }
-    //     }
-
-    //     return back()->with('success', 'Estudiantes promovidos correctamente.');
-    // }
-
     public function promoteStudents()
 {
     $currentYear = AcademicYear::where('status', 'activo')->first();

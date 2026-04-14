@@ -39,7 +39,15 @@ class Teacher extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function observers()
+{
+    return $this->hasMany(Observer::class);
+}
 
+public function directedGrades()
+{
+    return $this->hasMany(Grade::class, 'director_id');
+}
     // 🎯 EDAD AUTOMÁTICA
     public function getAgeAttribute()
     {

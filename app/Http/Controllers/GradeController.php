@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Grade;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -24,10 +25,12 @@ class GradeController extends Controller
     /**
      * Mostrar formulario crear grado
      */
-    public function create()
-    {
-        return view('admin.grades.create');
-    }
+   public function create()
+{
+    $teachers = Teacher::all();
+
+    return view('admin.grades.create', compact('teachers'));
+}
 
 
 
@@ -91,6 +94,10 @@ class GradeController extends Controller
                 'min:1',
                 'unique:grades,level'
             ],
+            'director_id' => [
+                'nullable',
+                'exists:teachers,id'
+            ]
         ], [
             'name.unique' => 'Ya existe un grado con ese nombre.',
             'level.unique' => 'Ya existe un grado con ese nivel.'
@@ -98,7 +105,8 @@ class GradeController extends Controller
 
         Grade::create([
             'name' => $request->name,
-            'level' => $request->level
+            'level' => $request->level,
+            'director_id' => $request->director_id
         ]);
 
         return redirect()->route('admin.grades.index')
@@ -146,6 +154,10 @@ class GradeController extends Controller
                 'min:1',
                 Rule::unique('grades')->ignore($grade->id),
             ],
+            'director_id' => [
+                'nullable',
+                'exists:teachers,id'
+            ]
         ], [
             'name.unique'  => 'Ya existe un grado con ese nombre.',
             'level.unique' => 'Ya existe un grado con ese nivel.',
@@ -154,6 +166,7 @@ class GradeController extends Controller
         $grade->update([
             'name'  => $request->name,
             'level' => $request->level,
+            'director_id' => $request->director_id
         ]);
 
         return redirect()->route('admin.grades.index')

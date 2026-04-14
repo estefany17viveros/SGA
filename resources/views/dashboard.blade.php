@@ -1,103 +1,138 @@
 @push('styles')
     @vite('resources/css/dashboard.css')
 @endpush
- 
+
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h1 class="text-3xl font-bold text-white">
-                Panel Principal
-            </h1>
-            <span class="text-sm text-blue-100">
-                {{ now()->format('d/m/Y') }}
-            </span>
-        </div>
-    </x-slot>
 
-    {{-- Banner institucional --}}
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-800 via-blue-700 to-emerald-600 p-10 text-white shadow-2xl mb-12">
+    {{-- ─── Header ─────────────────────────────────────────── --}}
+    
 
-        <div class="relative z-10">
-            <h2 class="text-3xl font-bold mb-3">
-                Bienvenida, {{ Auth::user()->name }} 👋
-            </h2>
-            <p class="text-lg text-blue-100">
-                Sistema Académico del Colegio — Plataforma de Gestión Institucional
-            </p>
+    <div class="dashboard-wrapper">
+
+        {{-- ─── Banner ──────────────────────────────────────── --}}
+        <div class="dashboard-banner">
+            <div class="banner-content">
+                <h2>Bienvenida, {{ Auth::user()->name }} 👋</h2>
+                <p> Control total del sistema</p>
+            </div>
         </div>
 
-        {{-- efecto decorativo --}}
-        <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
-        <div class="absolute -left-10 -bottom-10 w-52 h-52 bg-emerald-300/20 rounded-full blur-3xl"></div>
+        {{-- ─── Tarjetas de estadísticas ────────────────────── --}}
+        <div class="stats-grid">
 
-    </div>
-
-    {{-- Tarjetas principales --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-
-        {{-- Tarjeta Rol --}}
-        <div class="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition duration-300 border border-slate-100">
-
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <h3 class="text-sm uppercase tracking-wider text-slate-500">
-                        Rol de Usuario
-                    </h3>
-                    <p class="text-2xl font-bold text-blue-800 mt-2">
-                        {{ ucfirst(Auth::user()->role) }}
-                    </p>
-                </div>
-
-                <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-blue-100 text-3xl group-hover:scale-110 transition">
-                    🔐
-                </div>
+            <div class="stat-card stat-role">
+                <span class="stat-icon">🎓</span>
+                <p class="stat-label">Rol</p>
+                <h3 class="stat-value">{{ ucfirst(Auth::user()->role) }}</h3>
             </div>
 
-            <div class="h-1 w-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full"></div>
-        </div>
-
-        {{-- Tarjeta Estado --}}
-        <div class="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition duration-300 border border-slate-100">
-
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <h3 class="text-sm uppercase tracking-wider text-slate-500">
-                        Estado del Sistema
-                    </h3>
-                    <p class="text-xl font-bold text-emerald-700 mt-2">
-                        Operando con normalidad
-                    </p>
-                </div>
-
-                <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-emerald-100 text-3xl group-hover:scale-110 transition">
-                    📊
-                </div>
+            <div class="stat-card stat-total">
+                <span class="stat-icon">👥</span>
+                <p class="stat-label">Total Estudiantes</p>
+                <h3 class="stat-value">{{ $totalStudents ?? 0 }}</h3>
             </div>
 
-            <div class="h-1 w-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-full"></div>
-        </div>
-
-        {{-- Tarjeta Acceso --}}
-        <div class="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition duration-300 border border-slate-100">
-
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <h3 class="text-sm uppercase tracking-wider text-slate-500">
-                        Último Acceso
-                    </h3>
-                    <p class="text-xl font-bold text-green-700 mt-2">
-                        {{ now()->format('d/m/Y') }}
-                    </p>
-                </div>
-
-                <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-green-100 text-3xl group-hover:scale-110 transition">
-                    📅
-                </div>
+            <div class="stat-card stat-adults">
+                <span class="stat-icon">🔞</span>
+                <p class="stat-label">Mayores de edad</p>
+                <h3 class="stat-value">{{ $adultStudentsCount ?? 0 }}</h3>
             </div>
 
-            <div class="h-1 w-full bg-gradient-to-r from-green-600 to-green-400 rounded-full"></div>
+            <div class="stat-card stat-minors">
+                <span class="stat-icon">🧒</span>
+                <p class="stat-label">Menores de edad</p>
+                <h3 class="stat-value">{{ ($totalStudents ?? 0) - ($adultStudentsCount ?? 0) }}</h3>
+            </div>
+
+            <div class="stat-card stat-status">
+                <span class="stat-icon">⚡</span>
+                <p class="stat-label">Estado Sistema</p>
+                <h3 class="stat-value">
+                    <span class="stat-dot"></span>Activo
+                </h3>
+            </div>
+
         </div>
-        
+
+        {{-- ─── Tabla principal ─────────────────────────────── --}}
+        <div class="table-card">
+
+            <div class="table-card-header">
+                <h2>👨‍🎓 Estudiantes mayores de edad (18+)</h2>
+                @if(isset($adultStudents))
+                    <span class="table-count-badge">{{ $adultStudentsCount ?? 0 }} registros</span>
+                @endif
+            </div>
+
+            @if(isset($adultStudents) && $adultStudents->count())
+                <div class="table-scroll">
+                    <table class="students-table">
+
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nombre</th>
+                                <th>Edad</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach($adultStudents as $index => $student)
+                                <tr>
+                                    <td class="col-num">{{ $index + 1 }}</td>
+
+                                    <td class="col-name">
+                                        {{ $student->first_name }} {{ $student->last_name }}
+                                    </td>
+
+                                    <td class="col-age">
+                                        {{ \Carbon\Carbon::parse($student->birth_date)->age }} años
+                                    </td>
+
+                                    
+
+                                    <td>
+                                        <span class="badge-active">
+                                            <span class="dot"></span>
+                                            Activo
+                                        </span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+
+                    </table>
+                </div>
+            @else
+                <div class="empty-state">
+                    <span class="empty-icon">🎓</span>
+                    <p>No hay estudiantes mayores de edad registrados.</p>
+                </div>
+            @endif
+
+        </div>
+
+        {{-- ─── Resumen y recomendación ─────────────────────── --}}
+        <div class="summary-grid">
+
+            <div class="summary-card">
+                <h3>Resumen</h3>
+                <p>
+                    Este panel permite visualizar rápidamente el estado de los estudiantes,
+                    identificar mayores de edad y tener control general del sistema académico.
+                </p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Recomendación</h3>
+                <p>
+                    Se recomienda hacer seguimiento especial a estudiantes mayores de edad
+                    para procesos administrativos, documentación o validaciones legales.
+                </p>
+            </div>
+
+        </div>
 
     </div>
 

@@ -40,6 +40,7 @@
                 Periodos
             </a>
         @endif
+
     </div>
 </div>
 
@@ -58,7 +59,6 @@
         <a href="{{ route('admin.enrollments.index') }}" class="block px-4 py-2 hover:bg-gray-200">
             Matrículas
         </a>
-       
 
         <a href="{{ route('admin.enrollments.graduated') }}" class="block px-4 py-2 hover:bg-gray-200">
             Graduados
@@ -71,6 +71,7 @@
         <a href="{{ route('admin.guardians.index') }}" class="block px-4 py-2 hover:bg-gray-200">
             Acudientes
         </a>
+
     </div>
 </div>
 
@@ -89,5 +90,11 @@
         <a href="{{ route('admin.subjects.create') }}" class="block px-4 py-2 hover:bg-gray-200">
             Crear materia
         </a>
+
+        {{-- 🔥 CORREGIDO --}}
+        <a href="{{ route('admin.login-logs.index') }}" class="block px-4 py-2 hover:bg-gray-200">
+            Ver historial
+        </a>
+
     </div>
 </div>

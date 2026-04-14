@@ -15,7 +15,12 @@ return new class extends Migration
     $table->id();
     $table->string('name');
     $table->integer('level');
-    
+            $table->foreignId('director_id')
+              ->nullable()
+              ->constrained('teachers')
+              ->nullOnDelete();
+
+              
     $table->timestamps();
 });
     }

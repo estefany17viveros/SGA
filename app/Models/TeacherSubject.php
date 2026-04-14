@@ -37,6 +37,11 @@ class TeacherSubject extends Model
         return $this->belongsTo(Group::class);
     }
 
+public function dimension_Comments()
+{
+    return $this->hasMany(Dimension_Comment::class);
+}
+
    public function academicYear()
 {
     return $this->belongsTo(AcademicYear::class);

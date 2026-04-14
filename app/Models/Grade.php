@@ -12,6 +12,7 @@ class Grade extends Model
     protected $fillable = [
         'name',
         'level',
+        'director_id'
     ];
 
     // Relaciones
@@ -19,7 +20,10 @@ class Grade extends Model
     {
         return $this->hasMany(Group::class);
     }
-
+public function director()
+{
+    return $this->belongsTo(Teacher::class, 'director_id');
+}
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class);

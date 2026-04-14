@@ -1,100 +1,218 @@
 
 
 <?php $__env->startPush('styles'); ?>
-    <?php echo app('Illuminate\Foundation\Vite')('resources/css/teacher/students.css'); ?>
+<?php echo app('Illuminate\Foundation\Vite')('resources/css/teacher/students.css'); ?>
 <?php $__env->stopPush(); ?>
 
 <?php $__env->startSection('content'); ?>
 
 <div class="container">
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>👨‍🎓 Estudiantes</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>👨‍🎓 Estudiantes</h2>
 
-        
-        <a href="<?php echo e(route('teacher.scores.index', $teacher_subject_id)); ?>" class="btn btn-primary">
-            📊 Gestionar Notas
-        </a>
-    </div>
+    <a href="<?php echo e(route('teacher.scores.index', $teacher_subject_id)); ?>" class="btn btn-primary">
+        📊 Gestionar Notas
+    </a>
+</div>
 
-    <a href="<?php echo e(route('teacher.dashboard')); ?>">⬅ Volver al inicio</a>
+<a href="<?php echo e(route('teacher.dashboard')); ?>">⬅ Volver al inicio</a>
 
-    <div class="table-responsive mt-3">
-        <table class="table table-bordered">
 
-            <thead class="table-dark">
-                <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <th>Saber</th>
-                    <th>Hacer</th>
-                    <th>Ser</th>
-                    <th>Comentario</th>
-                </tr>
-            </thead>
+<?php
+    use App\Models\AcademicYear;
+    use App\Models\Period;
 
-            <tbody>
+    $year = AcademicYear::where('status', 'activo')->first();
 
-                <?php $__empty_1 = true; $__currentLoopData = $students; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+    $periods = [];
 
-                    <?php
+    if ($year) {
+        $periods = Period::where('academic_year_id', $year->id)
+            ->orderBy('id')
+            ->pluck('id')
+            ->toArray();
+    }
+
+    // 🔥 fallback
+    if (empty($periods)) {
+        $periods = [1,2,3,4];
+    }
+
+    // 🔥 ORDENAR POR PROMEDIO FINAL
+    $studentsSorted = $students->sortByDesc(function($student) use ($teacher_subject_id, $periods) {
+
+        $total = 0;
+        $count = 0;
+
+        foreach ($periods as $period) {
+            $score = $student->scores
+                ->where('teacher_subject_id', $teacher_subject_id)
+                ->where('period_id', $period)
+                ->first();
+
+            if ($score && $score->total !== null) {
+                $total += $score->total;
+                $count++;
+            }
+        }
+
+        return $count > 0 ? $total / $count : 0;
+    })->values();
+?>
+
+<div class="table-responsive mt-3">
+    <table class="table table-bordered">
+
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+
+                
+                <?php $__currentLoopData = $periods; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $period): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <th>P<?php echo e($period); ?></th>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                <th>Total Materia</th>
+                <th>Puesto</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <?php $__empty_1 = true; $__currentLoopData = $studentsSorted; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+
+                <?php
+                    // 🔥 asegurar relación
+                    $student->loadMissing('scores');
+
+                    $totalFinal = 0;
+                    $count = 0;
+                    $periodTotals = [];
+
+                    foreach ($periods as $period) {
+
                         $score = $student->scores
                             ->where('teacher_subject_id', $teacher_subject_id)
+                            ->where('period_id', $period)
                             ->first();
-                    ?>
 
-                    <tr>
-                        <td><?php echo e($loop->iteration); ?></td>
+                        $value = $score->total ?? null;
 
-                        <td><?php echo e($student->full_name); ?></td>
+                        if (!is_null($value)) {
+                            $totalFinal += $value;
+                            $count++;
+                        }
 
-                        
-                        <td>
+                        $periodTotals[$period] = $value;
+                    }
+
+                    $averageFinal = $count > 0 ? round($totalFinal / $count, 2) : 0;
+
+                    // 🔥 CALCULAR PUESTO
+                    $position = 1;
+
+                    foreach ($studentsSorted as $index => $s) {
+
+                        $sTotal = 0;
+                        $sCount = 0;
+
+                        foreach ($periods as $p) {
+                            $sc = $s->scores
+                                ->where('teacher_subject_id', $teacher_subject_id)
+                                ->where('period_id', $p)
+                                ->first();
+
+                            if ($sc && $sc->total !== null) {
+                                $sTotal += $sc->total;
+                                $sCount++;
+                            }
+                        }
+
+                        $sAvg = $sCount > 0 ? $sTotal / $sCount : 0;
+
+                        if ($index > 0) {
+                            $prev = $studentsSorted[$index - 1];
+
+                            $prevTotal = 0;
+                            $prevCount = 0;
+
+                            foreach ($periods as $p) {
+                                $psc = $prev->scores
+                                    ->where('teacher_subject_id', $teacher_subject_id)
+                                    ->where('period_id', $p)
+                                    ->first();
+
+                                if ($psc && $psc->total !== null) {
+                                    $prevTotal += $psc->total;
+                                    $prevCount++;
+                                }
+                            }
+
+                            $prevAvg = $prevCount > 0 ? $prevTotal / $prevCount : 0;
+
+                            if ($sAvg != $prevAvg) {
+                                $position = $index + 1;
+                            }
+                        }
+
+                        if ($s->id == $student->id) {
+                            break;
+                        }
+                    }
+                ?>
+
+                <tr>
+                    <td><?php echo e($loop->iteration); ?></td>
+
+                    <td><?php echo e($student->full_name); ?></td>
+
+                    
+                    <?php $__currentLoopData = $periods; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $period): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <td class="text-center">
                             <span class="badge bg-secondary">
-                                <?php echo e($score->saber ?? '-'); ?>
+                                <?php echo e($periodTotals[$period] ?? '-'); ?>
 
                             </span>
                         </td>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                        
-                        <td>
-                            <span class="badge bg-secondary">
-                                <?php echo e($score->hacer ?? '-'); ?>
+                    
+                    <td class="text-center">
+                        <span class="badge bg-success">
+                            <?php echo e($averageFinal); ?>
 
-                            </span>
-                        </td>
+                        </span>
+                    </td>
 
-                        
-                        <td>
-                            <span class="badge bg-secondary">
-                                <?php echo e($score->ser ?? '-'); ?>
+                    
+                    <td class="text-center">
+                        <span class="badge bg-warning text-dark">
+                            <?php echo e($position); ?>
 
-                            </span>
-                        </td>
+                        </span>
+                    </td>
+                </tr>
 
-                        
-                        <td>
-                            <?php echo e($score->comment ?? 'Sin comentario'); ?>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
-                        </td>
-                    </tr>
+                <tr>
+                    <td colspan="<?php echo e(count($periods) + 4); ?>" class="text-center">
+                        No hay estudiantes
+                    </td>
+                </tr>
 
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+            <?php endif; ?>
 
-                    <tr>
-                        <td colspan="6" class="text-center">
-                            No hay estudiantes
-                        </td>
-                    </tr>
+        </tbody>
 
-                <?php endif; ?>
+    </table>
+</div>
 
-            </tbody>
-
-        </table>
-    </div>
 
 </div>
 
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\SGA\resources\views/teacher/students.blade.php ENDPATH**/ ?>

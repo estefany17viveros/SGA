@@ -1,7 +1,5 @@
-
-
 <?php $__env->startPush('styles'); ?>
-<?php echo app('Illuminate\Foundation\Vite')('resources/css/periods/edit.css'); ?>
+<?php echo app('Illuminate\Foundation\Vite')('resources/css/admin/periods/edit.css'); ?>
 <?php $__env->stopPush(); ?>
 <?php $__env->startSection('content'); ?>
 

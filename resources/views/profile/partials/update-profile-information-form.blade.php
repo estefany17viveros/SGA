@@ -1,84 +1,95 @@
+<section class="profile-card">
 
-<section class="profile-card">   <!-- Información del Perfil -->
     <div class="bg-white/90 backdrop-blur-xl rounded-2xl shadow-custom border border-gray-200 p-8">
+
+        {{-- HEADER --}}
         <header class="mb-6">
-            <h2 class="text-2xl font-bold text-colegioAzul">Información del Perfil</h2>
+            <h2 class="text-2xl font-bold text-colegioAzul">
+                Información del Perfil
+            </h2>
+
             <p class="mt-2 text-gray-600">
-                Actualice la información de su perfil y su dirección de correo electrónico.
+                Solo puedes actualizar tu dirección y número de teléfono
             </p>
         </header>
 
-        <form id="send-verification" method="post" action="{{ route('verification.send') }}">
-            @csrf
-        </form>
+        {{-- MENSAJE --}}
+        @if(session('status') === 'profile-updated')
+            <div class="mb-4 p-3 bg-green-100 text-green-700 rounded-md">
+                ✔ Perfil actualizado correctamente
+            </div>
+        @endif
 
-        <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
+        {{-- 🔥 FOTO --}}
+        <div class="flex flex-col items-center mb-6">
+            @if(auth()->user()->teacher->photo ?? false)
+                <img src="{{ asset('storage/' . auth()->user()->teacher->photo) }}"
+                     class="w-28 h-28 rounded-full object-cover border-4 border-blue-500 shadow">
+            @else
+                <div class="w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+                    Sin foto
+                </div>
+            @endif
+        </div>
+
+        {{-- FORMULARIO SOLO EDITABLE --}}
+        <form method="POST" action="{{ route('profile.update') }}" class="space-y-6">
             @csrf
             @method('patch')
 
-            <!-- Nombre -->
-            <div>
-                <x-input-label for="name" :value="__('Nombre')" class="font-semibold text-gray-700"/>
-                <x-text-input 
-                    id="name" 
-                    name="name" 
-                    type="text" 
-                    class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm px-4 py-2 focus:ring-colegioAzul focus:border-colegioAzul" 
-                    :value="old('name', auth()->user()->name)" 
-                    required 
-                    autofocus 
-                    autocomplete="name" 
-                />
-                <x-input-error class="mt-1 text-red-600" :messages="$errors->get('name')" />
+            {{-- 🔹 INFORMACIÓN SOLO LECTURA --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div>
+                    <label class="font-semibold">Nombre</label>
+                    <input type="text"
+                           value="{{ auth()->user()->name }}"
+                           class="w-full border rounded-lg p-2 bg-gray-100"
+                           disabled>
+                </div>
+
+                <div>
+                    <label class="font-semibold">Correo electrónico</label>
+                    <input type="text"
+                           value="{{ auth()->user()->email }}"
+                           class="w-full border rounded-lg p-2 bg-gray-100"
+                           disabled>
+                </div>
+
             </div>
 
-            <!-- Correo Electrónico -->
+            {{-- 🔥 SOLO EDITABLE --}}
             <div>
-                <x-input-label for="email" :value="__('Correo Electrónico')" class="font-semibold text-gray-700"/>
-                <x-text-input 
-                    id="email" 
-                    name="email" 
-                    type="email" 
-                    class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm px-4 py-2 focus:ring-colegioAzul focus:border-colegioAzul" 
-                    :value="old('email', auth()->user()->email)" 
-                    required 
-                    autocomplete="username" 
-                />
-                <x-input-error class="mt-1 text-red-600" :messages="$errors->get('email')" />
-
-               @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
-                    <div class="mt-2 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded-md">
-                        <p class="text-yellow-700 text-sm">
-                            Su dirección de correo electrónico no está verificada.
-                            <button form="send-verification" class="underline text-yellow-600 hover:text-yellow-800 ml-1">
-                                Haga clic aquí para reenviar el correo de verificación.
-                            </button>
-                        </p>
-                        @if (session('status') === 'verification-link-sent')
-                            <p class="mt-1 text-green-600 text-sm font-medium">
-                                Se ha enviado un nuevo enlace de verificación a su correo electrónico.
-                            </p>
-                        @endif
-                    </div>
-                @endif
+                <label class="font-semibold">Teléfono</label>
+                <input type="text"
+                       name="phone"
+                       value="{{ old('phone', auth()->user()->teacher->phone ?? '') }}"
+                       class="w-full border border-gray-300 rounded-lg p-2">
             </div>
 
-            <!-- Botón Guardar -->
+            <div>
+                <label class="font-semibold">Dirección</label>
+                <input type="text"
+                       name="address"
+                       value="{{ old('address', auth()->user()->teacher->address ?? '') }}"
+                       class="w-full border border-gray-300 rounded-lg p-2">
+            </div>
+
+            {{-- BOTÓN --}}
             <div class="flex items-center gap-4">
-                <x-primary-button class="bg-gradient-to-r from-colegioAzul to-colegioVerde hover:opacity-90">
-                    Guardar
-                </x-primary-button>
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    💾 Guardar cambios
+                </button>
 
                 @if (session('status') === 'profile-updated')
-                    <p
-                        x-data="{ show: true }"
-                        x-show="show"
-                        x-transition
-                        x-init="setTimeout(() => show = false, 2000)"
-                        class="text-sm text-gray-600"
-                    >Guardado.</p>
+                    <span class="text-green-600 text-sm">
+                        Guardado ✔
+                    </span>
                 @endif
             </div>
+
         </form>
+
     </div>
+
 </section>

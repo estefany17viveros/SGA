@@ -40,6 +40,7 @@
                 Periodos
             </a>
         <?php endif; ?>
+
     </div>
 </div>
 
@@ -58,7 +59,6 @@
         <a href="<?php echo e(route('admin.enrollments.index')); ?>" class="block px-4 py-2 hover:bg-gray-200">
             Matrículas
         </a>
-       
 
         <a href="<?php echo e(route('admin.enrollments.graduated')); ?>" class="block px-4 py-2 hover:bg-gray-200">
             Graduados
@@ -71,6 +71,7 @@
         <a href="<?php echo e(route('admin.guardians.index')); ?>" class="block px-4 py-2 hover:bg-gray-200">
             Acudientes
         </a>
+
     </div>
 </div>
 
@@ -89,5 +90,11 @@
         <a href="<?php echo e(route('admin.subjects.create')); ?>" class="block px-4 py-2 hover:bg-gray-200">
             Crear materia
         </a>
+
+        
+        <a href="<?php echo e(route('admin.login-logs.index')); ?>" class="block px-4 py-2 hover:bg-gray-200">
+            Ver historial
+        </a>
+
     </div>
 </div><?php /**PATH C:\xampp\htdocs\SGA\resources\views/layouts/menus/admin.blade.php ENDPATH**/ ?>

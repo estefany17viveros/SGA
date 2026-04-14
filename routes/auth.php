@@ -78,7 +78,10 @@ Route::middleware(['auth', 'role:admin'])
     ->name('admin.')
     ->group(function () {
 
-    
+    Route::get('login-logs', [LoginLogController::class, 'index'])
+        ->name('login-logs.index');
+
+
         // Academic Years
         //no permite las rutas editar por que la verdad daña el sistema si hace cambio alguno 
        Route::resource('academic_years', AcademicYearController::class)
@@ -202,10 +205,7 @@ Route::middleware(['auth', 'role:teacher'])
     ->name('teacher.')
     ->group(function () {
 
-//   Route::get('/dashboard', [TeacherDashboardController::class, 'index'])
-//             ->name('dashboard');
-  
-       // 📚 Dashboard
+  // 📚 Dashboard
         Route::get('dashboard', [TeacherDashboardController::class, 'index'])
             ->name('dashboard');
 
@@ -226,6 +226,62 @@ Route::middleware(['auth', 'role:teacher'])
 Route::post('scores', [ScoreController::class, 'store'])
     ->name('scores.store');
 
-
+    Route::resource('dimension_comments', DimensionCommentController::class);
     
-            });
+    // 📊 Boletín
+    
+Route::get('/boletin/{student}/{period}', [BoletinController::class, 'show'])
+    ->name('boletin.show');
+
+Route::get('/boletin/pdf/{student}/{period}', [BoletinController::class, 'pdf'])
+    ->name('boletin.pdf'); // 🔥 ESTA LÍNEA ES CLAVE
+    //director  de grados 
+
+    Route::get('director', [TeacherDirectorController::class, 'index'])
+    ->name('director.index');
+
+Route::get('director/{grade}/students', [TeacherDirectorController::class, 'students'])
+    ->name('director.students');
+
+    // Guardar observación
+   
+ 
+    Route::get('director', [TeacherDirectorController::class, 'index'])
+        ->name('director.index');
+
+    Route::get('director/{grade}/students', [TeacherDirectorController::class, 'students'])
+        ->name('director.students');
+
+    /*
+    |----------------------------------------
+    | 👁 ESTUDIANTE (DETALLE)
+    |----------------------------------------
+    */
+
+    Route::get('students/{student}', [TeacherStudentController::class, 'show'])
+        ->name('students.show');
+
+    /*
+    |----------------------------------------
+    | ✏️ OBSERVADOR (SOLO DIRECTOR)
+    |----------------------------------------
+    */
+
+    Route::put('students/{student}/observer', [TeacherStudentController::class, 'updateObserver'])
+        ->name('students.observer.update');
+
+//el profe edita el perfil del profesor
+
+
+           Route::get('profile', [ProfileController::class, 'teacherProfile'])
+        ->name('teacher.profile');
+
+    Route::put('profile', [ProfileController::class, 'updateTeacherProfile'])
+        ->name('teacher.profile.update');
+});
+
+use App\Http\Controllers\DashboardController;
+
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth'])
+    ->name('dashboard');

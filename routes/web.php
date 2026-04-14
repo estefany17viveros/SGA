@@ -18,3 +18,5 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+// Route::get('/boletin/pdf/{student}/{period}', [BoletinController::class, 'pdf'])
+//     ->name('boletin.pdf');

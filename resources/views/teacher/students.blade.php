@@ -1,94 +1,212 @@
 @extends('layouts.app')
 
 @push('styles')
-    @vite('resources/css/teacher/students.css')
+@vite('resources/css/teacher/students.css')
 @endpush
 
 @section('content')
 
 <div class="container">
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>👨‍🎓 Estudiantes</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>👨‍🎓 Estudiantes</h2>
 
-        {{-- 🔥 BOTÓN GLOBAL --}}
-        <a href="{{ route('teacher.scores.index', $teacher_subject_id) }}" class="btn btn-primary">
-            📊 Gestionar Notas
-        </a>
-    </div>
+    <a href="{{ route('teacher.scores.index', $teacher_subject_id) }}" class="btn btn-primary">
+        📊 Gestionar Notas
+    </a>
+</div>
 
-    <a href="{{ route('teacher.dashboard') }}">⬅ Volver al inicio</a>
+<a href="{{ route('teacher.dashboard') }}">⬅ Volver al inicio</a>
 
-    <div class="table-responsive mt-3">
-        <table class="table table-bordered">
+{{-- 🔥 CARGAR PERIODOS DINÁMICOS --}}
+@php
+    use App\Models\AcademicYear;
+    use App\Models\Period;
 
-            <thead class="table-dark">
-                <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <th>Saber</th>
-                    <th>Hacer</th>
-                    <th>Ser</th>
-                    <th>Comentario</th>
-                </tr>
-            </thead>
+    $year = AcademicYear::where('status', 'activo')->first();
 
-            <tbody>
+    $periods = [];
 
-                @forelse($students as $student)
+    if ($year) {
+        $periods = Period::where('academic_year_id', $year->id)
+            ->orderBy('id')
+            ->pluck('id')
+            ->toArray();
+    }
 
-                    @php
+    // 🔥 fallback
+    if (empty($periods)) {
+        $periods = [1,2,3,4];
+    }
+
+    // 🔥 ORDENAR POR PROMEDIO FINAL
+    $studentsSorted = $students->sortByDesc(function($student) use ($teacher_subject_id, $periods) {
+
+        $total = 0;
+        $count = 0;
+
+        foreach ($periods as $period) {
+            $score = $student->scores
+                ->where('teacher_subject_id', $teacher_subject_id)
+                ->where('period_id', $period)
+                ->first();
+
+            if ($score && $score->total !== null) {
+                $total += $score->total;
+                $count++;
+            }
+        }
+
+        return $count > 0 ? $total / $count : 0;
+    })->values();
+@endphp
+
+<div class="table-responsive mt-3">
+    <table class="table table-bordered">
+
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+
+                {{-- 🔥 PERIODOS --}}
+                @foreach($periods as $period)
+                    <th>P{{ $period }}</th>
+                @endforeach
+
+                <th>Total Materia</th>
+                <th>Puesto</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @forelse($studentsSorted as $student)
+
+                @php
+                    // 🔥 asegurar relación
+                    $student->loadMissing('scores');
+
+                    $totalFinal = 0;
+                    $count = 0;
+                    $periodTotals = [];
+
+                    foreach ($periods as $period) {
+
                         $score = $student->scores
                             ->where('teacher_subject_id', $teacher_subject_id)
+                            ->where('period_id', $period)
                             ->first();
-                    @endphp
 
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
+                        $value = $score->total ?? null;
 
-                        <td>{{ $student->full_name }}</td>
+                        if (!is_null($value)) {
+                            $totalFinal += $value;
+                            $count++;
+                        }
 
-                        {{-- SABER --}}
-                        <td>
+                        $periodTotals[$period] = $value;
+                    }
+
+                    $averageFinal = $count > 0 ? round($totalFinal / $count, 2) : 0;
+
+                    // 🔥 CALCULAR PUESTO
+                    $position = 1;
+
+                    foreach ($studentsSorted as $index => $s) {
+
+                        $sTotal = 0;
+                        $sCount = 0;
+
+                        foreach ($periods as $p) {
+                            $sc = $s->scores
+                                ->where('teacher_subject_id', $teacher_subject_id)
+                                ->where('period_id', $p)
+                                ->first();
+
+                            if ($sc && $sc->total !== null) {
+                                $sTotal += $sc->total;
+                                $sCount++;
+                            }
+                        }
+
+                        $sAvg = $sCount > 0 ? $sTotal / $sCount : 0;
+
+                        if ($index > 0) {
+                            $prev = $studentsSorted[$index - 1];
+
+                            $prevTotal = 0;
+                            $prevCount = 0;
+
+                            foreach ($periods as $p) {
+                                $psc = $prev->scores
+                                    ->where('teacher_subject_id', $teacher_subject_id)
+                                    ->where('period_id', $p)
+                                    ->first();
+
+                                if ($psc && $psc->total !== null) {
+                                    $prevTotal += $psc->total;
+                                    $prevCount++;
+                                }
+                            }
+
+                            $prevAvg = $prevCount > 0 ? $prevTotal / $prevCount : 0;
+
+                            if ($sAvg != $prevAvg) {
+                                $position = $index + 1;
+                            }
+                        }
+
+                        if ($s->id == $student->id) {
+                            break;
+                        }
+                    }
+                @endphp
+
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+
+                    <td>{{ $student->full_name }}</td>
+
+                    {{-- 🔥 NOTAS POR PERIODO --}}
+                    @foreach($periods as $period)
+                        <td class="text-center">
                             <span class="badge bg-secondary">
-                                {{ $score->saber ?? '-' }}
+                                {{ $periodTotals[$period] ?? '-' }}
                             </span>
                         </td>
+                    @endforeach
 
-                        {{-- HACER --}}
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ $score->hacer ?? '-' }}
-                            </span>
-                        </td>
+                    {{-- 🔥 TOTAL FINAL --}}
+                    <td class="text-center">
+                        <span class="badge bg-success">
+                            {{ $averageFinal }}
+                        </span>
+                    </td>
 
-                        {{-- SER --}}
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ $score->ser ?? '-' }}
-                            </span>
-                        </td>
+                    {{-- 🔥 PUESTO --}}
+                    <td class="text-center">
+                        <span class="badge bg-warning text-dark">
+                            {{ $position }}
+                        </span>
+                    </td>
+                </tr>
 
-                        {{-- COMENTARIO --}}
-                        <td>
-                            {{ $score->comment ?? 'Sin comentario' }}
-                        </td>
-                    </tr>
+            @empty
 
-                @empty
+                <tr>
+                    <td colspan="{{ count($periods) + 4 }}" class="text-center">
+                        No hay estudiantes
+                    </td>
+                </tr>
 
-                    <tr>
-                        <td colspan="6" class="text-center">
-                            No hay estudiantes
-                        </td>
-                    </tr>
+            @endforelse
 
-                @endforelse
+        </tbody>
 
-            </tbody>
+    </table>
+</div>
 
-        </table>
-    </div>
 
 </div>
 

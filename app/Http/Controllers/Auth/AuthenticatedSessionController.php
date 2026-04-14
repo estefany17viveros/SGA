@@ -8,11 +8,12 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\LoginLog;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Mostrar vista de login
      */
     public function create(): View
     {
@@ -20,39 +21,42 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Procesar login
      */
     public function store(LoginRequest $request): RedirectResponse
-{
-    // 🔐 Autenticar usuario
-    $request->authenticate();
+    {
+        // 🔐 Autenticar usuario
+        $request->authenticate();
 
-    // 👤 Obtener usuario autenticado
-    $user = Auth::user();
+        // 👤 Usuario autenticado
+        $user = Auth::user();
 
-    // 🔴 VALIDAR SI ESTÁ INACTIVO
-    if (!$user->is_active) {
-        Auth::logout();
+        // 🔴 VALIDAR SI ESTÁ INACTIVO
+        if (!$user->is_active) {
+            Auth::logout();
 
-        return back()->withErrors([
-            'email' => '❌ Este usuario está inactivo, contacte al administrador'
-        ])->onlyInput('email');
+            return back()->withErrors([
+                'email' => '❌ Este usuario está inactivo, contacte al administrador'
+            ])->onlyInput('email');
+        }
+
+        // 🔄 regenerar sesión
+        $request->session()->regenerate();
+
+       
+
+        // 🚀 Redirigir
+        return redirect()->intended(route('dashboard'));
     }
 
-    // 🔄 regenerar sesión
-    $request->session()->regenerate();
-
-    return redirect()->intended(route('dashboard'));
-}
     /**
-     * Destroy an authenticated session.
+     * Cerrar sesión
      */
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');

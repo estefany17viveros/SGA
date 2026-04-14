@@ -20,4 +20,9 @@ class Period extends Model
     {
         return $this->belongsTo(AcademicYear::class);
     }
+       public function dimensionComments()
+    {
+        return $this->hasMany(DimensionComment::class);
+    }
+
 }
