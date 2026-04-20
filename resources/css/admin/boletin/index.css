@@ -1,0 +1,254 @@
+/* ===================================== */
+/* ========== VARIABLES ================ */
+/* ===================================== */
+
+:root {
+    --azul-profundo: #0f4c81;
+    --azul-medio: #1e88e5;
+    --azul-claro: #e3f2fd;
+    --verde-primario: #26a69a;
+    --verde-claro: #80cbc4;
+    --morado: #7c3aed;
+    --naranja: #fb8c00;
+    --coral: #e64a19;
+    --gris-claro: #f5f7fa;
+    --blanco: #ffffff;
+    --texto: #263238;
+    --texto-suave: #6b7280;
+    --borde: #e0e7ef;
+    --sombra: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ===================================== */
+/* ========== TÍTULO H2 ================ */
+/* ===================================== */
+
+.container h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 20px 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e88e5 55%, #26a69a 100%);
+    background-size: 200% auto;
+    padding: 18px 28px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px -4px rgba(30, 136, 229, 0.22);
+    animation: gradientShift 7s ease infinite, fadeRight 0.5s ease both;
+}
+
+/* ===================================== */
+/* ========== ROW (grid de grados) ====== */
+/* ===================================== */
+
+.container .row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 18px;
+    animation: fadeInUp 0.45s ease 0.05s both;
+}
+
+/* ===================================== */
+/* ========== COLUMNA Bootstrap ======== */
+/* ===================================== */
+
+.container .row .col-md-3 {
+    padding: 0;
+    margin-bottom: 0 !important;
+}
+
+/* ===================================== */
+/* ========== CARD DE GRADO ============ */
+/* ===================================== */
+
+.container .row .card.shadow {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 18px;
+    box-shadow: var(--sombra) !important;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    animation: fadeInUp 0.4s ease both;
+    border-top: 5px solid var(--azul-medio);
+    height: 100%;
+    position: relative;
+}
+
+/* colores de acento rotativo */
+.container .row .col-md-3:nth-child(6n+1) .card { border-top-color: var(--azul-medio); }
+.container .row .col-md-3:nth-child(6n+2) .card { border-top-color: var(--verde-primario); }
+.container .row .col-md-3:nth-child(6n+3) .card { border-top-color: var(--morado); }
+.container .row .col-md-3:nth-child(6n+4) .card { border-top-color: var(--naranja); }
+.container .row .col-md-3:nth-child(6n+5) .card { border-top-color: var(--coral); }
+.container .row .col-md-3:nth-child(6n)   .card { border-top-color: var(--verde-claro); }
+
+/* escalonado de aparición */
+.container .row .col-md-3:nth-child(1) .card { animation-delay: 0.04s; }
+.container .row .col-md-3:nth-child(2) .card { animation-delay: 0.09s; }
+.container .row .col-md-3:nth-child(3) .card { animation-delay: 0.14s; }
+.container .row .col-md-3:nth-child(4) .card { animation-delay: 0.19s; }
+.container .row .col-md-3:nth-child(5) .card { animation-delay: 0.24s; }
+.container .row .col-md-3:nth-child(6) .card { animation-delay: 0.29s; }
+.container .row .col-md-3:nth-child(7) .card { animation-delay: 0.34s; }
+.container .row .col-md-3:nth-child(8) .card { animation-delay: 0.39s; }
+
+/* círculo decorativo de fondo */
+.container .row .card.shadow::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(30,136,229,0.07), rgba(38,166,154,0.07));
+    pointer-events: none;
+}
+
+/* ícono decorativo */
+.container .row .card.shadow::after {
+    content: "📋";
+    font-size: 30px;
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    opacity: 0.14;
+    pointer-events: none;
+}
+
+.container .row .card.shadow:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(15, 76, 129, 0.15) !important;
+}
+
+/* ===================================== */
+/* ========== CARD BODY ================ */
+/* ===================================== */
+
+.container .row .card .card-body {
+    padding: 28px 22px 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+}
+
+/* ===================================== */
+/* ========== H4 NOMBRE GRADO ========== */
+/* ===================================== */
+
+.container .row .card h4 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--azul-profundo);
+    margin: 0;
+    line-height: 1.2;
+    padding-right: 24px;
+}
+
+.container .row .card h4::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--azul-medio), var(--verde-primario));
+    margin: 8px auto 0;
+}
+
+/* ===================================== */
+/* ========== BTN VER ESTUDIANTES ====== */
+/* ===================================== */
+
+.container .row .card .btn.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 100%;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--azul-medio), var(--verde-primario));
+    color: white;
+    text-decoration: none;
+    box-shadow: 0 3px 12px rgba(38, 166, 154, 0.26);
+    transition: all 0.22s ease;
+    margin-top: 0 !important;
+}
+
+.container .row .card .btn.btn-primary::after {
+    content: "→";
+    font-size: 13px;
+    transition: transform 0.2s ease;
+}
+
+.container .row .card .btn.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(38, 166, 154, 0.38);
+}
+
+.container .row .card .btn.btn-primary:hover::after {
+    transform: translateX(4px);
+}
+
+.container .row .card .btn.btn-primary:active {
+    transform: scale(0.96);
+}
+
+/* colores del botón según posición */
+.container .row .col-md-3:nth-child(6n+1) .btn { background: linear-gradient(135deg, var(--azul-medio), #1565c0); }
+.container .row .col-md-3:nth-child(6n+2) .btn { background: linear-gradient(135deg, var(--verde-primario), #00897b); }
+.container .row .col-md-3:nth-child(6n+3) .btn { background: linear-gradient(135deg, var(--morado), #5e35b1); }
+.container .row .col-md-3:nth-child(6n+4) .btn { background: linear-gradient(135deg, var(--naranja), #f57c00); }
+.container .row .col-md-3:nth-child(6n+5) .btn { background: linear-gradient(135deg, var(--coral), #bf360c); }
+.container .row .col-md-3:nth-child(6n)   .btn { background: linear-gradient(135deg, #009688, var(--verde-claro)); }
+
+/* ===================================== */
+/* ========== ANIMACIONES ============== */
+/* ===================================== */
+
+@keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeRight {
+    from { opacity: 0; transform: translateX(-16px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================================== */
+/* ========== RESPONSIVE =============== */
+/* ===================================== */
+
+@media (max-width: 900px) {
+    .container h2 { font-size: 1.25rem; padding: 16px 20px; }
+    .container .row { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; }
+}
+
+@media (max-width: 600px) {
+    .container h2 { font-size: 1.1rem; padding: 14px 16px; margin: 14px 0 18px; }
+    .container .row { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .container .row .card .card-body { padding: 20px 16px 16px; gap: 12px; }
+    .container .row .card h4 { font-size: 1rem; padding-right: 0; }
+}
+
+@media (max-width: 380px) {
+    .container .row { grid-template-columns: 1fr; }
+}

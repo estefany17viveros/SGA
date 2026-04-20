@@ -82,6 +82,27 @@ Route::middleware(['auth', 'role:admin'])
         ->name('login-logs.index');
 
 
+        
+    // 🔥 PANEL BOLETINES (ADMIN)
+    Route::get('/boletin', [BoletinController::class,'index'])
+        ->name('boletin.index');
+
+    Route::get('/boletin/grado/{id}', [BoletinController::class,'grade'])
+        ->name('boletin.grade');
+
+    // 📊 VER BOLETÍN
+    Route::get('/boletin/{student}/{period}', [BoletinController::class, 'show'])
+        ->name('boletin.show');
+
+    // 📄 PDF
+    Route::get('/boletin/pdf/{student}/{period}', [BoletinController::class, 'pdf'])
+        ->name('boletin.pdf');
+Route::get('/boletin/grado/{grade}/pdf/{period}', [BoletinController::class, 'pdfByGrade'])
+    ->name('boletin.pdf.grade');
+Route::get('/boletin/grado/{grade}/pdf/{period}', 
+    [BoletinController::class,'pdfMasivo']
+)->name('boletin.pdf.masivo');
+
         // Academic Years
         //no permite las rutas editar por que la verdad daña el sistema si hace cambio alguno 
        Route::resource('academic_years', AcademicYearController::class)
@@ -228,13 +249,14 @@ Route::post('scores', [ScoreController::class, 'store'])
 
     Route::resource('dimension_comments', DimensionCommentController::class);
     
-    // 📊 Boletín
+//     // 📊 Boletín
     
-Route::get('/boletin/{student}/{period}', [BoletinController::class, 'show'])
-    ->name('boletin.show');
+// Route::get('/boletin/{student}/{period}', [BoletinController::class, 'show'])
+//     ->name('boletin.show');
 
-Route::get('/boletin/pdf/{student}/{period}', [BoletinController::class, 'pdf'])
-    ->name('boletin.pdf'); // 🔥 ESTA LÍNEA ES CLAVE
+// Route::get('/boletin/pdf/{student}/{period}', [BoletinController::class, 'pdf'])
+//     ->name('boletin.pdf'); // 🔥 ESTA LÍNEA ES CLAVE
+    
     //director  de grados 
 
     Route::get('director', [TeacherDirectorController::class, 'index'])

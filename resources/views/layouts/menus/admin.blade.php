@@ -108,3 +108,19 @@
 
     </div>
 </div>
+
+<!-- 🔽 BOLETINES -->
+<div class="relative">
+    <button onclick="toggleMenu('menu6')" class="text-white">
+        Boletines ▾
+    </button>
+
+    <div id="menu6" class="hidden absolute bg-white text-black mt-2 rounded shadow-lg w-56 z-50">
+
+        <a href="{{ route('admin.boletin.index') }}" 
+           class="block px-4 py-2 hover:bg-gray-200">
+            Ver boletines por grado
+        </a>
+
+    </div>
+</div>
