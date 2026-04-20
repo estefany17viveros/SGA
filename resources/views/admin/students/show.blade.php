@@ -243,30 +243,6 @@
     </div>
 
 </div>
-                <!-- CERTIFICADO -->
-                <div class="info-block">
-
-                    <h5 class="block-title">Certificado PDF</h5>
-
-                    @if($student->certificate_file)
-
-                        <a href="{{ asset('storage/'.$student->certificate_file) }}"
-                           target="_blank"
-                           class="btn-certificate">
-                            📄 Ver Certificado
-                        </a>
-
-                        <a href="{{ asset('storage/'.$student->certificate_file) }}"
-                           download
-                           class="btn-certificate">
-                            ⬇ Descargar Certificado
-                        </a>
-
-                    @else
-                        <p>No se ha subido certificado.</p>
-                    @endif
-
-                </div>
 
 
                 <div class="divider"></div>
@@ -354,6 +330,30 @@
 
                 </div>
 
+                <!-- CERTIFICADO -->
+                <div class="info-block">
+
+                    <h5 class="block-title">Certificado PDF</h5>
+
+                    @if($student->certificate_file)
+
+                        <a href="{{ asset('storage/'.$student->certificate_file) }}"
+                           target="_blank"
+                           class="btn-certificate">
+                            📄 Ver Certificado
+                        </a>
+
+                        <a href="{{ asset('storage/'.$student->certificate_file) }}"
+                           download
+                           class="btn-certificate">
+                            ⬇ Descargar Certificado
+                        </a>
+
+                    @else
+                        <p>No se ha subido certificado.</p>
+                    @endif
+
+                </div>
 
                 <div class="divider"></div>
 

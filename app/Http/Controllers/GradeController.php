@@ -128,10 +128,12 @@ class GradeController extends Controller
     /**
      * Mostrar formulario editar
      */
-    public function edit(Grade $grade)
-    {
-        return view('admin.grades.edit', compact('grade'));
-    }
+   public function edit(Grade $grade)
+{
+    $teachers = Teacher::all();
+
+    return view('admin.grades.edit', compact('grade', 'teachers'));
+}
 
 
 

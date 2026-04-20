@@ -57,7 +57,7 @@ public function index(Request $request)
 
     return view('teacher.director.index', compact('grades', 'allStudents'));
 }
- public function students($gradeId)
+ public function students(Request $request, $gradeId)
 {
     $teacher = Auth::user()->teacher;
 
@@ -78,6 +78,16 @@ public function index(Request $request)
             $q->where('academic_year_id', $currentYear->id);
         }
     })
+
+    // 🔥 FILTROS
+    ->when($request->name, function ($q) use ($request) {
+        $q->where('first_name', 'like', '%' . $request->name . '%');
+    })
+
+    ->when($request->last_name, function ($q) use ($request) {
+        $q->where('last_name', 'like', '%' . $request->last_name . '%');
+    })
+
     ->with(['enrollments.grade', 'enrollments.academicYear'])
     ->get();
 

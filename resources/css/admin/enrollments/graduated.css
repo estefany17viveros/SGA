@@ -45,8 +45,13 @@
     margin-bottom: 26px;
     flex-wrap: wrap;
     gap: 14px;
-    background: linear-gradient(135deg, var(--azul-profundo), #1565c0);
-    border-radius: 16px;
+     background: linear-gradient(135deg,
+        var(--azul-profundo) 0%,
+        #1565c0 40%,
+        var(--azul-medio) 65%,
+        var(--verde-primario) 100%
+    );
+      border-radius: 16px;
     padding: 22px 28px;
     box-shadow: 0 6px 24px rgba(15, 76, 129, 0.3);
     position: relative;
@@ -511,14 +516,14 @@ select.form-control {
     }
 
     .table td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 11px 16px;
-        border-bottom: 1px solid #f0f4f8;
-        font-size: 13px;
-        text-align: left !important;
-    }
+    display: flex;
+    flex-direction: column; /* 🔥 clave */
+    align-items: flex-start; /* 🔥 todo a la izquierda */
+    padding: 11px 16px;
+    border-bottom: 1px solid #f0f4f8;
+    font-size: 13px;
+    text-align: left !important;
+}
 
     .table td:last-child { border-bottom: none; }
 

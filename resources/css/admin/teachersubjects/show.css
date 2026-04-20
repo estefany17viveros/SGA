@@ -1,301 +1,150 @@
-/* ===================================== */
-/* ========== VARIABLES ================ */
-/* ===================================== */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
 
 :root {
-    --azul-profundo:   #0f4c81;
-    --azul-medio:      #1e88e5;
-    --azul-claro:      #e3f2fd;
-    --verde-primario:  #26a69a;
-    --verde-claro:     #80cbc4;
-    --verde-muy-claro: #e0f2f1;
-    --gris-claro:      #f5f7fa;
-    --gris-borde:      #e0e0e0;
-    --blanco:          #ffffff;
-    --texto:           #263238;
-    --texto-suave:     #607d8b;
-    --rojo:            #ef5350;
-    --rojo-claro:      #ffebee;
-    --naranja:         #fb8c00;
-    --naranja-claro:   #fff3e0;
+    --azul-profundo: #0b0b0b;
+    --azul-oscuro:#3b82f6;
+    --azul-medio: #116f1d;
+    --verde-primario: #4d92ed;
+    --blanco: #ffffff;
+    --texto: #475569;
 }
 
-/* ===================================== */
-/* ========== BASE ===================== */
-/* ===================================== */
 
-.container,
-section.content,
-div.content,
-main {
-    /* 📐 Layout */
-    width: 100%;
-    max-width: 720px; /* un poco más amplio y moderno */
-    margin-inline: auto; /* mejor que margin: 0 auto */
-    
-    /* 📏 Espaciado adaptable */
-    padding: clamp(20px, 4vw, 40px);
 
-    /* 🎨 Apariencia */
-    box-sizing: border-box;
-
-    /* ✨ Animación */
-    animation: fadeInUp 0.5s ease both;
+.container {
+    max-width: 560px;
+    margin: 40px auto;
+    padding: 0 16px;
 }
 
-/* ==============================
-   📱 RESPONSIVE (pantallas grandes)
-============================== */
-@media (min-width: 1024px) {
-    .container,
-    section.content,
-    div.content,
-    main {
-        max-width: 900px;
-        padding: 48px 24px;
-    }
-}
-
-/* ==============================
-   📱 MOBILE (pantallas pequeñas)
-============================== */
-@media (max-width: 480px) {
-    .container,
-    section.content,
-    div.content,
-    main {
-        padding: 20px 16px;
-    }
-}   
-
-/* ===================================== */
-/* ========== TÍTULO h2 ================ */
-/* ===================================== */
-
-h2 {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--azul-profundo);
-    margin: 0 0 26px 0;
+.container h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--blanco);
+    text-align: center;
+    background: linear-gradient(135deg, var(--azul-oscuro), var(--verde-primario), var(--azul-medio));
+    background-size: 200% auto;
+    padding: 24px;
+    border-radius: 20px;
+    margin-bottom: 28px;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 12px;
-    letter-spacing: -0.01em;
+    animation: gradientShift 6s ease infinite;
 }
 
-h2::before {
-    content: '';
-    display: inline-flex;
-    width: 6px;
-    height: 30px;
-    background: linear-gradient(180deg, var(--azul-medio), var(--verde-primario));
-    border-radius: 4px;
-    flex-shrink: 0;
+.container h2::before {
+    content: '🔍';
 }
 
-/* ===================================== */
-/* ========== TARJETA DETALLE ========== */
-/* ===================================== */
-
-/* La sección de párrafos directos en el content */
-.detail-section,
-section.content > p,
-div.content > p,
-main > p {
-    /* cada párrafo se estila individualmente abajo */
-}
-
-/* Wrapper generado automáticamente — si existe */
+/* Card de detalle */
 .detail-card {
     background: var(--blanco);
-    border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.09);
-    overflow: hidden;
-    animation: slideIn 0.4s ease;
-    margin-bottom: 24px;
-}
-
-/* Párrafos <p> del detalle que van directo en el content */
-section.content > p,
-div.content > p,
-main > p {
-    background: var(--blanco);
-    margin: 0;
-    padding: 14px 26px;
-    font-size: 14.5px;
-    line-height: 1.6;
-    border-bottom: 1px solid #f4f4f4;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
     display: flex;
-    align-items: baseline;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Cada fila del detalle */
+.detail-row {
+    display: flex;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid #f1f5f9;
     gap: 12px;
-    transition: background-color 0.15s;
 }
 
-/* Primera fila: esquinas superiores redondeadas */
-section.content > p:first-of-type,
-div.content > p:first-of-type,
-main > p:first-of-type {
-    border-radius: 16px 16px 0 0;
-    border-top: 5px solid transparent;
-    /* franja tricolor usando border-image */
-    border-image: linear-gradient(90deg, var(--azul-profundo), var(--azul-medio), var(--verde-primario)) 1;
-    border-radius: 0;
-}
-
-/* Wrapper visual: envuelve todos los <p> con sombra */
-section.content,
-div.content,
-main {
-    /* Los párrafos de detalle se agrupan visualmente */
-}
-
-/* Mejor: estilizar el bloque de párrafos como tarjeta */
-section.content > p:first-of-type,
-div.content > p:first-of-type,
-main > p:first-of-type {
-    border-radius: 16px 16px 0 0;
-    padding-top: 20px;
-    box-shadow: 0 -1px 0 0 var(--gris-borde);
-}
-
-section.content > p:last-of-type,
-div.content > p:last-of-type,
-main > p:last-of-type {
+.detail-row:last-of-type {
     border-bottom: none;
-    border-radius: 0 0 16px 16px;
-    padding-bottom: 20px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.09);
-    margin-bottom: 24px;
 }
 
-/* Hover en filas */
-section.content > p:hover,
-div.content > p:hover,
-main > p:hover {
-    background: #fafcff;
-}
-
-/* Strong = etiqueta */
-section.content > p strong,
-div.content > p strong,
-main > p strong {
-    font-size: 11.5px;
+.detail-label {
+    font-size: 13px;
     font-weight: 700;
+    color: var(--texto);
     text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: var(--texto-suave);
-    min-width: 90px;
-    flex-shrink: 0;
+    letter-spacing: 0.05em;
+    min-width: 110px;
+    padding-top: 2px;
 }
 
-/* ===================================== */
-/* ========== BADGES DE ESTADO ========= */
-/* ===================================== */
+.detail-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--azul-profundo);
+    flex: 1;
+}
 
-/* "Activo" */
-p > span:not([style]),
+/* Badge de estado */
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
 .badge-activo {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 3px 12px;
-    background: var(--verde-muy-claro);
-    color: #00695c;
-    border: 1px solid var(--verde-claro);
-    border-radius: 20px;
-    font-size: 12.5px;
-    font-weight: 600;
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
 }
 
-/* Detectar texto "Activo" / "Inactivo" via contenido es complejo en CSS puro,
-   por lo que se aplica un estilo neutro limpio al span del estado */
-section.content > p span,
-div.content > p span,
-main > p span {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 3px 13px;
-    border-radius: 20px;
-    font-size: 12.5px;
-    font-weight: 600;
-    background: var(--verde-muy-claro);
-    color: #00695c;
-    border: 1px solid var(--verde-claro);
+.badge-inactivo {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fee2e2;
 }
 
-/* ===================================== */
-/* ========== BOTÓN VOLVER ============= */
-/* ===================================== */
+/* Botón volver */
+.actions {
+    margin-top: 24px;
+    display: flex;
+    gap: 10px;
+}
 
-a[href*="teacher-subjects.index"],
-a[href*="teacher-subjects"] {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 10px 20px;
-    color: var(--azul-medio);
-    background: var(--azul-claro);
-    border: 1.5px solid #bbdefb;
-    border-radius: 9px;
+.btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-family: inherit;
     font-size: 14px;
-    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     text-decoration: none;
-    transition: all 0.25s ease;
-    margin-top: 8px;
 }
 
-a[href*="teacher-subjects.index"]:hover,
-a[href*="teacher-subjects"]:hover {
-    background: var(--azul-medio);
+.btn-secondary {
+    background: #f1f5f9;
+    color: var(--azul-profundo);
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: var(--azul-profundo);
     color: var(--blanco);
-    border-color: var(--azul-medio);
-    transform: translateX(-2px);
 }
 
-/* ===================================== */
-/* ========== OCULTAR <br> ============= */
-/* ===================================== */
-
-br { display: none; }
-
-/* ===================================== */
-/* ========== ANIMACIONES ============== */
-/* ===================================== */
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
+.btn-primary:hover {
+    background: var(--azul-medio);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
 }
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(-18px); }
-    to   { opacity: 1; transform: translateX(0); }
-}
-
-/* ===================================== */
-/* ========== RESPONSIVE =============== */
-/* ===================================== */
-
-@media (max-width: 600px) {
-    h2 { font-size: 20px; }
-
-    section.content > p,
-    div.content > p,
-    main > p {
-        flex-direction: column;
-        gap: 4px;
-        padding: 12px 18px;
-    }
-
-    section.content > p strong,
-    div.content > p strong,
-    main > p strong {
-        min-width: unset;
-    }
-
-    a[href*="teacher-subjects"] {
-        width: 100%;
-        justify-content: center;
-    }
+@keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }

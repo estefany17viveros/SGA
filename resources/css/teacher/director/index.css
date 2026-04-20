@@ -1,0 +1,458 @@
+/* ===================================== */
+/* ========== VARIABLES ================ */
+/* ===================================== */
+
+:root {
+    --azul-profundo: #0f4c81;
+    --azul-medio: #1e88e5;
+    --azul-claro: #e3f2fd;
+    --verde-primario: #26a69a;
+    --verde-claro: #80cbc4;
+    --verde-muy-claro: #e0f2f1;
+    --gris-claro: #f5f7fa;
+    --blanco: #ffffff;
+    --texto: #263238;
+    --texto-suave: #6b7280;
+    --rojo: #ef5350;
+    --rojo-claro: #ffebee;
+    --naranja: #fb8c00;
+    --naranja-claro: #fff3e0;
+    --info: #0288d1;
+    --info-claro: #e1f5fe;
+    --borde: #e0e7ef;
+    --sombra: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ===================================== */
+/* ========== TÍTULO H2 ================ */
+/* ===================================== */
+
+.container h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 20px 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e88e5 55%, #26a69a 100%);
+    background-size: 200% auto;
+    padding: 18px 28px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px -4px rgba(30, 136, 229, 0.22);
+    animation: gradientShift 7s ease infinite, fadeRight 0.5s ease both;
+}
+
+/* ===================================== */
+/* ========== TARJETAS DE GRUPOS ======= */
+/* ===================================== */
+
+.container > .card.p-3.mb-2 {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-left: 5px solid var(--azul-medio);
+    border-radius: 14px;
+    padding: 18px 22px !important;
+    margin-bottom: 12px !important;
+    box-shadow: var(--sombra);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    animation: fadeInUp 0.4s ease both;
+}
+
+.container > .card.p-3.mb-2:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 32px rgba(15, 76, 129, 0.13);
+}
+
+.container > .card.p-3.mb-2 strong {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--azul-profundo);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.container > .card.p-3.mb-2 strong::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--azul-medio), var(--verde-primario));
+    flex-shrink: 0;
+}
+
+/* sin grupos */
+.container > p {
+    text-align: center;
+    color: var(--texto-suave);
+    font-size: 15px;
+    padding: 32px 20px;
+    background: var(--gris-claro);
+    border-radius: 12px;
+    border: 1px dashed var(--borde);
+    margin-bottom: 18px;
+}
+
+/* ===================================== */
+/* ========== BTN VER ESTUDIANTES ====== */
+/* ===================================== */
+
+.container > .card .btn.btn-primary.btn-sm {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: 9px;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--azul-medio), var(--verde-primario));
+    color: white;
+    box-shadow: 0 3px 12px rgba(38, 166, 154, 0.28);
+    transition: all 0.22s ease;
+    text-decoration: none;
+    margin-top: 0 !important;
+}
+
+.container > .card .btn.btn-primary.btn-sm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(38, 166, 154, 0.36);
+}
+
+.container > .card .btn.btn-primary.btn-sm:active {
+    transform: scale(0.96);
+}
+
+/* ===================================== */
+/* ========== SEPARADOR ================ */
+/* ===================================== */
+
+.container hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--borde), transparent);
+    margin: 28px 0;
+}
+
+/* ===================================== */
+/* ========== TÍTULO H3 ================ */
+/* ===================================== */
+
+.container h3 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--azul-profundo);
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 14px;
+    border-left: 4px solid var(--verde-primario);
+}
+
+/* ===================================== */
+/* ========== CARD FILTROS + TABLA ===== */
+/* ===================================== */
+
+.container > .card.p-3.mb-3 {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-top: 4px solid var(--verde-primario);
+    border-radius: 16px;
+    padding: 24px 28px !important;
+    box-shadow: var(--sombra);
+    animation: fadeInUp 0.45s ease 0.1s both;
+}
+
+/* ===================================== */
+/* ========== FILTROS ================== */
+/* ===================================== */
+
+.container form.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px !important;
+    align-items: end;
+}
+
+.container form.row .col-md-4,
+.container form.row .col-md-12 {
+    width: 100%;
+    padding: 0;
+}
+
+.container form.row .col-md-12 {
+    grid-column: 1 / -1;
+}
+
+/* inputs de filtro */
+.container form .form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 9px;
+    border: 1.5px solid #d4dbe6;
+    background: var(--gris-claro);
+    font-size: 13.5px;
+    color: var(--texto);
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.container form .form-control:hover {
+    border-color: #aab8cc;
+    background: var(--blanco);
+}
+
+.container form .form-control:focus {
+    outline: none;
+    border-color: var(--verde-primario);
+    background: var(--blanco);
+    box-shadow: 0 0 0 4px rgba(38, 166, 154, 0.14);
+}
+
+/* select con flecha */
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230f4c81' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 13px center;
+    padding-right: 34px;
+    cursor: pointer;
+}
+
+/* botón filtrar */
+.container form .btn.btn-primary.w-100 {
+    width: 100%;
+    padding: 11px 20px;
+    border-radius: 9px;
+    font-weight: 700;
+    font-size: 13.5px;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--azul-medio), var(--verde-primario));
+    color: white;
+    box-shadow: 0 4px 14px rgba(38, 166, 154, 0.26);
+    transition: all 0.22s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.container form .btn.btn-primary.w-100:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(38, 166, 154, 0.35);
+}
+
+.container form .btn.btn-primary.w-100:active {
+    transform: scale(0.97);
+}
+
+/* ===================================== */
+/* ========== TABLA ==================== */
+/* ===================================== */
+
+.table.table-bordered {
+    width: 100%;
+    border-collapse: collapse;
+    border: none !important;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    background: var(--blanco);
+    font-size: 13.5px;
+    margin-bottom: 0;
+}
+
+.table.table-bordered thead {
+    background: linear-gradient(135deg, var(--azul-medio), var(--azul-profundo));
+}
+
+.table.table-bordered thead th {
+    padding: 13px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.92);
+    border: none !important;
+    white-space: nowrap;
+}
+
+.table.table-bordered tbody tr {
+    border-bottom: 1px solid #f0f4f8 !important;
+    transition: background 0.15s ease;
+}
+
+.table.table-bordered tbody tr:last-child { border-bottom: none !important; }
+.table.table-bordered tbody tr:nth-child(even) { background: var(--gris-claro); }
+.table.table-bordered tbody tr:hover { background: var(--azul-claro) !important; }
+
+.table.table-bordered td {
+    padding: 11px 14px;
+    vertical-align: middle;
+    color: var(--texto);
+    border: none !important;
+}
+
+/* columna documento */
+.table.table-bordered td:nth-child(3) {
+    font-family: monospace;
+    font-size: 13px;
+    color: #546e7a;
+}
+
+/* celda vacía */
+.table.table-bordered td[colspan] {
+    text-align: center;
+    color: #9e9e9e;
+    font-size: 14px;
+    padding: 40px 20px !important;
+}
+
+/* ===================================== */
+/* ========== BTN VER INFO ============= */
+/* ===================================== */
+
+.table .btn.btn-info.btn-sm {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 7px;
+    font-weight: 700;
+    font-size: 12px;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    background: var(--info-claro);
+    color: var(--info);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.table .btn.btn-info.btn-sm:hover {
+    background: #b3e5fc;
+    transform: translateY(-1px);
+}
+
+/* ===================================== */
+/* ========== PAGINACIÓN =============== */
+/* ===================================== */
+
+.mt-3 nav,
+.mt-3 .pagination {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 16px;
+}
+
+.pagination .page-item .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1.5px solid var(--borde);
+    color: var(--azul-profundo);
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, var(--azul-medio), var(--azul-profundo));
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 3px 8px rgba(30, 136, 229, 0.22);
+}
+
+.pagination .page-item .page-link:hover { background: var(--azul-claro); border-color: var(--azul-medio); }
+.pagination .page-item.disabled .page-link { color: #bdbdbd; cursor: not-allowed; pointer-events: none; }
+
+/* ===================================== */
+/* ========== ANIMACIONES ============== */
+/* ===================================== */
+
+@keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeRight {
+    from { opacity: 0; transform: translateX(-16px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================================== */
+/* ========== RESPONSIVE =============== */
+/* ===================================== */
+
+@media (max-width: 900px) {
+    .container h2 { font-size: 1.25rem; padding: 16px 20px; }
+    .container form.row { grid-template-columns: 1fr 1fr; }
+    .container form.row .col-md-4:last-of-type { grid-column: 1 / -1; }
+}
+
+@media (max-width: 600px) {
+    .container h2 { font-size: 1.1rem; padding: 14px 16px; margin: 14px 0 16px; }
+    .container h3 { font-size: 1rem; }
+    .container > .card.p-3.mb-2 { flex-direction: column; align-items: flex-start; }
+    .container > .card.p-3.mb-3 { padding: 16px !important; }
+    .container form.row { grid-template-columns: 1fr; }
+
+    .table.table-bordered thead { display: none; }
+    .table.table-bordered tbody tr {
+        display: block;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        border: 1px solid var(--borde) !important;
+        overflow: hidden;
+        background: white !important;
+    }
+    .table.table-bordered td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 14px !important;
+        border-bottom: 1px solid #f0f4f8 !important;
+        font-size: 13px;
+        width: 100%;
+    }
+    .table.table-bordered td:last-child { border-bottom: none !important; }
+    .table.table-bordered td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--azul-profundo);
+        font-size: 10.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        flex-shrink: 0;
+        margin-right: 10px;
+    }
+}

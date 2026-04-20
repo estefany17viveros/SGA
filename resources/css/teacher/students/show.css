@@ -1,0 +1,440 @@
+/* ===================================== */
+/* ========== VARIABLES ================ */
+/* ===================================== */
+
+:root {
+    --azul-profundo: #0f4c81;
+    --azul-medio: #1e88e5;
+    --azul-claro: #e3f2fd;
+    --verde-primario: #26a69a;
+    --verde-claro: #80cbc4;
+    --verde-muy-claro: #e0f2f1;
+    --gris-claro: #f5f7fa;
+    --blanco: #ffffff;
+    --texto: #263238;
+    --texto-suave: #6b7280;
+    --rojo: #ef5350;
+    --rojo-claro: #ffebee;
+    --naranja: #fb8c00;
+    --naranja-claro: #fff3e0;
+    --morado: #7c3aed;
+    --morado-claro: #ede9fe;
+    --info: #0288d1;
+    --info-claro: #e1f5fe;
+    --borde: #e0e7ef;
+    --sombra: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ===================================== */
+/* ========== TÍTULO H2 ================ */
+/* ===================================== */
+
+.container h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 20px 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e88e5 55%, #26a69a 100%);
+    background-size: 200% auto;
+    padding: 18px 28px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px -4px rgba(30, 136, 229, 0.22);
+    animation: gradientShift 7s ease infinite, fadeRight 0.5s ease both;
+}
+
+/* ===================================== */
+/* ========== CARDS BASE =============== */
+/* ===================================== */
+
+.container .card.mb-3.p-3 {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 16px;
+    padding: 24px 28px !important;
+    margin-bottom: 18px !important;
+    box-shadow: var(--sombra);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    animation: fadeInUp 0.4s ease both;
+    position: relative;
+    overflow: hidden;
+}
+
+/* escalonado de aparición */
+.container .card.mb-3.p-3:nth-child(1) { animation-delay: 0.04s; border-top: 4px solid var(--azul-medio); }
+.container .card.mb-3.p-3:nth-child(2) { animation-delay: 0.08s; border-top: 4px solid var(--verde-primario); }
+.container .card.mb-3.p-3:nth-child(3) { animation-delay: 0.12s; border-top: 4px solid var(--info); }
+.container .card.mb-3.p-3:nth-child(4) { animation-delay: 0.16s; border-top: 4px solid var(--rojo); }
+.container .card.mb-3.p-3:nth-child(5) { animation-delay: 0.20s; border-top: 4px solid var(--naranja); }
+.container .card.mb-3.p-3:nth-child(6) { animation-delay: 0.24s; border-top: 4px solid var(--verde-claro); }
+.container .card.mb-3.p-3:nth-child(7) { animation-delay: 0.28s; border-top: 4px solid var(--azul-medio); }
+.container .card.mb-3.p-3:nth-child(8) { animation-delay: 0.32s; border-top: 4px solid var(--morado); }
+
+.container .card.mb-3.p-3:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(15, 76, 129, 0.12);
+}
+
+/* ===================================== */
+/* ========== TÍTULOS H5 =============== */
+/* ===================================== */
+
+.container .card h5 {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--azul-profundo);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin: 0 0 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--borde);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ===================================== */
+/* ========== CARD FOTO ================ */
+/* ===================================== */
+
+.container .card.text-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.container .card.text-center img.rounded {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 50% !important;
+    border: 4px solid var(--azul-claro);
+    box-shadow: 0 4px 18px rgba(15, 76, 129, 0.16);
+    display: block;
+}
+
+.container .card.text-center > p {
+    color: var(--texto-suave);
+    font-size: 13.5px;
+    font-style: italic;
+    margin: 0;
+    padding: 18px 0;
+    background: var(--gris-claro);
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--borde);
+}
+
+/* ===================================== */
+/* ========== PÁRRAFOS DE DATOS ======== */
+/* ===================================== */
+
+.container .card p {
+    font-size: 14px;
+    color: var(--texto);
+    margin: 0 0 10px;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+    line-height: 1.5;
+}
+
+.container .card p:last-child { margin-bottom: 0; }
+
+.container .card p strong {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--azul-profundo);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    min-width: 120px;
+}
+
+/* filas de datos con separador sutil */
+.container .card p + p {
+    padding-top: 8px;
+    border-top: 1px solid #f4f6f9;
+}
+
+/* ===================================== */
+/* ========== LISTAS (acudientes, matrículas) */
+/* ===================================== */
+
+.container .card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.container .card ul li {
+    background: var(--gris-claro);
+    border: 1px solid var(--borde);
+    border-left: 4px solid var(--verde-primario);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13.5px;
+    color: var(--texto);
+    line-height: 1.7;
+}
+
+.container .card ul li strong {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--azul-profundo);
+    display: block;
+    margin-bottom: 2px;
+}
+
+/* matrículas con borde azul */
+.container .card:nth-child(7) ul li {
+    border-left-color: var(--azul-medio);
+}
+
+/* ===================================== */
+/* ========== BOTONES PRIMARIOS ======== */
+/* ===================================== */
+
+.container .card .btn.btn-primary.btn-sm {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: 9px;
+    font-weight: 700;
+    font-size: 12.5px;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--azul-medio), var(--verde-primario));
+    color: white;
+    box-shadow: 0 3px 12px rgba(38, 166, 154, 0.28);
+    text-decoration: none;
+    transition: all 0.22s ease;
+    margin-top: 10px;
+}
+
+.container .card .btn.btn-primary.btn-sm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(38, 166, 154, 0.38);
+}
+
+/* ===================================== */
+/* ========== SECCIÓN OBSERVADOR ======= */
+/* ===================================== */
+
+/* texto de observaciones */
+.container .card:nth-child(8) > p:not(.text-muted) {
+    background: var(--gris-claro);
+    border-left: 4px solid var(--morado);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--texto);
+    margin-bottom: 12px;
+    line-height: 1.65;
+}
+
+/* separador dentro del observador */
+.container .card hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--borde), transparent);
+    margin: 18px 0;
+}
+
+/* label del textarea */
+.container .card .mb-2 label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--azul-profundo);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+}
+
+/* textarea observación */
+.container .card .mb-2 textarea.form-control {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #d4dbe6;
+    background: var(--gris-claro);
+    font-size: 13.5px;
+    color: var(--texto);
+    font-family: inherit;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.container .card .mb-2 textarea.form-control:focus {
+    outline: none;
+    border-color: var(--morado);
+    background: var(--blanco);
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+}
+
+/* input file */
+.container .card .mb-2 input[type="file"].form-control {
+    width: 100%;
+    padding: 9px 14px;
+    border-radius: 10px;
+    border: 1.5px dashed #d4dbe6;
+    background: var(--gris-claro);
+    font-size: 13px;
+    color: var(--texto-suave);
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.container .card .mb-2 input[type="file"].form-control:hover {
+    border-color: var(--morado);
+}
+
+/* botón guardar cambios */
+.container .card .btn.btn-success.btn-sm {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 20px;
+    border-radius: 9px;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
+    color: white;
+    box-shadow: 0 4px 14px rgba(38, 166, 154, 0.3);
+    transition: all 0.22s ease;
+    margin-top: 4px;
+}
+
+.container .card .btn.btn-success.btn-sm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(38, 166, 154, 0.4);
+}
+
+.container .card .btn.btn-success.btn-sm:active {
+    transform: scale(0.96);
+}
+
+/* aviso solo director */
+.container .card p.text-muted {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px !important;
+    color: var(--texto-suave) !important;
+    background: var(--naranja-claro) !important;
+    border-left: 3px solid var(--naranja) !important;
+    border-radius: 0 8px 8px 0 !important;
+    padding: 10px 14px !important;
+    margin-top: 8px !important;
+    font-style: italic;
+}
+
+/* ===================================== */
+/* ========== BTN VOLVER =============== */
+/* ===================================== */
+
+.container > .btn.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 22px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13.5px;
+    font-family: inherit;
+    border: 1.5px solid #d4dbe6;
+    cursor: pointer;
+    background: var(--gris-claro);
+    color: #475569;
+    text-decoration: none;
+    margin: 6px 0 32px;
+    transition: all 0.22s ease;
+}
+
+.container > .btn.btn-secondary:hover {
+    background: #e2e8f0;
+    border-color: #aab8cc;
+    transform: translateY(-1px);
+}
+
+/* ===================================== */
+/* ========== ANIMACIONES ============== */
+/* ===================================== */
+
+@keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeRight {
+    from { opacity: 0; transform: translateX(-16px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================================== */
+/* ========== RESPONSIVE =============== */
+/* ===================================== */
+
+@media (max-width: 900px) {
+    .container h2 { font-size: 1.25rem; padding: 16px 20px; }
+    .container .card.mb-3.p-3 { padding: 20px 20px !important; }
+}
+
+@media (max-width: 600px) {
+    .container h2 { font-size: 1.1rem; padding: 14px 16px; margin: 14px 0 18px; }
+
+    .container .card.mb-3.p-3 {
+        padding: 16px !important;
+        border-radius: 12px;
+    }
+
+    .container .card p {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .container .card p strong {
+        min-width: unset;
+    }
+
+    .container > .btn.btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .container .card .btn.btn-primary.btn-sm,
+    .container .card .btn.btn-success.btn-sm {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .container .card ul li { padding: 10px 12px; }
+}

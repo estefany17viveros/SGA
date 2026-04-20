@@ -1,72 +1,89 @@
 @extends('layouts.app')
+
 @push('styles')
-@vite('resources/css/admin/teachersubjects/index.css')
+    @vite('resources/css/admin/teachersubjects/index.css')
 @endpush
+
 @section('content')
 
-<h2>Asignaciones</h2>
+<div class="container">
+    <h2>Asignaciones</h2>
 
-<a href="{{ route('admin.teacher-subjects.create') }}">Nueva Asignación</a>
+    <div class="header-actions">
+        <a href="{{ route('admin.teacher-subjects.create') }}" class="btn-create">
+            <span>+</span> Nueva Asignación
+        </a>
+    </div>
 
-@if(session('success'))
-    <p style="color:green">{{ session('success') }}</p>
-@endif
+    @if(session('success'))
+        <div class="alert-success">
+            <p>{{ session('success') }}</p>
+        </div>
+    @endif
 
-<table border="1" cellpadding="10">
-    <thead>
-        <tr>
-            <th>Profesor</th>
-            <th>Materia</th>
-            <th>Grado</th>
-            <th>Grupo</th>
-            <th>Año</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Profesor</th>
+                    <th>Materia</th>
+                    <th>Grado</th>
+                    <th>Grupo</th>
+                    <th>Año</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
 
-    <tbody>
-        @forelse($assignments as $a)
-            <tr>
-                <td>
-                    {{ $a->teacher->first_name ?? 'Sin docente' }}
-                    {{ $a->teacher->last_name ?? '' }}
-                </td>
+            <tbody>
+                @forelse($assignments as $a)
+                    <tr>
+                        <td data-label="Profesor">
+                            <strong>{{ $a->teacher->first_name ?? 'Sin docente' }}</strong>
+                            <span>{{ $a->teacher->last_name ?? '' }}</span>
+                        </td>
 
-                <td>
-                    {{ $a->subject->name ?? 'Sin materia' }}
-                </td>
+                        <td data-label="Materia">
+                            {{ $a->subject->name ?? 'Sin materia' }}
+                        </td>
 
-                <td>
-                    {{ $a->grade->name ?? 'Sin grado' }}
-                </td>
+                        <td data-label="Grado">
+                            <span class="badge-info">{{ $a->grade->name ?? 'Sin grado' }}</span>
+                        </td>
 
-                <td>
-                    {{ $a->group ? $a->group->name : 'General' }}
-                </td>
+                        <td data-label="Grupo">
+                            {{ $a->group ? $a->group->name : 'General' }}
+                        </td>
 
-                {{-- 🔥 AQUÍ ESTÁ LA CORRECCIÓN --}}
-                <td>
-                    {{ $a->academicYear ? $a->academicYear->year : 'Sin año' }}
-                </td>
+                        <td data-label="Año">
+                            {{ $a->academicYear ? $a->academicYear->year : 'Sin año' }}
+                        </td>
 
-                <td>
-                    <a href="{{ route('admin.teacher-subjects.show', $a->id) }}">Ver</a>
+                        <td data-label="Acciones" class="actions-cell">
+                            <a href="{{ route('admin.teacher-subjects.show', $a->id) }}" class="btn-action show" title="Ver">
+                                👁️
+                            </a>
 
-                    <a href="{{ route('admin.teacher-subjects.edit', $a->id) }}">Editar</a>
+                            <a href="{{ route('admin.teacher-subjects.edit', $a->id) }}" class="btn-action edit" title="Editar">
+                                ✏️
+                            </a>
 
-                    <form action="{{ route('admin.teacher-subjects.destroy', $a->id) }}" method="POST" style="display:inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit">Eliminar</button>
-                    </form>
-                </td>
-            </tr>
-        @empty
-            <tr>
-                <td colspan="6">No hay registros</td>
-            </tr>
-        @endforelse
-    </tbody>
-</table>
+                            <form action="{{ route('admin.teacher-subjects.destroy', $a->id) }}" method="POST" class="delete-form">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-delete" onclick="return confirm('¿Estás seguro de eliminar esta asignación?')" title="Eliminar">
+                                    🗑️
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="empty-row">No hay registros encontrados</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 
 @endsection

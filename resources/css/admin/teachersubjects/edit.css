@@ -1,256 +1,246 @@
 /* ===================================== */
 /* ========== VARIABLES ================ */
 /* ===================================== */
-
 :root {
-    --azul-profundo:   #0f4c81;
-    --azul-medio:      #1e88e5;
-    --azul-claro:      #e3f2fd;
-    --verde-primario:  #26a69a;
-    --verde-claro:     #80cbc4;
-    --verde-muy-claro: #e0f2f1;
-    --gris-oscuro:     #263238;
-    --gris-claro:      #f5f7fa;
+    --azul-profundo:   #0f172a;
+    --azul-medio:      #2563eb;
+    --verde-itaf:      #059669;
     --blanco:          #ffffff;
-    --texto:           #263238;
-    --texto-suave:     #607d8b;
-    --rojo:            #ef5350;
-    --rojo-claro:      #ffebee;
-    --naranja:         #fb8c00;
-    --naranja-claro:   #fff3e0;
+    --texto:           #1e293b;
+    --borde:           #e2e8f0;
+    --bg-body:         #f8fafc;
 }
 
 /* ===================================== */
-/* ========== BASE ===================== */
+/* ========== BASE & LAYOUT ============ */
 /* ===================================== */
+body {
+    background-color: var(--bg-body);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+}
 
-.container,
-section.content,
-div.content,
-main {
-    /* 📐 Layout */
-    width: 100%;
-    max-width: 720px; /* un poco más amplio y moderno */
-    margin-inline: auto; /* mejor que margin: 0 auto */
-    
-    /* 📏 Espaciado adaptable */
-    padding: clamp(20px, 4vw, 40px);
-
-    /* 🎨 Apariencia */
+.container {
+    max-width: 650px;
+    margin: 80px auto;
+    padding: 0 20px;
     box-sizing: border-box;
-
-    /* ✨ Animación */
-    animation: fadeInUp 0.5s ease both;
 }
 
-/* ==============================
-   📱 RESPONSIVE (pantallas grandes)
-============================== */
-@media (min-width: 1024px) {
-    .container,
-    section.content,
-    div.content,
-    main {
-        max-width: 900px;
-        padding: 48px 24px;
-    }
-}
-
-/* ==============================
-   📱 MOBILE (pantallas pequeñas)
-============================== */
-@media (max-width: 480px) {
-    .container,
-    section.content,
-    div.content,
-    main {
-        padding: 20px 16px;
-    }
-}   
 /* ===================================== */
 /* ========== TÍTULO h2 ================ */
 /* ===================================== */
-
-h2 {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--azul-profundo);
-    margin: 0 0 26px 0;
+.container h2{
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 20px 0;
     display: flex;
     align-items: center;
-    gap: 12px;
-    letter-spacing: -0.01em;
+    gap: 15px;
+    
+    /* Fondo con Gradiente Animado */
+    background: linear-gradient(135deg, #0f172a 0%, #3b82f6 50%, #10b981 100%);
+    background-size: 200% auto;
+    padding: 18px 28px;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.2);
+    
+    animation: gradientShift 6s ease infinite, fadeRight 0.6s ease both;
 }
 
-/* Acento naranja para "editar" */
-h2::before {
-    content: '';
+/* Pseudo-elemento para el icono */
+.container h2::before {
+    content: '✏️';
+    font-size: 1.2rem;
     display: inline-flex;
-    width: 6px;
-    height: 30px;
-    background: linear-gradient(180deg, var(--naranja), var(--azul-medio));
-    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background: rgba(255, 255, 255, 0.15); /* Efecto cristalizado */
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
     flex-shrink: 0;
-}
-
-/* ===================================== */
-/* ========== ERRORES ================== */
-/* ===================================== */
-
-div[style*="color:red"],
-.alert-errors {
-    background: var(--rojo-claro) !important;
-    border: 1px solid #ffcdd2;
-    border-left: 4px solid var(--rojo);
-    border-radius: 10px;
-    padding: 13px 18px;
-    margin-bottom: 22px;
-    color: #c62828 !important;
-    font-size: 14px;
-    animation: fadeInUp 0.3s ease;
-}
-
-div[style*="color:red"] p {
-    margin: 4px 0;
-    line-height: 1.5;
-    padding: 0;
-    border: none;
-    background: none;
-    color: inherit;
-}
-
-/* ===================================== */
-/* ========== FORMULARIO TARJETA ======= */
-/* ===================================== */
-
-form[method="POST"] {
-    background: var(--blanco);
-    border-radius: 16px;
-    /* Borde naranja superior = modo editar */
-    border-top: 4px solid var(--naranja);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-    padding: 36px;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    animation: slideIn 0.4s ease;
-}
-
-/* ===================================== */
-/* ========== LABELS =================== */
-/* ===================================== */
-
-form[method="POST"] label {
-    display: block;
-    font-weight: 600;
-    color: var(--azul-profundo);
-    font-size: 13px;
-    letter-spacing: 0.01em;
-    margin-bottom: 7px;
-    margin-top: 18px;
-}
-
-form[method="POST"] label:first-of-type {
-    margin-top: 0;
-}
-
-/* ===================================== */
-/* ========== SELECTS ================== */
-/* ===================================== */
-
-form[method="POST"] select {
-    width: 100%;
-    padding: 11px 40px 11px 15px;
-    border: 2px solid #e0e0e0;
-    border-radius: 9px;
-    font-size: 14.5px;
-    font-family: inherit;
-    color: var(--texto);
-    background-color: #fafafa;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23263238' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 14px center;
-    appearance: none;
-    cursor: pointer;
-    outline: none;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.2s;
-}
-
-form[method="POST"] select:hover {
-    border-color: var(--verde-claro);
-}
-
-form[method="POST"] select:focus {
-    border-color: var(--verde-primario);
-    background-color: var(--blanco);
-    box-shadow: 0 0 0 4px rgba(38, 166, 154, 0.12);
-}
-
-/* ===================================== */
-/* ========== OCULTAR <br> ============= */
-/* ===================================== */
-
-form[method="POST"] br {
-    display: none;
-}
-
-/* ===================================== */
-/* ========== BOTÓN ACTUALIZAR ========= */
-/* ===================================== */
-
-form[method="POST"] button[type="submit"] {
-    align-self: flex-start;
-    margin-top: 28px;
-    padding: 11px 30px;
-    background: linear-gradient(135deg, var(--naranja), #ffa726);
-    color: var(--blanco);
-    border: none;
-    border-radius: 9px;
-    font-size: 15px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 3px 10px rgba(251, 140, 0, 0.3);
-    transition: all 0.3s ease;
-}
-
-form[method="POST"] button[type="submit"]:hover {
-    background: linear-gradient(135deg, #e65100, var(--naranja));
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(251, 140, 0, 0.4);
-}
-
-form[method="POST"] button[type="submit"]:active {
-    transform: scale(0.97);
 }
 
 /* ===================================== */
 /* ========== ANIMACIONES ============== */
 /* ===================================== */
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(-18px); }
-    to   { opacity: 1; transform: translateX(0); }
+@keyframes fadeRight {
+    from { 
+        opacity: 0; 
+        transform: translateX(-20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateX(0); 
+    }
+}
+
+@keyframes fadeInDown {
+    from { 
+        opacity: 0; 
+        transform: translateY(-10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* Ajuste para móviles */
+@media (max-width: 576px) {
+    .container h2 {
+        font-size: 1.2rem;
+        padding: 15px 20px;
+        width: 100%; /* El título ocupa todo el ancho en móvil */
+        justify-content: center;
+    }
+    
+    .d-flex.justify-content-between {
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+/* ===================================== */
+/* ========== FORMULARIO TARJETA ======= */
+/* ===================================== */
+form {
+    background: var(--blanco);
+    border-radius: 28px;
+    padding: 65px 45px 45px 45px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(226, 232, 240, 0.7);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Limpieza de espaciados manuales <br> */
+br {
+    display: none;
+}
+
+/* Etiquetas (Labels) */
+label {
+    display: block;
+    font-weight: 700;
+    color: var(--azul-profundo);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    margin-top: 20px;
+}
+
+label:first-of-type {
+    margin-top: 0;
+}
+
+/* Selectores (Inputs) */
+select {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1.5px solid var(--borde);
+    border-radius: 14px;
+    font-size: 15px;
+    color: var(--texto);
+    background-color: #fcfdfe;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230f172a' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    appearance: none;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    outline: none;
+}
+
+select:focus {
+    border-color: var(--azul-medio);
+    background-color: var(--blanco);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    transform: translateY(-1px);
+}
+
+/* ===================================== */
+/* ========== BOTÓN DE ACCIÓN ========== */
+/* ===================================== */
+button[type="submit"] {
+    align-self: flex-start;
+    margin-top: 35px;
+    padding: 16px 45px;
+    background: var(--azul-profundo);
+    color: var(--blanco);
+    border: none;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 20px -6px rgba(15, 23, 42, 0.3);
+}
+
+button[type="submit"]:hover {
+    background: var(--azul-medio);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px -8px rgba(37, 99, 235, 0.4);
+}
+
+button[type="submit"]:active {
+    transform: scale(0.96);
+}
+
+/* ===================================== */
+/* ========== ERRORES ================== */
+/* ===================================== */
+div[style*="color:red"] {
+    background: #fff1f2 !important;
+    border: 1px solid #fecdd3 !important;
+    border-radius: 16px !important;
+    padding: 15px 20px !important;
+    margin-bottom: 25px !important;
+    color: #be123c !important;
+    font-size: 14px;
+}
+
+/* ===================================== */
+/* ========== ANIMACIONES ============== */
+/* ===================================== */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 /* ===================================== */
 /* ========== RESPONSIVE =============== */
 /* ===================================== */
-
 @media (max-width: 640px) {
-    form[method="POST"] { padding: 24px 18px; }
-    h2 { font-size: 20px; }
-    form[method="POST"] button[type="submit"] {
+    .container { 
+        margin: 30px auto; 
+    }
+    
+    form { 
+        padding: 55px 25px 35px 25px; 
+    }
+    
+    h2 { 
+        font-size: 1.2rem; 
+        padding: 25px 15px; 
+    }
+    
+    button[type="submit"] {
         width: 100%;
-        justify-content: center;
+        text-align: center;
     }
 }

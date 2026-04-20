@@ -1,340 +1,254 @@
 /* ===================================== */
-/* ========== VARIABLES ================ */
+/* ========== VARIABLES (Root) ========= */
 /* ===================================== */
-
 :root {
-    --azul-profundo:   #0f4c81;
-    --azul-medio:      #1e88e5;
-    --azul-claro:      #e3f2fd;
-    --verde-primario:  #26a69a;
-    --verde-claro:     #80cbc4;
-    --verde-muy-claro: #e0f2f1;
-    --gris-claro:      #f5f7fa;
-    --gris-borde:      #e0e0e0;
-    --blanco:          #ffffff;
-    --texto:           #263238;
-    --texto-suave:     #607d8b;
-    --rojo:            #ef5350;
-    --rojo-claro:      #ffebee;
-    --naranja:         #fb8c00;
-    --naranja-claro:   #fff3e0;
-    --verde-exito:     #2e7d32;
-    --verde-exito-bg:  #e8f5e9;
-    --verde-exito-borde: #a5d6a7;
+    --azul-profundo: #0f172a;
+    --azul-primario: #2563eb;
+    --azul-hover: #eff6ff;
+    --verde-exito: #10b981;
+    --naranja-edit: #f59e0b;
+    --rojo-delete: #ef4444;
+    --blanco: #ffffff;
+    --texto: #334155;
+    --texto-suave: #64748b;
+    --gris-borde: #f1f5f9;
+    --radius-lg: 16px;
+    --radius-md: 10px;
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 10px 15px -3px rgba(37, 99, 235, 0.1);
+    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ===================================== */
-/* ========== BASE ===================== */
+/* ========== BASE & CONTENEDOR ======== */
 /* ===================================== */
-
-.container,
-section.content,
-div.content,
-main {
-    /* 📐 Layout */
-    width: 100%;
-    max-width: 720px; /* un poco más amplio y moderno */
-    margin-inline: auto; /* mejor que margin: 0 auto */
-    
-    /* 📏 Espaciado adaptable */
-    padding: clamp(20px, 4vw, 40px);
-
-    /* 🎨 Apariencia */
-    box-sizing: border-box;
-
-    /* ✨ Animación */
-    animation: fadeInUp 0.5s ease both;
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--texto);
 }
 
-/* ==============================
-   📱 RESPONSIVE (pantallas grandes)
-============================== */
-@media (min-width: 1024px) {
-    .container,
-    section.content,
-    div.content,
-    main {
-        max-width: 900px;
-        padding: 48px 24px;
-    }
-}
-
-/* ==============================
-   📱 MOBILE (pantallas pequeñas)
-============================== */
-@media (max-width: 480px) {
-    .container,
-    section.content,
-    div.content,
-    main {
-        padding: 20px 16px;
-    }
-}   
-/* ===================================== */
-/* ========== CABECERA ================= */
-/* ===================================== */
-
-h2 {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--azul-profundo);
-    margin: 0 0 20px 0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    letter-spacing: -0.01em;
-}
-
-h2::before {
-    content: '';
-    display: inline-flex;
-    width: 6px;
-    height: 30px;
-    background: linear-gradient(180deg, var(--verde-primario), var(--azul-medio));
-    border-radius: 4px;
-    flex-shrink: 0;
-}
-
-/* ===================================== */
-/* ========== BOTÓN NUEVA ASIGNACIÓN === */
-/* ===================================== */
-
-a[href*="teacher-subjects.create"],
-a[href*="teacher-subjects/create"] {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 22px;
-    background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
+/* Título Principal */
+.container h2 {
+    font-size: 1.75rem;
+    font-weight: 800;
     color: var(--blanco);
-    text-decoration: none;
-    border-radius: 9px;
-    font-size: 14px;
-    font-weight: 600;
-    box-shadow: 0 3px 10px rgba(38, 166, 154, 0.3);
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    margin-bottom: 20px;
-}
-
-a[href*="teacher-subjects.create"]:hover,
-a[href*="teacher-subjects/create"]:hover {
-    background: linear-gradient(135deg, #00897b, var(--verde-primario));
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(38, 166, 154, 0.4);
+    padding: 30px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--azul-profundo) 0%, var(--azul-primario) 100%);
+    box-shadow: var(--shadow-md);
+    margin-bottom: 25px;
+    letter-spacing: -0.025em;
+    position: relative;
+    overflow: hidden;
 }
 
 /* ===================================== */
-/* ========== ALERTA ÉXITO ============= */
+/* ========== MENSAJES DE ALERTA ======= */
 /* ===================================== */
-
-p[style*="color:green"],
-p[style*="color: green"] {
-    background: var(--verde-exito-bg) !important;
-    color: var(--verde-exito) !important;
-    border: 1px solid var(--verde-exito-borde);
+.alert-success {
+    background-color: #ecfdf5;
     border-left: 4px solid var(--verde-exito);
-    border-radius: 10px;
-    padding: 11px 16px;
-    margin: 0 0 20px 0;
-    font-size: 14px;
+    color: #065f46;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
     font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    box-shadow: var(--shadow-sm);
 }
 
 /* ===================================== */
-/* ========== TABLA ==================== */
+/* ========== HEADER ACTIONS =========== */
 /* ===================================== */
+.header-actions {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: flex-end;
+}
 
-/* Envoltorio con sombra */
+.btn-create {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background-color: var(--verde-exito);
+    color: white;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: var(--transition);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.btn-create:hover {
+    background-color: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+}
+
+/* ===================================== */
+/* ========== TABLA Y ENVOLTORIO ======= */
+/* ===================================== */
 .table-wrap {
     background: var(--blanco);
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gris-borde);
+    box-shadow: var(--shadow-sm);
     overflow: hidden;
-    overflow-x: auto;
 }
 
-table,
-table[border] {
+table {
     width: 100%;
-    border-collapse: collapse;
-    border: none !important;
-    font-size: 14px;
-    min-width: 640px;
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
-/* Encabezado degradado */
 table thead tr {
-    background: linear-gradient(135deg, var(--azul-profundo), var(--azul-medio));
-}
+     background: linear-gradient(135deg, var(--azul-profundo) 0%, var(--azul-primario) 100%);
+   
+    }
 
 table thead th {
-    padding: 14px 16px;
-    text-align: left;
-    font-size: 11.5px;
+    padding: 18px 24px;
+    font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: rgba(255, 255, 255, 0.92);
-    border: none;
-    white-space: nowrap;
-}
-
-/* Filas */
-table tbody tr {
-    border-bottom: 1px solid #f0f0f0;
-    transition: background-color 0.18s ease;
-}
-
-table tbody tr:last-child {
-    border-bottom: none;
-}
-
-table tbody tr:hover {
-    background-color: #f0f9ff;
+    letter-spacing: 0.05em;
+    color: floralwhite;
+    border-bottom: 2px solid var(--gris-borde);
+    text-align: left;
 }
 
 table tbody td {
-    padding: 12px 16px;
+    padding: 20px 24px;
+    font-size: 14.5px;
     color: var(--texto);
     vertical-align: middle;
-    border: none;
 }
 
-/* Celda vacía */
-table tbody td[colspan] {
+table tbody tr:not(:last-child) td {
+    border-bottom: 1px solid var(--gris-borde);
+}
+
+table tbody tr:hover {
+    background-color: var(--azul-hover);
+}
+
+/* Estilos específicos de celdas */
+.badge-info {
+    display: inline-block;
+    padding: 4px 12px;
+    background-color: #e0f2fe;
+    color: #0369a1;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.empty-row {
     text-align: center;
+    padding: 40px !important;
     color: var(--texto-suave);
     font-style: italic;
-    padding: 40px;
 }
 
 /* ===================================== */
-/* ========== ACCIONES EN FILAS ======== */
+/* ========== ACCIONES (Botones) ======= */
 /* ===================================== */
-
-td:last-child {
-    white-space: nowrap;
+.actions-cell {
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
 
-/* Ver */
-td a[href*="teacher-subjects"][href*="show"],
-td a[href*="show"] {
+.btn-action, .btn-delete {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 5px 11px;
-    background: var(--azul-claro);
-    color: var(--azul-medio);
-    border: 1px solid #bbdefb;
-    border-radius: 6px;
-    font-size: 12.5px;
-    font-weight: 500;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
     text-decoration: none;
-    transition: all 0.2s ease;
-    margin-right: 4px;
-}
-
-td a[href*="show"]:hover {
-    background: var(--azul-medio);
-    color: var(--blanco);
-    border-color: var(--azul-medio);
-}
-
-/* Editar */
-td a[href*="teacher-subjects"][href*="edit"],
-td a[href*="edit"] {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 11px;
-    background: var(--naranja-claro);
-    color: #e65100;
-    border: 1px solid #ffcc80;
-    border-radius: 6px;
-    font-size: 12.5px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    margin-right: 4px;
-}
-
-td a[href*="edit"]:hover {
-    background: var(--naranja);
-    color: var(--blanco);
-    border-color: var(--naranja);
-}
-
-/* Formulario eliminar */
-td form[method="POST"] {
-    display: inline-flex;
-    margin: 0;
-    padding: 0;
-    background: none;
-    box-shadow: none;
-    border-radius: 0;
+    transition: var(--transition);
     border: none;
-    animation: none;
-}
-
-td form[method="POST"] label {
-    display: none;
-}
-
-/* Botón eliminar */
-td form[method="POST"] button[type="submit"] {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 11px;
-    background: var(--rojo-claro);
-    color: var(--rojo);
-    border: 1px solid #ffcdd2;
-    border-radius: 6px;
-    font-size: 12.5px;
-    font-weight: 500;
-    font-family: inherit;
     cursor: pointer;
-    transition: all 0.2s ease;
-    margin-top: 0;
-    box-shadow: none;
+    background: transparent;
+    font-size: 16px;
 }
 
-td form[method="POST"] button[type="submit"]:hover {
-    background: var(--rojo);
-    color: var(--blanco);
-    border-color: var(--rojo);
-    transform: none;
-    box-shadow: none;
+/* Botón Ver */
+.btn-action.show {
+    background: #eff6ff;
+    color: var(--azul-primario);
+}
+.btn-action.show:hover {
+    background: var(--azul-primario);
+    color: white;
+}
+
+/* Botón Editar */
+.btn-action.edit {
+    background: #fffbeb;
+    color: var(--naranja-edit);
+}
+.btn-action.edit:hover {
+    background: var(--naranja-edit);
+    color: white;
+}
+
+/* Botón Eliminar */
+.btn-delete {
+    background: #fef2f2;
+    color: var(--rojo-delete);
+}
+.btn-delete:hover {
+    background: var(--rojo-delete);
+    color: white;
 }
 
 /* ===================================== */
-/* ========== OCULTAR <br> ============= */
+/* ========== RESPONSIVE (Móvil) ======= */
 /* ===================================== */
-
-br { display: none; }
-
-/* ===================================== */
-/* ========== ANIMACIONES ============== */
-/* ===================================== */
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ===================================== */
-/* ========== RESPONSIVE =============== */
-/* ===================================== */
-
 @media (max-width: 768px) {
-    h2 { font-size: 20px; }
-
-    table thead th:nth-child(4),
-    table tbody td:nth-child(4) {
-        display: none;
+    .container { padding: 10px; }
+    
+    .table-wrap { border: none; background: transparent; box-shadow: none; }
+    
+    table, thead, tbody, th, td, tr { display: block; }
+    
+    thead tr { display: none; }
+    
+    table tbody tr {
+        background: white;
+        margin-bottom: 20px;
+        border-radius: var(--radius-lg);
+        padding: 20px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--gris-borde);
+    }
+    
+    table tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #f1f5f9;
+        text-align: right;
+    }
+    
+    table tbody td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--texto-suave);
+        text-transform: uppercase;
+        font-size: 11px;
+        text-align: left;
+    }
+    
+    .actions-cell {
+        justify-content: flex-end;
+        padding-top: 10px;
     }
 }

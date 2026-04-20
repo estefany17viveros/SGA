@@ -1,338 +1,213 @@
 /* ===================================== */
 /* ========== VARIABLES ================ */
 /* ===================================== */
-
 :root {
-    --azul-profundo:   #0f4c81;
-    --azul-medio:      #1e88e5;
-    --azul-claro:      #e3f2fd;
-    --verde-primario:  #26a69a;
-    --verde-claro:     #80cbc4;
+    --azul-profundo: #0f4c81;
+    --azul-medio: #1e88e5;
+    --azul-claro: #e3f2fd;
+    --verde-primario: #26a69a;
+    --verde-claro: #80cbc4;
     --verde-muy-claro: #e0f2f1;
-    --gris-oscuro:     #263238;
-    --gris-claro:      #f5f7fa;
-    --gris-borde:      #e0e0e0;
-    --blanco:          #ffffff;
-    --texto:           #263238;
-    --texto-suave:     #607d8b;
-    --rojo:            #ef5350;
-    --rojo-claro:      #ffebee;
-    --naranja:         #fb8c00;
-    --naranja-claro:   #fff3e0;
+    --gris-oscuro: #263238;
+    --gris-claro: #f5f7fa;
+    --blanco: #ffffff;
+    --texto: #263238;
+    --rojo: #ef5350;
+    --rojo-claro: #ffebee;
+    --naranja-itaf: #ff9800; /* Color vibrante para editar */
 }
 
 /* ===================================== */
-/* ========== BASE ===================== */
+/* ========== CONTAINER PRINCIPAL ====== */
 /* ===================================== */
-
-/* ==============================
-   📦 CONTENEDORES PRINCIPALES
-============================== */
-
-.container,
-section.content,
-div.content,
-main {
-    /* 📐 Layout */
-    width: 100%;
-    max-width: 720px; /* un poco más amplio y moderno */
-    margin-inline: auto; /* mejor que margin: 0 auto */
-    
-    /* 📏 Espaciado adaptable */
-    padding: clamp(20px, 4vw, 40px);
-
-    /* 🎨 Apariencia */
+.subject-show-page {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 40px !important;
+    width: 90%;
     box-sizing: border-box;
-
-    /* ✨ Animación */
-    animation: fadeInUp 0.5s ease both;
+    animation: fadeInUp 0.6s ease-out;
+    
+    /* FONDO BLANCO UNIFICADO */
+    background: var(--blanco) !important;
+    border: 1px solid #edf2f7 !important;
+    border-radius: 24px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05) !important;
+    overflow: hidden;
 }
 
-/* ==============================
-   📱 RESPONSIVE (pantallas grandes)
-============================== */
-@media (min-width: 1024px) {
-    .container,
-    section.content,
-    div.content,
-    main {
-        max-width: 900px;
-        padding: 48px 24px;
-    }
-}
-
-/* ==============================
-   📱 MOBILE (pantallas pequeñas)
-============================== */
-@media (max-width: 480px) {
-    .container,
-    section.content,
-    div.content,
-    main {
-        padding: 20px 16px;
-    }
-}
 /* ===================================== */
-/* ========== TÍTULO h1 ================ */
+/* ========== TITLE ==================== */
 /* ===================================== */
-
-h1 {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--azul-profundo);
-    margin-bottom: 24px;
+.subject-show-page h1 {
+    font-size: clamp(1.1rem, 5vw, 1.5rem);
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 30px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    letter-spacing: -0.01em;
+    gap: 14px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e88e5 55%, #26a69a 100%);
+    background-size: 200% auto;
+    padding: 20px 26px;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px -5px rgba(30, 136, 229, 0.3);
+    animation: gradientShift 6s ease infinite;
 }
 
-h1::before {
-    content: '';
-    display: inline-flex;
-    width: 6px;
-    height: 32px;
-    background: linear-gradient(180deg, var(--azul-medio), var(--verde-primario));
-    border-radius: 4px;
-    flex-shrink: 0;
+.subject-show-page h1::before {
+    content: '📋';
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px;
+    border-radius: 12px;
+    font-size: 1.2rem;
 }
 
-/* ===================================== */
-/* ========== TARJETA DETALLE ========== */
-/* ===================================== */
-
-/* Reemplaza el div[style="border:1px solid #ccc;..."] */
-div[style*="border:1px solid #ccc"],
-div[style*="border: 1px solid #ccc"],
-.sga-detail-card,
-.detail-card {
-    background: var(--blanco) !important;
+/* Limpieza de contenedores internos para evitar "doble tarjeta" */
+.subject-details-card, 
+.subject-show-page div[style*="border"] {
+    background: transparent !important;
     border: none !important;
-    border-radius: 16px !important;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.09) !important;
+    box-shadow: none !important;
     padding: 0 !important;
-    overflow: hidden;
-    animation: slideIn 0.4s ease;
-}
-
-/* Franja de color superior de la tarjeta */
-div[style*="border:1px solid #ccc"]::before,
-div[style*="border: 1px solid #ccc"]::before {
-    content: '';
-    display: block;
-    height: 5px;
-    background: linear-gradient(90deg, var(--azul-profundo), var(--azul-medio), var(--verde-primario));
-    border-radius: 16px 16px 0 0;
-}
-
-/* Padding interno del contenido */
-div[style*="border:1px solid #ccc"] > *,
-div[style*="border: 1px solid #ccc"] > * {
-    padding-left: 30px;
-    padding-right: 30px;
-}
-
-div[style*="border:1px solid #ccc"] > p:first-of-type,
-div[style*="border: 1px solid #ccc"] > p:first-of-type {
-    padding-top: 28px;
-}
-
-div[style*="border:1px solid #ccc"] > p:last-of-type,
-div[style*="border: 1px solid #ccc"] > p:last-of-type {
-    padding-bottom: 28px;
+    margin: 0 !important;
 }
 
 /* ===================================== */
-/* ========== PÁRRAFOS DETALLE ========= */
+/* ========== FILAS DE INFORMACIÓN ===== */
 /* ===================================== */
-
-div[style*="border:1px solid #ccc"] p,
-div[style*="border: 1px solid #ccc"] p {
+.subject-show-page p {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 0;
+    border-bottom: 1px solid #f1f5f9;
     margin: 0;
-    padding: 14px 30px;
-    font-size: 14.5px;
-    line-height: 1.6;
-    border-bottom: 1px solid #f4f4f4;
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    color: var(--texto);
-    transition: background-color 0.15s;
+    transition: background 0.2s;
 }
 
-div[style*="border:1px solid #ccc"] p:last-of-type,
-div[style*="border: 1px solid #ccc"] p:last-of-type {
+.subject-show-page p:hover {
+    background: #fafafa;
+}
+
+.subject-show-page p:last-of-type {
     border-bottom: none;
 }
 
-div[style*="border:1px solid #ccc"] p:hover,
-div[style*="border: 1px solid #ccc"] p:hover {
-    background-color: #fafcff;
-}
-
-/* Labels strong */
-div[style*="border:1px solid #ccc"] p strong,
-div[style*="border: 1px solid #ccc"] p strong {
-    color: var(--texto-suave);
-    font-size: 11.5px;
-    font-weight: 700;
+.subject-show-page p strong {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--azul-profundo);
     text-transform: uppercase;
-    letter-spacing: 0.07em;
-    white-space: nowrap;
-    min-width: 90px;
-    flex-shrink: 0;
+    letter-spacing: 0.8px;
 }
 
 /* ===================================== */
-/* ========== BADGES DE ESTADO ========= */
+/* ========== ESTADOS (BADGES) ========= */
 /* ===================================== */
-
-/* Activo */
-span[style*="color:green"],
-span[style*="color: green"],
-.badge-active {
-    display: inline-flex !important;
-    align-items: center;
-    gap: 5px;
-    padding: 3px 12px !important;
+span[style*="color:green"], .status-active {
     background: var(--verde-muy-claro) !important;
     color: #00695c !important;
-    border: 1px solid var(--verde-claro);
-    border-radius: 20px;
-    font-size: 12.5px !important;
-    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 12px;
 }
 
-span[style*="color:green"]::before,
-span[style*="color: green"]::before {
-    content: '';
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    background: var(--verde-primario);
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
-/* Inactivo */
-span[style*="color:red"],
-span[style*="color: red"],
-.badge-inactive {
-    display: inline-flex !important;
-    align-items: center;
-    gap: 5px;
-    padding: 3px 12px !important;
+span[style*="color:red"], .status-inactive {
     background: var(--rojo-claro) !important;
-    color: #c62828 !important;
-    border: 1px solid #ffcdd2;
-    border-radius: 20px;
-    font-size: 12.5px !important;
-    font-weight: 600;
-}
-
-span[style*="color:red"]::before,
-span[style*="color: red"]::before {
-    content: '';
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    background: var(--rojo);
-    border-radius: 50%;
-    flex-shrink: 0;
+    color: var(--rojo) !important;
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 12px;
 }
 
 /* ===================================== */
-/* ========== BOTONES DE ACCIÓN ======== */
+/* ========== BOTONES / ACCIONES ======= */
 /* ===================================== */
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 35px;
+    padding-top: 25px;
+    border-top: 1px solid #edf2f7;
+}
 
-/* Contenedor de links de acción debajo de la tarjeta */
-a[href*="subjects.index"],
-a[href*="subjects.edit"] {
+.btn-action {
+    text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    padding: 10px 20px;
-    border-radius: 9px;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 26px;
+    border-radius: 12px;
+    font-weight: 700;
     font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.25s ease;
-    margin-top: 20px;
-    margin-right: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Botón "Volver" */
-a[href*="subjects.index"] {
-    color: var(--azul-medio);
-    background: var(--azul-claro);
-    border: 1.5px solid #bbdefb;
+/* Botón Volver (Gris Elegante) */
+.btn-back {
+    background: #f1f5f9;
+    color: #475569;
 }
 
-a[href*="subjects.index"]:hover {
-    background: var(--azul-medio);
-    color: var(--blanco);
-    border-color: var(--azul-medio);
-    transform: translateX(-2px);
+.btn-back:hover {
+    background: #e2e8f0;
+    transform: translateX(-5px);
 }
 
-/* Botón "Editar" */
-a[href*="subjects.edit"] {
-    color: #e65100;
-    background: var(--naranja-claro);
-    border: 1.5px solid #ffcc80;
+/* Botón Editar (Naranja Vibrante) */
+.btn-edit {
+    background: var(--naranja-itaf);
+    color: white !important;
+    box-shadow: 0 4px 14px rgba(255, 152, 0, 0.3);
 }
 
-a[href*="subjects.edit"]:hover {
-    background: var(--naranja);
-    color: var(--blanco);
-    border-color: var(--naranja);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(251, 140, 0, 0.3);
+.btn-edit:hover {
+    background: #fb8c00;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 152, 0, 0.4);
 }
 
 /* ===================================== */
-/* ========== OCULTAR <br> ============= */
+/* ========== ANIMACIONES =============== */
 /* ===================================== */
-
-br { display: none; }
-
-/* ===================================== */
-/* ========== ANIMACIONES ============== */
-/* ===================================== */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(-18px); }
-    to   { opacity: 1; transform: translateX(0); }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* ===================================== */
 /* ========== RESPONSIVE =============== */
 /* ===================================== */
+@media (max-width: 650px) {
+    .subject-show-page {
+        margin: 20px auto;
+        padding: 25px !important;
+        width: 95%;
+    }
 
-@media (max-width: 640px) {
-    h1 { font-size: 21px; }
+    .subject-show-page p {
+        grid-template-columns: 1fr;
+        gap: 5px;
+        padding: 14px 0;
+    }
 
-    div[style*="border:1px solid #ccc"] p,
-    div[style*="border: 1px solid #ccc"] p {
+    .actions {
         flex-direction: column;
-        gap: 4px;
-        padding: 12px 20px;
     }
 
-    div[style*="border:1px solid #ccc"] p strong,
-    div[style*="border: 1px solid #ccc"] p strong {
-        min-width: unset;
-    }
-
-    a[href*="subjects.index"],
-    a[href*="subjects.edit"] {
+    .btn-action {
         width: 100%;
-        justify-content: center;
-        margin-right: 0;
     }
 }

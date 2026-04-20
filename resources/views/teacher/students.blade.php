@@ -18,7 +18,6 @@
 
 <a href="{{ route('teacher.dashboard') }}">⬅ Volver al inicio</a>
 
-{{-- 🔥 CARGAR PERIODOS DINÁMICOS --}}
 @php
     use App\Models\AcademicYear;
     use App\Models\Period;
@@ -34,12 +33,11 @@
             ->toArray();
     }
 
-    // 🔥 fallback
     if (empty($periods)) {
         $periods = [1,2,3,4];
     }
 
-    // 🔥 ORDENAR POR PROMEDIO FINAL
+    // 🔥 ORDENAR POR PROMEDIO (TRUNCADO)
     $studentsSorted = $students->sortByDesc(function($student) use ($teacher_subject_id, $periods) {
 
         $total = 0;
@@ -57,7 +55,9 @@
             }
         }
 
-        return $count > 0 ? $total / $count : 0;
+        return $count > 0 
+            ? floor(($total / $count) * 100) / 100 
+            : 0;
     })->values();
 @endphp
 
@@ -69,7 +69,6 @@
                 <th>#</th>
                 <th>Nombre</th>
 
-                {{-- 🔥 PERIODOS --}}
                 @foreach($periods as $period)
                     <th>P{{ $period }}</th>
                 @endforeach
@@ -84,7 +83,6 @@
             @forelse($studentsSorted as $student)
 
                 @php
-                    // 🔥 asegurar relación
                     $student->loadMissing('scores');
 
                     $totalFinal = 0;
@@ -108,9 +106,12 @@
                         $periodTotals[$period] = $value;
                     }
 
-                    $averageFinal = $count > 0 ? round($totalFinal / $count, 2) : 0;
+                    // 🔥 PROMEDIO FINAL TRUNCADO
+                    $averageFinal = $count > 0 
+                        ? floor(($totalFinal / $count) * 100) / 100 
+                        : 0;
 
-                    // 🔥 CALCULAR PUESTO
+                    // 🔥 CALCULAR PUESTO (USANDO TRUNCADO)
                     $position = 1;
 
                     foreach ($studentsSorted as $index => $s) {
@@ -130,7 +131,9 @@
                             }
                         }
 
-                        $sAvg = $sCount > 0 ? $sTotal / $sCount : 0;
+                        $sAvg = $sCount > 0 
+                            ? floor(($sTotal / $sCount) * 100) / 100 
+                            : 0;
 
                         if ($index > 0) {
                             $prev = $studentsSorted[$index - 1];
@@ -150,7 +153,9 @@
                                 }
                             }
 
-                            $prevAvg = $prevCount > 0 ? $prevTotal / $prevCount : 0;
+                            $prevAvg = $prevCount > 0 
+                                ? floor(($prevTotal / $prevCount) * 100) / 100 
+                                : 0;
 
                             if ($sAvg != $prevAvg) {
                                 $position = $index + 1;
@@ -168,19 +173,21 @@
 
                     <td>{{ $student->full_name }}</td>
 
-                    {{-- 🔥 NOTAS POR PERIODO --}}
+                    {{-- 🔥 NOTAS POR PERIODO (TRUNCADAS Y FORMATEADAS) --}}
                     @foreach($periods as $period)
                         <td class="text-center">
                             <span class="badge bg-secondary">
-                                {{ $periodTotals[$period] ?? '-' }}
+                                {{ isset($periodTotals[$period]) 
+                                    ? number_format(floor($periodTotals[$period] * 100) / 100, 2, '.', '') 
+                                    : '-' }}
                             </span>
                         </td>
                     @endforeach
 
-                    {{-- 🔥 TOTAL FINAL --}}
+                    {{-- 🔥 PROMEDIO FINAL --}}
                     <td class="text-center">
                         <span class="badge bg-success">
-                            {{ $averageFinal }}
+                            {{ number_format($averageFinal, 2, '.', '') }}
                         </span>
                     </td>
 
@@ -206,7 +213,6 @@
 
     </table>
 </div>
-
 
 </div>
 

@@ -45,16 +45,83 @@
     gap: 12px;
     flex-wrap: wrap;
 }
+/* ===================================== */
+/* ========== HEADERS UNIFICADOS ======= */
+/* ===================================== */
 
-.container h3 {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--azul-profundo);
-    margin: 0;
+.container h2,
+.container h3, /* Añadido h3 para heredar el estilo */
+.container > .mb-4 {
+    font-weight: 800;
+    color: var(--blanco);
+    letter-spacing: -0.03em;
+    text-align: center;
+    
+    /* Graduación de color optimizada */
+    background: linear-gradient(135deg, 
+        var(--azul-profundo) 0%, 
+        var(--azul-medio) 50%, 
+        var(--verde-primario) 100%
+    );
+    background-size: 200% auto;
+    
+    /* Estética de contenedor */
+    border-radius: 20px;
+    box-shadow: 0 12px 35px rgba(15, 76, 129, 0.2);
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 12px;
+    
+    /* Animaciones fluidas */
+    animation: gradientShift 8s ease infinite, fadeUp 0.5s ease-out both;
 }
+
+/* Diferenciación de tamaños para jerarquía */
+.container h2 {
+    font-size: 1.8rem;
+    padding: 30px 40px;
+    margin-bottom: 28px;
+}
+
+.container h3 {
+    font-size: 2.2rem; /* Un poco más pequeño que el h2 */
+    padding: 30px 350px;
+    margin-bottom: 20px;
+}
+
+/* Iconos para ambos encabezados */
+.container h2::before,
+.container h3::before {
+    
+    font-size: 1.3rem;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* ===================================== */
+/* ========== ANIMACIONES ============== */
+/* ===================================== */
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+ 
 
 /* ===================================== */
 /* ========== ALERT ==================== */
@@ -389,71 +456,136 @@ form[style*="display:inline"] { display: inline !important; }
 /* ========== RESPONSIVE =============== */
 /* ===================================== */
 
-@media (max-width: 860px) {
-    .container { padding: 20px 15px; }
-    .container h3 { font-size: 20px; }
+/* 📱 Tablets */
+@media (max-width: 992px) {
 
+    .container {
+        padding: 20px 15px;
+    }
+
+    .container h2 {
+        font-size: 1.5rem;
+        padding: 25px 20px;
+    }
+
+    .container h3 {
+        font-size: 1.6rem;
+        padding: 20px;
+    }
+
+    /* Grid pasa a 1 columna */
     .row {
         grid-template-columns: 1fr;
         gap: 10px;
     }
 
     .col-md-6,
-    .col-md-3 { grid-column: span 1; }
+    .col-md-3 {
+        grid-column: span 1;
+    }
 
-    .btn-secondary { margin-left: 0; }
-
+    /* Botones full */
     .btn-primary,
     .btn-secondary {
         width: 100%;
         justify-content: center;
     }
+}
 
-    /* Tabla → tarjetas en móvil */
-    .table thead { display: none; }
+/* 📱 Móviles */
+@media (max-width: 768px) {
+
+    /* Header se acomoda */
+    .d-flex.justify-content-between.mb-3 {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    /* 🔥 TABLA → CARDS */
+    .table thead {
+        display: none;
+    }
 
     .table tbody tr {
         display: block;
-        margin: 0 0 14px 0;
+        margin-bottom: 15px;
         border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
         border: 1px solid var(--borde);
-        overflow: hidden;
-        background: white !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        background: white;
+        padding: 10px;
     }
 
+    /* 🔥 CELDAS IZQUIERDA */
     .table td {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 11px 16px;
-        border-bottom: 1px solid #f5f5f5;
+        flex-direction: column;        /* 🔥 clave */
+        align-items: flex-start;       /* 🔥 izquierda */
+        text-align: left;              /* 🔥 izquierda */
+        padding: 10px 12px;
+        border-bottom: 1px solid #f0f0f0;
+        width: 100%;
         font-size: 13px;
     }
 
-    .table td:last-child { border-bottom: none; }
+    .table td:last-child {
+        border-bottom: none;
+    }
 
+    /* 🔥 ETIQUETA */
     .table td::before {
         content: attr(data-label);
         font-weight: 700;
-        color: var(--azul-profundo);
         font-size: 11px;
+        color: var(--azul-profundo);
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        margin-right: 10px;
-        flex-shrink: 0;
+        margin-bottom: 4px;
     }
 
-    /* Quita la familia monospace en la td de ID en móvil */
-    .table td:first-child { font-family: inherit; }
+    /* quitar monospace en móvil */
+    .table td:first-child {
+        font-family: inherit;
+        color: var(--texto);
+    }
 
-    /* Tabla dentro de card sin padding */
-    .card:last-child .card-body {
-        padding: 14px;
+    /* botones en columna */
+    .table td .btn {
+        width: 100%;
+        margin-top: 6px;
+        justify-content: center;
+    }
+
+    form {
+        width: 100%;
+    }
+
+    /* cards internas */
+    .card .card-body {
+        padding: 15px;
     }
 }
 
+/* 📱 Móviles pequeños */
 @media (max-width: 480px) {
-    .container h3 { font-size: 17px; }
-    .btn { font-size: 12px; }
+
+    .container h2 {
+        font-size: 1.3rem;
+        padding: 18px;
+    }
+
+    .container h3 {
+        font-size: 1.2rem;
+        padding: 15px;
+    }
+
+    .btn {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .form-control {
+        font-size: 13px;
+        padding: 9px 12px;
+    }
 }

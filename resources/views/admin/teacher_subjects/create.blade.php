@@ -4,7 +4,9 @@
 @endpush
 @section('content')
 
-<h2>Nueva Asignación</h2>
+<div class="container-header">
+    <h2>Asignaciones</h2>
+    </div>
 
 @if($errors->any())
     <div style="color:red;">

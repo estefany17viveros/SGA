@@ -9,218 +9,265 @@
     --verde-primario: #26a69a;
     --verde-claro: #80cbc4;
     --verde-muy-claro: #e0f2f1;
-    --gris-oscuro: #263238;
     --gris-claro: #f5f7fa;
     --blanco: #ffffff;
     --texto: #263238;
+    --texto-suave: #6b7280;
     --rojo: #ef5350;
     --rojo-claro: #ffebee;
     --naranja: #fb8c00;
-    --naranja-claro: #fff3e0;
+    --borde: #e0e7ef;
+    --sombra: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* ===================================== */
-/* ========== CONTAINER ================ */
-/* ===================================== */
-
-.container {
-    max-width: 620px;
-    margin: 0 auto;
-    padding: 30px 20px;
-    animation: fadeInUp 0.5s ease;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
 /* ===================================== */
-/* ========== PAGE TITLE =============== */
+/* ========== TÍTULO H2 ================ */
 /* ===================================== */
 
-.container h4.mb-3 {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--azul-profundo);
-    margin-bottom: 25px;
+.container h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 20px 0 24px;
     display: flex;
     align-items: center;
-    gap: 10px;
-}
-
-.container h4.mb-3::before {
-    content: '✏️';
-    font-size: 18px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: var(--naranja-claro);
-    border-radius: 10px;
-    flex-shrink: 0;
-}
-
-/* ===================================== */
-/* ========== CARD ===================== */
-/* ===================================== */
-
-.card {
-    background: var(--blanco);
+    gap: 14px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e88e5 55%, #26a69a 100%);
+    background-size: 200% auto;
+    padding: 18px 28px;
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    animation: slideIn 0.4s ease;
-}
-
-.card-body {
-    padding: 35px;
+    box-shadow: 0 8px 24px -4px rgba(30, 136, 229, 0.22);
+    animation: gradientShift 7s ease infinite, fadeRight 0.5s ease both;
 }
 
 /* ===================================== */
-/* ========== FORM ELEMENTS ============ */
+/* ========== ALERTA ERRORES =========== */
 /* ===================================== */
 
-.mb-3 {
-    margin-bottom: 22px;
-}
-
-.form-label {
-    display: block;
+.alert.alert-danger {
+    padding: 14px 18px;
+    background: linear-gradient(135deg, var(--rojo-claro), #ffcdd2);
+    border-left: 4px solid var(--rojo);
+    border-radius: 10px;
+    color: #b71c1c;
+    font-size: 13.5px;
     font-weight: 600;
+    box-shadow: 0 3px 12px rgba(239, 83, 80, 0.1);
+    margin-bottom: 20px;
+    animation: slideIn 0.3s ease;
+}
+
+.alert.alert-danger ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.alert.alert-danger ul li { margin-bottom: 4px; }
+.alert.alert-danger ul li:last-child { margin-bottom: 0; }
+
+/* ===================================== */
+/* ========== CARD DEL FORMULARIO ====== */
+/* ===================================== */
+
+.container form {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-top: 4px solid var(--verde-primario);
+    border-radius: 16px;
+    padding: 28px 32px;
+    box-shadow: var(--sombra);
+    animation: fadeInUp 0.4s ease 0.05s both;
+    max-width: 640px;
+}
+
+/* ===================================== */
+/* ========== CAMPOS =================== */
+/* ===================================== */
+
+.container form .mb-3 {
+    margin-bottom: 20px !important;
+}
+
+/* etiquetas */
+.container form .form-label,
+.container form label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 700;
     color: var(--azul-profundo);
-    margin-bottom: 8px;
-    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 7px;
 }
 
-.form-control,
-.form-select {
+/* inputs de texto y número */
+.container form .form-control,
+.container form input[type="text"],
+.container form input[type="number"] {
     width: 100%;
-    padding: 12px 16px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 15px;
-    font-family: inherit;
-    transition: all 0.3s ease;
-    background: #fafafa;
-    box-sizing: border-box;
+    padding: 11px 16px;
+    border-radius: 10px;
+    border: 1.5px solid #d4dbe6;
+    background: var(--gris-claro);
+    font-size: 14px;
     color: var(--texto);
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
-.form-control:focus,
-.form-select:focus {
+.container form .form-control:hover,
+.container form input[type="text"]:hover,
+.container form input[type="number"]:hover {
+    border-color: #aab8cc;
+    background: var(--blanco);
+}
+
+.container form .form-control:focus,
+.container form input[type="text"]:focus,
+.container form input[type="number"]:focus {
     outline: none;
     border-color: var(--verde-primario);
-    background: white;
-    box-shadow: 0 0 0 4px rgba(38, 166, 154, 0.1);
+    background: var(--blanco);
+    box-shadow: 0 0 0 4px rgba(38, 166, 154, 0.14);
 }
 
-.form-control:hover,
-.form-select:hover {
-    border-color: var(--verde-claro);
-}
-
-.form-control::placeholder {
-    color: #9e9e9e;
-    opacity: 0.8;
-}
-
-/* ===================================== */
-/* ========== SELECT =================== */
-/* ===================================== */
-
-.form-select {
+/* select director */
+.container form select,
+.container form select#director_id {
+    width: 100%;
+    padding: 11px 36px 11px 16px;
+    border-radius: 10px;
+    border: 1.5px solid #d4dbe6;
+    background-color: var(--gris-claro);
+    font-size: 14px;
+    color: var(--texto);
+    font-family: inherit;
     cursor: pointer;
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23263238' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230f4c81' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 14px center;
-    padding-right: 40px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    margin-top: 7px;
 }
 
-/* ===================================== */
-/* ========== ERROR MESSAGES =========== */
-/* ===================================== */
+.container form select:hover {
+    border-color: #aab8cc;
+    background-color: var(--blanco);
+}
 
-small.text-danger {
+.container form select:focus {
+    outline: none;
+    border-color: var(--verde-primario);
+    background-color: var(--blanco);
+    box-shadow: 0 0 0 4px rgba(38, 166, 154, 0.14);
+}
+
+/* wrapper del director (usa clases Tailwind en el blade) */
+.container form > div:not(.mb-3) {
+    margin-bottom: 20px;
+}
+
+.container form > div:not(.mb-3) label {
     display: block;
-    color: var(--rojo);
-    font-size: 13px;
-    font-weight: 600;
-    margin-top: 6px;
-    padding: 6px 10px;
-    background: var(--rojo-claro);
-    border-radius: 6px;
-    border-left: 3px solid var(--rojo);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--azul-profundo);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 0;
 }
 
 /* ===================================== */
-/* ========== BUTTONS ================== */
+/* ========== BOTONES ================== */
 /* ===================================== */
 
-.btn {
-    padding: 11px 26px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 15px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: inherit;
+/* separador visual antes de los botones */
+.container form > .btn:first-of-type,
+.container form > button {
+    margin-top: 8px;
+}
+
+/* botón actualizar */
+.container form button.btn.btn-primary,
+.container form .btn.btn-primary {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    padding: 11px 26px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13.5px;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--azul-medio), var(--verde-primario));
+    color: white;
+    box-shadow: 0 4px 14px rgba(38, 166, 154, 0.28);
+    transition: all 0.25s ease;
+    margin-right: 10px;
     text-decoration: none;
 }
 
-.btn:active {
+.container form button.btn.btn-primary:hover,
+.container form .btn.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(38, 166, 154, 0.38);
+}
+
+.container form button.btn.btn-primary:active,
+.container form .btn.btn-primary:active {
     transform: scale(0.97);
 }
 
-.btn-success {
-    background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
-    color: white;
-    box-shadow: 0 3px 8px rgba(38, 166, 154, 0.3);
-    margin-right: 10px;
+/* botón cancelar */
+.container form .btn.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 22px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13.5px;
+    font-family: inherit;
+    border: 1.5px solid #d4dbe6;
+    cursor: pointer;
+    background: var(--gris-claro);
+    color: #475569;
+    text-decoration: none;
+    transition: all 0.22s ease;
 }
 
-.btn-success:hover {
-    background: linear-gradient(135deg, #00897b, var(--verde-primario));
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(38, 166, 154, 0.4);
-}
-
-.btn-secondary {
-    background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
-    color: #424242;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.btn-secondary:hover {
-    background: linear-gradient(135deg, #bdbdbd, #9e9e9e);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-/* ===================================== */
-/* ========== DISABLED STATES ========== */
-/* ===================================== */
-
-.form-control:disabled,
-.form-select:disabled {
-    background: #f5f5f5;
-    color: #9e9e9e;
-    cursor: not-allowed;
-    opacity: 0.6;
+.container form .btn.btn-secondary:hover {
+    background: #e2e8f0;
+    border-color: #aab8cc;
+    transform: translateY(-1px);
 }
 
 /* ===================================== */
-/* ========== ANIMATIONS =============== */
+/* ========== ANIMACIONES ============== */
 /* ===================================== */
+
+@keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeRight {
+    from { opacity: 0; transform: translateX(-16px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
+    from { opacity: 0; transform: translateY(18px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideIn {
-    from { opacity: 0; transform: translateX(-20px); }
+    from { opacity: 0; transform: translateX(-14px); }
     to   { opacity: 1; transform: translateX(0); }
 }
 
@@ -228,21 +275,21 @@ small.text-danger {
 /* ========== RESPONSIVE =============== */
 /* ===================================== */
 
-@media (max-width: 768px) {
-    .container { padding: 20px 15px; }
-    .container h4.mb-3 { font-size: 22px; }
-    .card-body { padding: 25px 20px; }
+@media (max-width: 900px) {
+    .container h2 { font-size: 1.25rem; padding: 16px 20px; }
+    .container form { padding: 22px 22px; }
+}
 
-    .btn {
+@media (max-width: 600px) {
+    .container h2 { font-size: 1.1rem; padding: 14px 16px; margin: 14px 0 18px; }
+    .container form { padding: 18px 16px; border-radius: 12px; max-width: 100%; }
+
+    .container form button.btn.btn-primary,
+    .container form .btn.btn-primary,
+    .container form .btn.btn-secondary {
         width: 100%;
         justify-content: center;
         margin-right: 0;
         margin-bottom: 10px;
     }
-}
-
-@media (max-width: 480px) {
-    .container h4.mb-3 { font-size: 19px; }
-    .card-body { padding: 20px 15px; }
-    .btn { padding: 10px 20px; font-size: 14px; }
 }

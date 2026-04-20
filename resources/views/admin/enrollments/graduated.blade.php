@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Estudiantes Graduados')
+@section('title', 'Estudiantes Egresados')
 @push('styles')
 @vite('resources/css/admin/enrollments/graduated.css')
 @endpush
@@ -10,7 +10,7 @@
 
     {{-- HEADER --}}
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>🎓 Estudiantes Graduados</h2>
+        <h2>🎓 Estudiantes Egresados</h2>
 
         <a href="{{ route('admin.enrollments.index') }}" class="btn btn-secondary">
             ← Volver
@@ -98,7 +98,7 @@
                             </td>
 
                             <td class="text-center">
-                                <span class="badge bg-success">🎓 Graduado</span>
+                                <span class="badge bg-success">🎓 Egresados</span>
                             </td>
 
                         </tr>
@@ -107,7 +107,7 @@
 
                         <tr>
                             <td colspan="5" class="text-center">
-                                No hay estudiantes graduados
+                                No hay estudiantes Egresados registrados
                             </td>
                         </tr>
 

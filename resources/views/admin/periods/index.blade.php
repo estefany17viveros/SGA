@@ -1,68 +1,93 @@
 @extends('layouts.app')
+
 @push('styles')
 @vite('resources/css/admin/periods/index.css')
 @endpush
+
 @section('content')
 
-<h2>Periodos - Año {{ $year->year }}</h2>
+<div class="container">
 
-<a href="{{ route('admin.academic_years.index') }}">← Volver</a>
+    <h2>Periodos - Año {{ $year->year }}</h2>
 
-<br><br>
+    <a href="{{ route('admin.academic_years.index') }}">← Volver</a>
 
-@php
-$total = $periods->sum('percentage');
-@endphp
+    @php
+        $total = $periods->sum('percentage');
+    @endphp
 
-<p>
-    Total: 
-    <strong style="color: {{ $total == 100 ? 'green' : 'red' }}">
-        {{ number_format($total,2) }}%
-    </strong>
-</p>
+    <p>
+        Total:
+        <strong style="color: {{ $total == 100 ? 'green' : 'red' }}">
+            {{ number_format($total,2) }}%
+        </strong>
+    </p>
 
-@if(session('success'))
-<p style="color:green">{{ session('success') }}</p>
-@endif
+    @if(session('success'))
+        <p style="color:green">{{ session('success') }}</p>
+    @endif
 
-@if(session('error'))
-<p style="color:red">{{ session('error') }}</p>
-@endif
+    @if(session('error'))
+        <p style="color:red">{{ session('error') }}</p>
+    @endif
 
-<table border="1" cellpadding="8">
-<tr>
-    <th>#</th>
-    <th>Nombre</th>
-    <th>Fechas</th>
-    <th>%</th>
-    <th>Estado</th>
-    <th>Acciones</th>
-</tr>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Fechas</th>
+                    <th>%</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
 
-@foreach($periods as $p)
-<tr @if($loop->last) style="background:#eef" @endif>
-    <td>{{ $p->number }}</td>
-    <td>{{ $p->name }}</td>
-    <td>{{ $p->start_date }} - {{ $p->end_date }}</td>
-    <td>{{ number_format($p->percentage,2) }}%</td>
+            <tbody>
+                @foreach($periods as $p)
+                <tr @if($loop->last) style="background:#eef" @endif>
 
-    <td>
-        {{ $p->status }}
-    </td>
+                    <td data-label="#">
+                        {{ $p->number }}
+                    </td>
 
-    <td>
-        <a href="{{ route('admin.periods.show',$p->id) }}">Ver</a> |
-        <a href="{{ route('admin.periods.edit',$p->id) }}">Editar</a> |
+                    <td data-label="Nombre">
+                        {{ $p->name }}
+                    </td>
 
-        @if($p->status=='activo')
-            <a href="{{ route('admin.periods.close',$p->id) }}">Cerrar</a>
-        @else
-            <a href="{{ route('admin.periods.open',$p->id) }}">Activar</a>
-        @endif
-    </td>
-</tr>
-@endforeach
+                    <td data-label="Fechas">
+                        {{ $p->start_date }} - {{ $p->end_date }}
+                    </td>
 
-</table>
+                    <td data-label="%">
+                        {{ number_format($p->percentage,2) }}%
+                    </td>
+
+                    <td data-label="Estado">
+                        {{ $p->status }}
+                    </td>
+
+                    <td data-label="Acciones">
+
+                        <a href="{{ route('admin.periods.show',$p->id) }}">Ver</a>
+
+                        <a href="{{ route('admin.periods.edit',$p->id) }}">Editar</a>
+
+                        @if($p->status=='activo')
+                            <a href="{{ route('admin.periods.close',$p->id) }}">Cerrar</a>
+                        @else
+                            <a href="{{ route('admin.periods.open',$p->id) }}">Activar</a>
+                        @endif
+
+                    </td>
+
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+</div>
 
 @endsection

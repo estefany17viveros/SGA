@@ -1,50 +1,49 @@
 @extends('layouts.app')
+
 @push('styles')
-@vite('resources/css/admin/subjects/edit.css')
+@vite('resources/css/admin/subjects/show.css')
 @endpush
+
 @section('content')
 
-<h1>✏️ Editar Materia</h1>
+<div class="subject-show-page">
 
-@if($errors->any())
-    <div style="color:red;">
-        <ul>
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 
-<form method="POST" action="{{ route('admin.subjects.update', $subject) }}">
-    @csrf
-    @method('PUT')
+<h1>Detalle de Materia</h1>
 
-    <div>
-        <label>Nombre</label>
-        <input type="text" name="name" value="{{ $subject->name }}">
-    </div>
+<div style="border:1px solid #ccc; padding:20px; border-radius:10px;">
 
-    <div>
-        <label>Descripción</label>
-        <textarea name="description">{{ $subject->description }}</textarea>
-    </div>
+    <p><strong>ID:</strong> {{ $subject->id }}</p>
 
-    <div>
-        <label>Estado</label>
-        <select name="status">
-            <option value="active" {{ $subject->status == 'active' ? 'selected' : '' }}>Activo</option>
-            <option value="inactive" {{ $subject->status == 'inactive' ? 'selected' : '' }}>Inactivo</option>
-        </select>
-    </div>
+    <p><strong>Nombre:</strong> {{ $subject->name }}</p>
 
-    <br>
+    <p>
+        <strong>Descripción:</strong> 
+        {{ $subject->description ?? 'Sin descripción' }}
+    </p>
 
-    <button>🔄 Actualizar</button>
-</form>
+    <p>
+        <strong>Estado:</strong> 
+        @if($subject->status == 'active')
+            <span style="color:green;">Activo</span>
+        @else
+            <span style="color:red;">Inactivo</span>
+        @endif
+    </p>
 
-<br>
+    <p>
+        <strong>Creado:</strong> 
+        {{ $subject->created_at->format('d/m/Y') }}
+    </p>
 
-<a href="{{ route('admin.subjects.index') }}">⬅ Volver</a>
+</div>
+
+<div class="actions">
+    <a href="{{ route('admin.subjects.index') }}">⬅ Volver</a>
+    <a href="{{ route('admin.subjects.edit', $subject) }}">✏️ Editar</a>
+</div>
+
+
+</div>
 
 @endsection

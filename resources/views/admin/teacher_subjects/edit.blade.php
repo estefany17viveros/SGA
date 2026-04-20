@@ -75,8 +75,9 @@
 
     <br><br>
 
-    <button type="submit">Actualizar</button>
-
+    <button type="submit">
+    <i class="fas fa-sync-alt"></i> Actualizar Asignación
+</button>
 </form>
 
 @endsection

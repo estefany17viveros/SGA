@@ -1,158 +1,91 @@
-/* ===================================== */
-/* ========== VARIABLES ================ */
-/* ===================================== */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
 
 :root {
-    --azul-profundo: #0f4c81;
-    --azul-claro: #e3f2fd;
-    --verde-primario: #26a69a;
-    --verde-muy-claro: #e0f2f1;
+    --azul-profundo: #0f172a;
+    --azul-medio: #3b82f6;
+    --verde-primario: #10b981;
+    --blanco: #ffffff;
+    --texto: #475569;
+    --borde: #f1f5f9;
 }
-
-/* ===================================== */
-/* ========== CONTAINER ================ */
-/* ===================================== */
 
 .container {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 30px 20px;
-    animation: fadeInUp 0.5s ease;
+    max-width: 600px;
+    margin: 40px auto;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
+/* Encabezado Principal */
 .container h2 {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--azul-profundo);
-    margin-bottom: 30px;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--blanco);
     text-align: center;
+    background: linear-gradient(135deg, var(--azul-profundo), var(--azul-medio), var(--verde-primario));
+    background-size: 200% auto;
+    padding: 24px;
+    border-radius: 20px;
+    margin-bottom: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
+    animation: gradientShift 6s ease infinite;
 }
 
-.container h2::before {
-    content: '📋';
-    font-size: 32px;
-}
+.container h2::before { content: '📊'; }
 
-/* ===================================== */
-/* ========== CARD ===================== */
-/* ===================================== */
-
+/* Tarjeta de Detalles */
 .card {
-    background: white;
-    border-radius: 16px;
+    background: var(--blanco);
+    border-radius: 24px;
+    border: 1px solid var(--borde);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    border-top: 5px solid var(--verde-primario);
-    margin-bottom: 25px;
 }
 
-.card-body {
-    padding: 35px;
-}
+.card-body { padding: 30px; }
 
 .card-body p {
-    padding: 15px 20px;
-    margin-bottom: 15px;
-    background: linear-gradient(135deg, var(--azul-claro), var(--verde-muy-claro));
-    border-radius: 8px;
-    border-left: 4px solid var(--verde-primario);
-    font-size: 16px;
-    transition: transform 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--borde);
+    margin: 0;
 }
 
-.card-body p:hover {
-    transform: translateX(5px);
-}
+.card-body p:last-child { border-bottom: none; }
 
-.card-body strong {
-    color: var(--azul-profundo);
-    font-weight: 700;
+.card-body p strong {
+    font-size: 12px;
     text-transform: uppercase;
-    font-size: 13px;
-    letter-spacing: 0.5px;
-    margin-right: 12px;
-    display: inline-block;
-    min-width: 100px;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
 }
 
-/* ===================================== */
-/* ========== BUTTON =================== */
-/* ===================================== */
-
-.btn-secondary {
-    background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
-    color: #424242;
-    padding: 12px 24px;
-    border-radius: 8px;
-    text-decoration: none;
+.card-body p span, 
+.card-body p:not(strong) {
     font-weight: 600;
-    font-size: 15px;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    color: var(--azul-profundo);
+}
+
+/* Botón Volver */
+.btn-secondary {
     display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    margin-top: 20px;
+    padding: 12px 24px;
+    background: #f1f5f9;
+    color: var(--azul-profundo);
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s;
 }
 
-.btn-secondary:hover {
-    background: linear-gradient(135deg, #bdbdbd, #9e9e9e);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
+.btn-secondary:hover { background: #e2e8f0; transform: translateY(-2px); }
 
-.btn-secondary::before {
-    content: '←';
-    font-size: 18px;
-}
-
-.mt-3 {
-    margin-top: 25px;
-}
-
-/* ===================================== */
-/* ========== ANIMATIONS =============== */
-/* ===================================== */
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ===================================== */
-/* ========== RESPONSIVE =============== */
-/* ===================================== */
-
-@media (max-width: 768px) {
-    .container {
-        padding: 20px 15px;
-    }
-
-    .container h2 {
-        font-size: 24px;
-    }
-
-    .card-body {
-        padding: 25px 20px;
-    }
-
-    .card-body strong {
-        display: block;
-        margin-bottom: 5px;
-        min-width: auto;
-    }
-
-    .btn-secondary {
-        width: 100%;
-        justify-content: center;
-    }
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }

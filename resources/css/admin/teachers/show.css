@@ -1,262 +1,168 @@
-/* ===================================== */
-/* ========== VARIABLES ================ */
-/* ===================================== */
-
 :root {
     --azul-profundo: #0f4c81;
     --azul-medio: #1e88e5;
-    --azul-claro: #e3f2fd;
+    --azul-claro: #f0f7ff;
     --verde-primario: #26a69a;
-    --verde-claro: #80cbc4;
-    --verde-muy-claro: #e0f2f1;
-    --gris-oscuro: #263238;
-    --gris-claro: #f5f7fa;
+    --texto-main: #2c3e50;
+    --texto-muted: #64748b;
     --blanco: #ffffff;
-    --texto: #263238;
-    --rojo: #ef5350;
-    --rojo-claro: #ffebee;
-    --borde: #e8edf2;
-    --sombra: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --borde: #e2e8f0;
+    --radius: 12px;
+    --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ===================================== */
-/* ========== BASE ===================== */
-/* ===================================== */
-
-
-/* ===================================== */
-/* ========== WRAPPER ================== */
-/* Centro visual para todos los elementos */
-/* ===================================== */
-
-h2, img, p, br, a {
-    display: block;
-    max-width: 680px;
-    margin-left: auto;
-    margin-right: auto;
+/* Contenedor Principal */
+.teacher-profile-container {
+    max-width: 650px;
+    margin: 40px auto;
+    font-family: 'Inter', sans-serif;
 }
 
-/* ===================================== */
-/* ========== NOMBRE DEL PROFESOR ====== */
-/* ===================================== */
-
-h2 {
-    font-size: 28px;
-    font-weight: 700;
+/* Título */
+.teacher-profile-container h2 {
+    font-size: 32px;
+    font-weight: 800;
     color: var(--azul-profundo);
     text-align: center;
-    padding-bottom: 16px;
-    margin-bottom: 20px;
-    border-bottom: 3px solid var(--azul-claro);
-    animation: fadeInUp 0.5s ease;
-    position: relative;
+    margin-bottom: 30px;
+    letter-spacing: -0.02em;
+    animation: fadeInDown 0.6s ease;
 }
 
-h2::after {
-    content: '';
-    position: absolute;
-    bottom: -3px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: var(--verde-primario);
-    border-radius: 2px;
-}
-
-/* ===================================== */
-/* ========== FOTO ===================== */
-/* ===================================== */
-
-img {
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
+/* Foto de Perfil (Blob) */
+.teacher-profile-container .profile-img {
+    width: 130px;
+    height: 130px;
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
     object-fit: cover;
-    border: 4px solid var(--azul-claro);
-    box-shadow: 0 6px 20px rgba(15, 76, 129, 0.18);
-    margin: 0 auto 24px;
-    animation: fadeInUp 0.5s ease 0.1s both;
+    border: 5px solid var(--blanco);
+    box-shadow: 0 15px 35px rgba(15, 76, 129, 0.2);
+    margin: 0 auto 40px;
+    display: block;
+    animation: profileBlob 8s ease-in-out infinite alternate, fadeInUp 0.6s ease;
+    transition: var(--transition);
 }
 
-/* ===================================== */
-/* ========== FILAS DE DATOS =========== */
-/* ===================================== */
+.teacher-profile-container .profile-img:hover {
+    transform: scale(1.05) rotate(2deg);
+}
 
-p {
+/* Tarjeta de Datos */
+.teacher-profile-container .info-card {
     background: var(--blanco);
-    padding: 13px 18px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--borde);
+}
+
+.teacher-profile-container p {
+    padding: 16px 24px;
     border-bottom: 1px solid var(--borde);
-    font-size: 14px;
+    font-size: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 0;
-    animation: slideIn 0.4s ease;
-}
-
-/* Primer p — cabecera redondeada con acento azul */
-p:first-of-type {
-    border-radius: 16px 16px 0 0;
-    border-top: 4px solid var(--azul-medio);
-    box-shadow: 0 -2px 8px rgba(30, 136, 229, 0.08);
-}
-
-/* Último p de datos (antes del PDF) */
-p:last-of-type {
-    border-radius: 0 0 16px 16px;
-    border-bottom: none;
-    box-shadow: var(--sombra);
-    margin-bottom: 22px;
-}
-
-/* Cuando hay solo un <p> de PDF al final */
-p:has(a) {
-    border-radius: 12px !important;
-    border-top: none;
-    border-bottom: none !important;
-    box-shadow: none !important;
-    background: transparent;
-    padding: 0;
-    margin-bottom: 18px;
-    justify-content: flex-start;
-}
-
-p strong {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--azul-profundo);
-    opacity: 0.65;
-    flex-shrink: 0;
-    min-width: 175px;
-}
-
-/* Estado: sobreescribir inline styles */
-p span[style*="color: green"],
-p span[style*="color:green"] {
-    display: inline-block !important;
-    padding: 4px 14px !important;
-    background: var(--verde-muy-claro) !important;
-    color: var(--verde-primario) !important;
-    border-radius: 20px !important;
-    font-size: 12px !important;
-    font-weight: 700 !important;
-}
-
-p span[style*="color: red"],
-p span[style*="color:red"] {
-    display: inline-block !important;
-    padding: 4px 14px !important;
-    background: var(--rojo-claro) !important;
-    color: var(--rojo) !important;
-    border-radius: 20px !important;
-    font-size: 12px !important;
-    font-weight: 700 !important;
-}
-
-/* ===================================== */
-/* ========== LINK PDF ================= */
-/* ===================================== */
-
-p > a {
-    display: inline-flex !important;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 18px;
-    background: linear-gradient(135deg, var(--azul-claro), #bbdefb);
-    color: var(--azul-profundo);
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    border: 1.5px solid #bbdefb;
-    transition: all 0.25s ease;
-    box-shadow: 0 2px 6px rgba(30, 136, 229, 0.1);
-    max-width: fit-content;
     margin: 0;
+    transition: var(--transition);
 }
 
-p > a:hover {
-    background: linear-gradient(135deg, #bbdefb, #90caf9);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(30, 136, 229, 0.18);
+.teacher-profile-container p:last-child {
+    border-bottom: none;
 }
 
-/* ===================================== */
-/* ========== BR ======================= */
-/* ===================================== */
+.teacher-profile-container p:hover {
+    background: var(--azul-claro);
+}
 
-br { display: none; }
+.teacher-profile-container p strong {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--texto-muted);
+}
 
-/* ===================================== */
-/* ========== ENLACE VOLVER ============ */
-/* ===================================== */
+/* Badges de Estado */
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
 
-/* El <a> directo hijo del body (no dentro de <p>) */
-body > a {
-    display: inline-flex !important;
-    align-items: center;
-    gap: 7px;
-    padding: 10px 22px;
-    background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
-    color: #424242;
-    border-radius: 9px;
+.status-badge.active { background: #dcfce7; color: #166534; }
+.status-badge.inactive { background: #fee2e2; color: #991b1b; }
+
+/* Botones y Acciones */
+.teacher-profile-container .actions {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.btn-cv {
+    background: var(--azul-profundo);
+    color: var(--blanco) !important;
+    padding: 12px 28px;
+    border-radius: var(--radius);
     font-weight: 600;
-    font-size: 14px;
     text-decoration: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    transition: all 0.25s ease;
-    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(15, 76, 129, 0.25);
+    transition: var(--transition);
 }
 
-body > a:hover {
-    background: linear-gradient(135deg, #bdbdbd, #9e9e9e);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+.btn-cv:hover {
+    background: var(--azul-medio);
+    transform: translateY(-3px);
 }
 
-body > a:active { transform: scale(0.97); }
+.btn-back {
+    display: flex;
+    margin: 20px auto;
+    width: fit-content;
+    background: #f1f5f9;
+    color: var(--texto-muted) !important;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid var(--borde);
+    transition: var(--transition);
+}
 
-/* ===================================== */
-/* ========== ANIMATIONS =============== */
-/* ===================================== */
+.btn-back:hover {
+    background: var(--blanco);
+    border-color: var(--azul-medio);
+    color: var(--azul-profundo) !important;
+}
+
+/* Animaciones */
+@keyframes profileBlob {
+    0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+    100% { border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%; }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(-20px); }
-    to   { opacity: 1; transform: translateX(0); }
-}
-
-/* ===================================== */
-/* ========== RESPONSIVE =============== */
-/* ===================================== */
-
-@media (max-width: 720px) {
-    body { padding: 20px 15px; }
-
-    h2 { font-size: 22px; }
-
-    img { width: 85px; height: 85px; }
-
-    p {
+/* Responsive */
+@media (max-width: 600px) {
+    .teacher-profile-container p {
         flex-direction: column;
         align-items: flex-start;
-        gap: 4px;
+        gap: 5px;
     }
-
-    p strong { min-width: unset; }
-
-    body > a { width: 100%; justify-content: center; }
-}
-
-@media (max-width: 480px) {
-    h2 { font-size: 19px; }
-    body > a { font-size: 13px; padding: 9px 16px; }
 }

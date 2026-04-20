@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Crear Grado')
 @push('styles')
-@vite('resources/css/admin/grades/create.css')
+@vite('resources/css/admin/grades/edit.css')
 @endpush
 @section('content')
 <div class="container">
@@ -46,7 +46,23 @@
                    required>
 
         </div>
+<div>
+    <label for="director_id">Director de grupo</label>
 
+    <select name="director_id" id="director_id" class="mt-1 block w-full border rounded p-2">
+
+        <option value="">-- Sin director --</option>
+
+        @foreach($teachers as $teacher)
+            <option value="{{ $teacher->id }}"
+                {{ $grade->director_id == $teacher->id ? 'selected' : '' }}>
+                
+                {{ $teacher->full_name }}
+            </option>
+        @endforeach
+
+    </select>
+</div>
         <button class="btn btn-primary">
             Actualizar
         </button>

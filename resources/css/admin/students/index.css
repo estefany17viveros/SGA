@@ -32,37 +32,50 @@
     margin: 0 auto;
     padding: 30px 20px;
     animation: fadeInUp 0.5s ease;
+    
 }
 
 /* ===================================== */
 /* ========== PAGE HEADER ============== */
 /* ===================================== */
 
+/* Encabezado */
 .page-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 26px;
-    flex-wrap: wrap;
-    gap: 16px;
+    background: linear-gradient(135deg,
+        var(--azul-profundo) 0%,
+        #1565c0 40%,
+        var(--azul-medio) 65%,
+        var(--verde-primario) 100%
+    );
+     padding: 40px;
+    border-radius: 30px;
+    color: var(--blanco);
+    box-shadow: 0 15px 35px rgba(15,76,129,0.2);
+    margin-bottom: 30px;
 }
 
-.header-content h3 {
-    font-size: 28px;
-    font-weight: 700;
+.header-content h3 { font-weight: 900; font-size: 2rem; margin: 0; }
+.subtitle { opacity: 0.8; font-weight: 500; }
+
+.btn-create {
+    background: var(--blanco);
     color: var(--azul-profundo);
-    margin: 0 0 4px 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 0.85rem;
+    transition: all 0.3s;
 }
-
-.subtitle {
-    font-size: 13px;
-    color: #78909c;
-    margin: 0;
-    font-weight: 400;
-}
+.btn-create:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(255,255,255,0.3);
+}   
+.btn-create:active { transform: scale(0.97); }
 
 /* ===================================== */
 /* ========== BTN CREAR ================ */
@@ -566,47 +579,57 @@ select.search-input {
 
     .btn-search,
     .btn-reset { width: 100%; justify-content: center; }
+/* Tabla → tarjetas */
+.students-table thead { display: none; }
 
-    /* Tabla → tarjetas */
-    .students-table thead { display: none; }
-
-    .students-table tbody tr {
-        display: block;
-        margin-bottom: 14px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-        border: 1px solid var(--borde);
-        overflow: hidden;
-        background: white !important;
-    }
-
-    .students-table td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 11px 16px;
-        border-bottom: 1px solid #f0f4f8;
-        font-size: 13px;
-    }
-
-    .students-table td:last-child { border-bottom: none; }
-
-    .students-table td::before {
-        content: attr(data-label);
-        font-weight: 700;
-        color: var(--azul-profundo);
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-right: 10px;
-        flex-shrink: 0;
-    }
-
-    .photo-cell { width: auto; }
-    .actions-cell { flex-wrap: wrap; gap: 4px; }
+.students-table tbody tr {
+    display: block;
+    margin-bottom: 14px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border: 1px solid var(--borde);
+    overflow: hidden;
+    background: white !important;
 }
 
-@media (max-width: 480px) {
-    .header-content h3 { font-size: 21px; }
-    .btn-action { font-size: 11px; padding: 5px 9px; }
+/* 🔥 CELDAS */
+.students-table td {
+    display: flex;
+    flex-direction: column; /* ← clave */
+    align-items: flex-start; /* ← izquierda */
+    padding: 11px 16px;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 14px;
+    text-align: left; /* ← izquierda */
+}
+
+.students-table td:last-child { 
+    border-bottom: none; 
+}
+
+/* 🔥 ETIQUETA */
+.students-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--azul-profundo);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+    text-align: left; /* ← izquierda */
+}
+
+/* extras */
+.photo-cell { width: auto; }
+
+.actions-cell {
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
+}
+
+.actions-cell .btn {
+    width: 100%;
+}
+
 }

@@ -2,7 +2,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 /* ============================= */
 /* ===== FOOTER ===== */
 /* ============================= */
@@ -47,6 +46,7 @@ body {
     flex-direction: column;
     align-items: center;        /* ← CENTRADO horizontal */
 }
+
 
 /* ─── Contenedor de página ────────────────────────────── */
 /* Úsalo en cada página para tener el mismo ancho y padding */
@@ -118,6 +118,7 @@ body {
 }
 
 /* Texto negro elegante */
+
 .login-card,
 .login-card label,
 .login-card span,
@@ -240,6 +241,22 @@ body {
     cursor: not-allowed;
     transform: none;
 }
+@media (prefers-color-scheme: dark) {
+    /* Fondo del contenedor del dropdown */
+    .dark\:bg-gray-700 {
+        background-color: #ffffff !important; /* Gris oscuro profesional */
+    }
+
+    /* Color de los enlaces en modo oscuro */
+    .dark\:text-gray-300 {
+        color: #f3f4f6 !important; /* Blanco grisáceo para que se lea bien */
+    }
+
+    /* Hover en modo oscuro */
+    .dark\:hover\:bg-gray-600:hover {
+        background-color: #0062ff65 !important;
+    }
+}
 
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
@@ -261,4 +278,5 @@ body {
     .page-content {
         padding: 24px 16px 48px; /* ← padding reducido en móvil pero proporcional */
     }
+    
 }

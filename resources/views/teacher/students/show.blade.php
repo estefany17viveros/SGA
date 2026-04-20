@@ -1,5 +1,8 @@
 @extends('layouts.app')
-
+@section('title', 'Información del estudiante')
+@push('styles')
+    @vite('resources/css/teacher/students/show.css')    
+@endpush
 @section('content')
 <div class="container">
 

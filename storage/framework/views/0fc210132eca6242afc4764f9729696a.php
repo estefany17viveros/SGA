@@ -61,7 +61,7 @@
         </a>
 
         <a href="<?php echo e(route('admin.enrollments.graduated')); ?>" class="block px-4 py-2 hover:bg-gray-200">
-            Graduados
+            Egresados
         </a>
 
         <a href="<?php echo e(route('admin.enrollments.retired')); ?>" class="block px-4 py-2 hover:bg-gray-200">
@@ -91,7 +91,17 @@
             Crear materia
         </a>
 
-        
+    </div>
+</div>
+
+<!-- 🔽 HISTORIAL -->
+<div class="relative">
+    <button onclick="toggleMenu('menu5')" class="text-white">
+        Historial ▾
+    </button>
+
+    <div id="menu5" class="hidden absolute bg-white text-black mt-2 rounded shadow-lg w-48 z-50">
+
         <a href="<?php echo e(route('admin.login-logs.index')); ?>" class="block px-4 py-2 hover:bg-gray-200">
             Ver historial
         </a>

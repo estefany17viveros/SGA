@@ -1,5 +1,8 @@
 @extends('layouts.app')
-
+@section('title', 'Estudiantes del grado')
+@push('styles')
+    @vite('resources/css/teacher/director/student.css')
+@endpush
 @section('content')
 <div class="container">
 
@@ -14,7 +17,30 @@
             No hay estudiantes en este grado
         </div>
     @else
+<form method="GET" class="mb-3">
 
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+
+        <input type="text" name="name" placeholder="Nombre"
+            value="{{ request('name') }}"
+            class="form-control" style="max-width:200px;">
+
+        <input type="text" name="last_name" placeholder="Apellido"
+            value="{{ request('last_name') }}"
+            class="form-control" style="max-width:200px;">
+
+        <button type="submit" class="btn btn-primary btn-sm">
+            🔍 Buscar
+        </button>
+
+        <a href="{{ route('teacher.director.students', $grade->id) }}"
+           class="btn btn-secondary btn-sm">
+            ❌ Limpiar
+        </a>
+
+    </div>
+
+</form>
         <table class="table table-bordered table-hover">
 
             <thead class="table-dark">

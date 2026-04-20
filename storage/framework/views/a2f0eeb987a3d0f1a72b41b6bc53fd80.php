@@ -18,7 +18,6 @@
 
 <a href="<?php echo e(route('teacher.dashboard')); ?>">⬅ Volver al inicio</a>
 
-
 <?php
     use App\Models\AcademicYear;
     use App\Models\Period;
@@ -34,12 +33,11 @@
             ->toArray();
     }
 
-    // 🔥 fallback
     if (empty($periods)) {
         $periods = [1,2,3,4];
     }
 
-    // 🔥 ORDENAR POR PROMEDIO FINAL
+    // 🔥 ORDENAR POR PROMEDIO (TRUNCADO)
     $studentsSorted = $students->sortByDesc(function($student) use ($teacher_subject_id, $periods) {
 
         $total = 0;
@@ -57,7 +55,9 @@
             }
         }
 
-        return $count > 0 ? $total / $count : 0;
+        return $count > 0 
+            ? floor(($total / $count) * 100) / 100 
+            : 0;
     })->values();
 ?>
 
@@ -69,7 +69,6 @@
                 <th>#</th>
                 <th>Nombre</th>
 
-                
                 <?php $__currentLoopData = $periods; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $period): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <th>P<?php echo e($period); ?></th>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -84,7 +83,6 @@
             <?php $__empty_1 = true; $__currentLoopData = $studentsSorted; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
                 <?php
-                    // 🔥 asegurar relación
                     $student->loadMissing('scores');
 
                     $totalFinal = 0;
@@ -108,9 +106,12 @@
                         $periodTotals[$period] = $value;
                     }
 
-                    $averageFinal = $count > 0 ? round($totalFinal / $count, 2) : 0;
+                    // 🔥 PROMEDIO FINAL TRUNCADO
+                    $averageFinal = $count > 0 
+                        ? floor(($totalFinal / $count) * 100) / 100 
+                        : 0;
 
-                    // 🔥 CALCULAR PUESTO
+                    // 🔥 CALCULAR PUESTO (USANDO TRUNCADO)
                     $position = 1;
 
                     foreach ($studentsSorted as $index => $s) {
@@ -130,7 +131,9 @@
                             }
                         }
 
-                        $sAvg = $sCount > 0 ? $sTotal / $sCount : 0;
+                        $sAvg = $sCount > 0 
+                            ? floor(($sTotal / $sCount) * 100) / 100 
+                            : 0;
 
                         if ($index > 0) {
                             $prev = $studentsSorted[$index - 1];
@@ -150,7 +153,9 @@
                                 }
                             }
 
-                            $prevAvg = $prevCount > 0 ? $prevTotal / $prevCount : 0;
+                            $prevAvg = $prevCount > 0 
+                                ? floor(($prevTotal / $prevCount) * 100) / 100 
+                                : 0;
 
                             if ($sAvg != $prevAvg) {
                                 $position = $index + 1;
@@ -172,7 +177,9 @@
                     <?php $__currentLoopData = $periods; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $period): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <td class="text-center">
                             <span class="badge bg-secondary">
-                                <?php echo e($periodTotals[$period] ?? '-'); ?>
+                                <?php echo e(isset($periodTotals[$period]) 
+                                    ? number_format(floor($periodTotals[$period] * 100) / 100, 2, '.', '') 
+                                    : '-'); ?>
 
                             </span>
                         </td>
@@ -181,7 +188,7 @@
                     
                     <td class="text-center">
                         <span class="badge bg-success">
-                            <?php echo e($averageFinal); ?>
+                            <?php echo e(number_format($averageFinal, 2, '.', '')); ?>
 
                         </span>
                     </td>
@@ -210,9 +217,7 @@
     </table>
 </div>
 
-
 </div>
 
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\SGA\resources\views/teacher/students.blade.php ENDPATH**/ ?>

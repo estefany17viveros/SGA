@@ -31,28 +31,86 @@
 /* ===================================== */
 /* ========== PAGE TITLE =============== */
 /* ===================================== */
+/* ===================================== */
+/* ========== TITULO H3 (ESTILO BENTO) = */
+/* ===================================== */
 
 .container h3 {
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--azul-profundo);
-    margin-bottom: 30px;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--blanco); /* Blanco para resaltar sobre el gradiente */
     text-align: center;
+    justify-content: center;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 12px;
+    gap: 15px;
+    margin-bottom: 30px;
+    
+    /* Graduación animada consistente */
+    background: linear-gradient(135deg, 
+        var(--azul-profundo) 0%, 
+        var(--azul-medio) 50%, 
+        var(--verde-primario) 100%
+    );
+    background-size: 200% auto;
+    padding: 24px 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+    
+    animation: gradientShift 6s ease infinite, fadeInUp 0.5s ease both;
 }
 
+/* Pseudo-elemento para el icono con efecto Glassmorphism */
 .container h3::before {
     content: '👨‍🎓';
-    font-size: 36px;
+    font-size: 1.3rem;
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
+/* Espaciador Utility */
 .mb-4 {
-    margin-bottom: 30px;
+    margin-bottom: 35px; /* Ajustado para mejor aire visual */
 }
 
+/* ===================================== */
+/* ========== ANIMACIONES ============== */
+/* ===================================== */
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeInUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .container h3 {
+        font-size: 1.4rem;
+        padding: 18px 20px;
+        flex-direction: column; /* Icono arriba en móviles */
+        gap: 10px;
+    }
+}
 /* ===================================== */
 /* ========== ERROR ALERT ============== */
 /* ===================================== */
@@ -504,7 +562,7 @@
     }
 
     .d-flex {
-        flex-direction: column-reverse;
+        flex-direction: column;
         gap: 15px;
     }
 

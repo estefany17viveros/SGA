@@ -1,5 +1,8 @@
 
-
+<?php $__env->startSection('title', 'Comentarios por Dimensión'); ?>
+<?php $__env->startPush('styles'); ?>
+    <?php echo app('Illuminate\Foundation\Vite')('resources/css/teacher/dimension_comments/index.css'); ?>
+<?php $__env->stopPush(); ?>
 <?php $__env->startSection('content'); ?>
 
 <div class="container">

@@ -15,6 +15,7 @@ class Period extends Model
         'status',
         'percentage'
     ];
+    
 
     public function academicYear()
     {

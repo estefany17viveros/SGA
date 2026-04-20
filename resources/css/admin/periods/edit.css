@@ -1,66 +1,222 @@
-/* ==============================
-   ✏️ EDITAR PERIODO
-============================== */
+/* ============================================================ */
+/* periods/edit.css — Formulario Editar Periodo                 */
+/* ============================================================ */
 
-.edit-container {
-    max-width: 600px;
-    margin: auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 14px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+    --azul-profundo:  #0f4c81;
+    --azul-medio:     #1e88e5;
+    --azul-claro:     #e3f2fd;
+    --verde-primario: #26a69a;
+    --verde-claro:    #80cbc4;
+    --gris-claro:     #f5f7fa;
+    --blanco:         #ffffff;
+    --texto:          #263238;
+    --texto-suave:    #607d8b;
+    --rojo:           #ef5350;
+    --rojo-claro:     #ffebee;
+
+    --shadow-sm: 0 2px 8px rgba(38,50,56,0.07);
+    --shadow-md: 0 6px 28px rgba(38,50,56,0.10);
+    --radius-lg: 16px;
+    --radius-xl: 20px;
 }
 
-.edit-title {
-    font-size: 22px;
+*, *::before, *::after { box-sizing: border-box; }
+
+
+/* ===== CONTENEDOR ===== */
+
+/* ===== CONTENEDOR ===== */
+.container {
+    max-width: 650px;
+    margin: 80px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* ===== TÍTULO ===== */
+
+h2 {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e88e5 55%, #26a69a 100%);
+    background-size: 200% auto;
+    padding: clamp(14px, 3vw, 18px) clamp(16px, 4vw, 26px);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 8px 20px -6px rgba(30, 136, 229, 0.25);
+    animation: gradientShift 7s ease infinite;
+}
+
+/* ===== ALERTA ERROR ===== */
+
+p[style*="color:red"],
+p[style*="color: red"] {
+    background: var(--rojo-claro) !important;
+    color: var(--rojo) !important;
+    border: 1px solid #ffcdd2;
+    border-left: 4px solid var(--rojo);
+    border-radius: 10px;
+    padding: 11px 16px;
+    margin: 0 0 20px;
+    font-size: 13.5px;
     font-weight: 600;
-    margin-bottom: 20px;
-    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.edit-error {
-    background: #fee2e2;
-    color: #991b1b;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 15px;
+/* ===== CARD FORMULARIO ===== */
+
+form[method="POST"] {
+    background: var(--blanco);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    padding: clamp(20px, 4vw, 36px);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid #e8edf2;
+    animation: fadeInUp 0.5s ease 0.1s both;
 }
 
-.edit-form label {
-    font-weight: 500;
+/* ===== GRUPOS DE CAMPO ===== */
+
+form[method="POST"] label {
     display: block;
-    margin-bottom: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--texto-suave);
+    margin-bottom: 6px;
+    margin-top: 18px;
 }
 
-.edit-form input {
+form[method="POST"] label:first-of-type {
+    margin-top: 0;
+}
+
+/* ===== INPUTS ===== */
+
+form[method="POST"] input[type="text"],
+form[method="POST"] input[type="date"],
+form[method="POST"] input[type="number"] {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    transition: 0.2s;
-}
-
-.edit-form input:focus {
-    border-color: #2563eb;
+    padding: 10px 14px;
+    border: 1.5px solid #dde3ea;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 500;
+    color: var(--texto);
+    background: #fafbfc;
+    transition: all 0.2s ease;
     outline: none;
 }
 
-.edit-btn {
-    background: #2563eb;
-    color: white;
-    padding: 10px 18px;
-    border-radius: 8px;
+form[method="POST"] input:focus {
+    border-color: var(--azul-medio);
+    background: var(--blanco);
+    box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.12);
+}
+
+form[method="POST"] input:hover:not(:focus) {
+    border-color: #b0bec5;
+}
+
+/* ===== BOTÓN GUARDAR ===== */
+
+form[method="POST"] button[type="submit"],
+form[method="POST"] button {
+    margin-top: 28px;
+    width: 100%;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--verde-primario), #4db6ac);
+    color: var(--blanco);
     border: none;
+    border-radius: 11px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     cursor: pointer;
+    box-shadow: 0 4px 14px rgba(38, 166, 154, 0.3);
+    transition: all 0.25s ease;
+    letter-spacing: 0.03em;
 }
 
-.edit-btn:hover {
-    background: #1e40af;
+form[method="POST"] button:hover {
+    background: linear-gradient(135deg, #00897b, var(--verde-primario));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(38, 166, 154, 0.38);
 }
 
-.edit-back {
-    display: inline-block;
-    margin-top: 15px;
-    color: #64748b;
+form[method="POST"] button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(38, 166, 154, 0.2);
+}
+
+/* ===== LINK VOLVER ===== */
+
+a[href*="periods"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--azul-medio);
+    text-decoration: none;
+    padding: 8px 16px;
+    background: var(--azul-claro);
+    border: 1px solid #bbdefb;
+    border-radius: 9px;
+    margin-top: 16px;
+    transition: all 0.2s ease;
+}
+
+a[href*="periods"]:hover {
+    background: var(--azul-medio);
+    color: var(--blanco);
+    border-color: var(--azul-medio);
+    transform: translateX(-2px);
+}
+
+br { display: none; }
+
+/* ===== ANIMACIONES ===== */
+
+@keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 600px) {
+    .container, main { padding: 16px; }
+
+    form[method="POST"] { padding: 20px 16px; }
+
+    form[method="POST"] label { margin-top: 14px; }
+
+    form[method="POST"] button {
+        padding: 13px 20px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 360px) {
+    h2 { font-size: 1rem; padding: 14px 16px; }
 }

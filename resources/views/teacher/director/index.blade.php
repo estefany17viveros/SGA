@@ -1,5 +1,8 @@
 @extends('layouts.app')
-
+@section('title', 'Mis grupos como director')
+@push('styles')
+    @vite('resources/css/teacher/director/index.css')
+@endpush
 @section('content')
 <div class="container">
 

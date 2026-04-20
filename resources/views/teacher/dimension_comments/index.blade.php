@@ -1,5 +1,8 @@
 @extends('layouts.app')
-
+@section('title', 'Comentarios por Dimensión')
+@push('styles')
+    @vite('resources/css/teacher/dimension_comments/index.css')
+@endpush
 @section('content')
 
 <div class="container">

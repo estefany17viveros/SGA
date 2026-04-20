@@ -57,11 +57,12 @@ class GroupController extends Controller
     /**
      * Editar grupo
      */
-    public function edit($id)
-    {
-        $group = Group::with('grade')->findOrFail($id);
-        return view('admin.groups.edit', compact('group'));
-    }
+  
+public function edit(Grade $grade, Group $group)
+{
+    // Ya no necesitas buscar el grupo manualmente, Laravel lo hace por ti (Route Model Binding)
+    return view('admin.groups.edit', compact('grade', 'group'));
+}
 
     /**
      * Actualizar grupo
@@ -104,16 +105,17 @@ class GroupController extends Controller
     /**
      * Eliminar grupo
      */
-    public function destroy($id)
-    {
-        $group = Group::findOrFail($id);
-
-        if ($group->enrollments()->exists()) {
-            return back()->with('error', 'No se puede eliminar un grupo con matrículas.');
-        }
-
-        $group->delete();
-
-        return back()->with('success', 'Grupo eliminado correctamente.');
+   
+public function destroy(Grade $grade, Group $group)
+{
+    if ($group->enrollments()->exists()) {
+        return back()->with('error', 'No se puede eliminar un grupo con matrículas.');
     }
+
+    $group->delete();
+
+    return redirect()
+        ->route('admin.grades.groups.index', $grade->id)
+        ->with('success', 'Grupo eliminado correctamente.');
+}
 }

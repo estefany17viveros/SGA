@@ -81,34 +81,61 @@ class AcademicYearController extends Controller
     private function promoteStudents($oldYear, $newYear)
 {
     $enrollments = Enrollment::where('academic_year_id', $oldYear->id)
-        ->where('status', 'aprobado')
         ->with('grade')
         ->get();
 
     foreach ($enrollments as $enrollment) {
 
-       $nextGrade = Grade::where('level', $enrollment->grade->level + 1)->first();
+        // ❌ ignorar retirados
+        if ($enrollment->status == 'retirado') {
+            continue;
+        }
 
-        if ($nextGrade) {
+        // 🎓 GRADUAR SOLO AQUÍ
+        if ($enrollment->status == 'aprobado' && $enrollment->grade->level == 11) {
 
-            $exists = Enrollment::where('student_id', $enrollment->student_id)
-                ->where('academic_year_id', $newYear->id)
-                ->exists();
+            $enrollment->update(['status' => 'graduado']);
+            continue;
+        }
 
-            if (!$exists) {
+        $gradeId = $enrollment->grade_id;
 
-                Enrollment::create([
-                    'student_id' => $enrollment->student_id,
-                    'grade_id' => $nextGrade->id,
-                    'academic_year_id' => $newYear->id,
-                    'group_id' => null,
-                    'status' => 'matriculado'
-                ]);
+        // ✅ APROBADO → sube de grado
+        if ($enrollment->status == 'aprobado') {
+
+            $nextGrade = Grade::where('level', $enrollment->grade->level + 1)->first();
+
+            if ($nextGrade) {
+                $gradeId = $nextGrade->id;
             }
         }
-    }
 
+        // 🔁 REPROBADO → mismo grado
+        if ($enrollment->status == 'reprobado') {
+            $gradeId = $enrollment->grade_id;
+        }
+
+        // 🔒 evitar duplicados
+        $exists = Enrollment::where('student_id', $enrollment->student_id)
+            ->where('academic_year_id', $newYear->id)
+            ->exists();
+
+        if (!$exists) {
+
+            Enrollment::create([
+                'student_id' => $enrollment->student_id,
+                'grade_id' => $gradeId,
+                'academic_year_id' => $newYear->id,
+                'group_id' => null,
+
+                // 🔥 CLAVE PARA REPITENTES
+                'status' => $enrollment->status == 'reprobado'
+                    ? 'reprobado'
+                    : 'matriculado'
+            ]);
+        }
     }
+}
   private function createPeriods($academicYear)
 {
     $totalPeriods = $academicYear->periods;

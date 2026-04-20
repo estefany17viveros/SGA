@@ -23,7 +23,7 @@
         @isset($header)
             <header class="app-header">
                 <div class="container">
-                    <h2>{{ $header }}</h2>
+                    {{ $header }}
                 </div>
             </header>
         @endisset

@@ -3,279 +3,329 @@
 /* ===================================== */
 
 :root {
-    --azul-profundo:   #0f4c81;
-    --azul-medio:      #1e88e5;
-    --azul-claro:      #e3f2fd;
-    --verde-primario:  #26a69a;
-    --verde-claro:     #80cbc4;
+    --azul-profundo: #0f4c81;
+    --azul-medio: #1e88e5;
+    --azul-claro: #e3f2fd;
+    --verde-primario: #26a69a;
+    --verde-claro: #80cbc4;
     --verde-muy-claro: #e0f2f1;
-    --gris-oscuro:     #263238;
-    --gris-claro:      #f5f7fa;
-    --blanco:          #ffffff;
-    --texto:           #263238;
-    --rojo:            #ef5350;
-    --rojo-claro:      #ffebee;
+    --gris-oscuro: #263238;
+    --gris-claro: #f5f7fa;
+    --blanco: #ffffff;
+    --texto: #263238;
+    --rojo: #ef5350;
+    --rojo-claro: #ffebee;
 }
 
 /* ===================================== */
-/* ========== CONTAINER ================ */
+/* ========== BODY / CONTAINER ========= */
 /* ===================================== */
 
 
-/* ==============================
-   📦 CONTENEDORES PRINCIPALES
-============================== */
-
-.container,
-section.content,
-div.content,
-main {
-    /* 📐 Layout */
-    width: 100%;
-    max-width: 720px; /* un poco más amplio y moderno */
-    margin-inline: auto; /* mejor que margin: 0 auto */
+.create-subject-page {
     
-    /* 📏 Espaciado adaptable */
-    padding: clamp(20px, 4vw, 40px);
-
-    /* 🎨 Apariencia */
+    max-width: 1000px;
+    /* margin: arriba/abajo - izquierda/derecha */
+    /* 'auto' en los lados es lo que hace que se centre automáticamente */
+    margin: 20px auto; 
+    
+    padding: 30px 20px;
+    animation: fadeInUp 0.5s ease;
+    
+    /* Opcional: Para asegurar que no se pegue a los bordes en móviles */
+    width: 95%; 
     box-sizing: border-box;
-
-    /* ✨ Animación */
-    animation: fadeInUp 0.5s ease both;
 }
 
-/* ==============================
-   📱 RESPONSIVE (pantallas grandes)
-============================== */
-@media (min-width: 1024px) {
-    .container,
-    section.content,
-    div.content,
-    main {
-        max-width: 900px;
-        padding: 48px 24px;
-    }
-}
-
-/* ==============================
-   📱 MOBILE (pantallas pequeñas)
-============================== */
-@media (max-width: 480px) {
-    .container,
-    section.content,
-    div.content,
-    main {
-        padding: 20px 16px;
-    }
-}
 
 /* ===================================== */
-/* ========== TÍTULO h1 ================ */
+/* ========== PAGE TITLE =============== */
 /* ===================================== */
 
-h1 {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--azul-profundo);
-    margin-bottom: 24px;
+create-subject-page h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 24px 0;
     display: flex;
     align-items: center;
-    gap: 12px;
-    letter-spacing: -0.01em;
+    gap: 14px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e88e5 55%, #26a69a 100%);
+    background-size: 200% auto;
+    padding: 16px 26px;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px -4px rgba(30, 136, 229, 0.25);
+    animation: gradientShift 6s ease infinite, fadeRight 0.6s ease both;
 }
 
-h1::before {
-    content: '';
+create-subject-page h1::before {
+    content: '➕';
+    font-size: 1.1rem;
     display: inline-flex;
-    width: 6px;
-    height: 32px;
-    background: linear-gradient(180deg, var(--verde-primario), var(--azul-medio));
-    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
     flex-shrink: 0;
 }
 
 /* ===================================== */
-/* ========== ERRORES ================== */
+/* ========== ERROR LIST =============== */
 /* ===================================== */
 
-div[style*="color:red"],
-.alert-errors {
+create-subject-page div[style*="color:red"],
+create-subject-page div[style*="color: red"] {
     background: var(--rojo-claro) !important;
-    border: 1px solid #ffcdd2;
     border-left: 4px solid var(--rojo);
-    border-radius: 10px;
-    padding: 14px 18px;
-    margin-bottom: 22px;
-    color: #c62828 !important;
-    font-size: 14px;
-    animation: fadeInUp 0.3s ease;
+    border-radius: 8px;
+    padding: 14px 18px !important;
+    margin-bottom: 20px;
+    animation: fadeInDown 0.4s ease;
 }
 
-div[style*="color:red"] ul {
-    margin: 4px 0 0 0;
+create-subject-page div[style*="color:red"] ul,
+create-subject-page div[style*="color: red"] ul {
+    margin: 0;
     padding-left: 18px;
 }
 
-div[style*="color:red"] li {
-    margin: 4px 0;
-    line-height: 1.5;
+create-subject-page div[style*="color:red"] li,
+create-subject-page div[style*="color: red"] li {
+    color: var(--rojo) !important;
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.7;
 }
 
 /* ===================================== */
 /* ========== FORM WRAPPER ============= */
 /* ===================================== */
 
-form[method="POST"] {
+create-subject-page form[method="POST"] {
     background: var(--blanco);
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-    padding: 36px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    padding: 32px 36px;
     animation: slideIn 0.4s ease;
 }
 
 /* ===================================== */
-/* ========== GRUPOS DE CAMPO ========== */
+/* ========== FORM GROUPS ============== */
 /* ===================================== */
 
-form[method="POST"] > div {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
+create-subject-page form[method="POST"] > div {
+    margin-bottom: 22px;
 }
 
-/* ===================================== */
-/* ========== LABELS =================== */
-/* ===================================== */
-
-form[method="POST"] label {
+create-subject-page form[method="POST"] label {
     display: block;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 700;
     color: var(--azul-profundo);
-    font-size: 13.5px;
-    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
 }
 
 /* ===================================== */
-/* ========== INPUTS & TEXTAREA ======== */
+/* ========== INPUTS =================== */
 /* ===================================== */
 
-form[method="POST"] input[type="text"],
-form[method="POST"] textarea {
+create-subject-page form[method="POST"] input[type="text"],
+create-subject-page form[method="POST"] textarea {
     width: 100%;
-    padding: 11px 15px;
+    padding: 12px 16px;
     border: 2px solid #e0e0e0;
-    border-radius: 9px;
-    font-size: 15px;
+    border-radius: 8px;
+    font-size: 14.5px;
     font-family: inherit;
-    color: var(--texto);
     background: #fafafa;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.2s;
+    color: var(--texto);
+    transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
     box-sizing: border-box;
-    outline: none;
-    appearance: none;
 }
 
-form[method="POST"] input[type="text"]:hover,
-form[method="POST"] textarea:hover {
-    border-color: var(--verde-claro);
-}
-
-form[method="POST"] input[type="text"]:focus,
-form[method="POST"] textarea:focus {
-    border-color: var(--verde-primario);
-    background: var(--blanco);
-    box-shadow: 0 0 0 4px rgba(38, 166, 154, 0.12);
-}
-
-form[method="POST"] textarea {
-    min-height: 110px;
+create-subject-page form[method="POST"] textarea {
     resize: vertical;
+    min-height: 110px;
     line-height: 1.6;
 }
 
-/* ===================================== */
-/* ========== OCULTAR <br> ============= */
-/* ===================================== */
+create-subject-page form[method="POST"] input[type="text"]:focus,
+create-subject-page form[method="POST"] textarea:focus {
+    outline: none;
+    border-color: var(--verde-primario);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(38, 166, 154, 0.12);
+}
 
-form[method="POST"] br {
-    display: none;
+create-subject-page form[method="POST"] input[type="text"]:hover:not(:focus),
+create-subject-page form[method="POST"] textarea:hover:not(:focus) {
+    border-color: var(--verde-claro);
 }
 
 /* ===================================== */
-/* ========== BOTÓN GUARDAR ============ */
+/* ========== SUBMIT BUTTON ============ */
 /* ===================================== */
 
-form[method="POST"] > button {
-    align-self: flex-start;
-    padding: 11px 28px;
-    background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
-    color: var(--blanco);
-    border: none;
-    border-radius: 9px;
-    font-size: 15px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
+create-subject-page form[method="POST"] button[type="submit"],
+create-subject-page form[method="POST"] button:not([type]) {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 3px 10px rgba(38, 166, 154, 0.3);
-    transition: all 0.3s ease;
-    margin-top: 4px;
-}
-
-form[method="POST"] > button:hover {
-    background: linear-gradient(135deg, #00897b, var(--verde-primario));
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(38, 166, 154, 0.4);
-}
-
-form[method="POST"] > button:active {
-    transform: scale(0.97);
-}
-
-/* ===================================== */
-/* ========== ENLACE VOLVER ============ */
-/* ===================================== */
-
-a[href*="subjects"] {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 20px;
-    color: var(--azul-medio);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 8px 14px;
+    padding: 12px 28px;
     border-radius: 8px;
-    border: 1.5px solid var(--azul-claro);
-    background: var(--azul-claro);
+    font-weight: 700;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
+    color: #ffffff;
+    box-shadow: 0 3px 10px rgba(38, 166, 154, 0.3);
     transition: all 0.25s ease;
+    margin-top: 8px;
+}
+/* CONTENEDOR */
+.create-subject-page {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 30px 20px;
+    animation: fadeInUp 0.5s ease;
+    width: 95%;
+    box-sizing: border-box;
 }
 
-a[href*="subjects"]:hover {
-    background: var(--azul-medio);
-    color: var(--blanco);
-    border-color: var(--azul-medio);
-    transform: translateX(-2px);
+/* TÍTULO */
+.create-subject-page h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 24px 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e88e5 55%, #26a69a 100%);
+    background-size: 200% auto;
+    padding: 16px 26px;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px -4px rgba(30, 136, 229, 0.25);
+    animation: gradientShift 6s ease infinite, fadeRight 0.6s ease both;
 }
 
+.create-subject-page h1::before {
+    content: '➕';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+}
+
+/* ERROR BOX */
+.create-subject-page .error-box {
+    background: #ffebee;
+    border-left: 4px solid #ef5350;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+}
+
+/* FORM */
+.create-subject-page form {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 32px;
+}
+
+.create-subject-page form > div {
+    margin-bottom: 20px;
+}
+
+.create-subject-page label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0f4c81;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* INPUTS */
+.create-subject-page input,
+.create-subject-page textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.create-subject-page input:focus,
+.create-subject-page textarea:focus {
+    border-color: #26a69a;
+    outline: none;
+}
+
+/* BOTÓN */
+.create-subject-page button {
+    padding: 12px 28px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(135deg, #26a69a, #80cbc4);
+    color: white;
+    cursor: pointer;
+}
+
+.create-subject-page button:hover {
+    transform: translateY(-2px);
+}
+
+/* LINK */
+.create-subject-page a {
+    display: inline-flex;
+    padding: 10px 20px;
+    background: #e0e0e0;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.create-subject-page a:hover {
+    background: #d5d5d5;
+    transform: translateY(-2px);
+}
 /* ===================================== */
-/* ========== ANIMACIONES ============== */
+/* ========== ANIMATIONS =============== */
 /* ===================================== */
+
+@keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeRight {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(24px); }
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideIn {
-    from { opacity: 0; transform: translateX(-18px); }
+    from { opacity: 0; transform: translateX(-16px); }
     to   { opacity: 1; transform: translateX(0); }
 }
 
@@ -283,17 +333,15 @@ a[href*="subjects"]:hover {
 /* ========== RESPONSIVE =============== */
 /* ===================================== */
 
-@media (max-width: 640px) {
-    form[method="POST"] {
-        padding: 24px 18px;
-    }
+@media (max-width: 768px) {
+    create-subject-page h1 { font-size: 1.1rem; padding: 14px 18px; }
+    create-subject-page form[method="POST"] { padding: 24px 20px; }
+    create-subject-page form[method="POST"] button { width: 100%; justify-content: center; }
+    create-subject-page a { width: 100%; justify-content: center; margin-top: 10px; }
+}
 
-    h1 {
-        font-size: 21px;
-    }
-
-    form[method="POST"] > button {
-        width: 100%;
-        justify-content: center;
-    }
+@media (max-width: 480px) {
+    create-subject-page h1 { font-size: 1rem; }
+    create-subject-page form[method="POST"] { padding: 20px 16px; }
+    create-subject-page form[method="POST"] button { font-size: 14px; }
 }

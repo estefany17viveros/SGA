@@ -1,37 +1,38 @@
 
 
+<?php $__env->startPush('styles'); ?>
+<?php echo app('Illuminate\Foundation\Vite')('resources/css/admin/loginlogs/index.css'); ?>
+<?php $__env->stopPush(); ?>
+
 <?php $__env->startSection('content'); ?>
 <div class="container">
 
-    <h2 class="mb-4">📊 Registro de Ingresos al Sistema</h2>
+    <h2 class="mb-4">Registro de Ingresos al Sistema</h2>
 
     
     <div class="card mb-3 shadow-sm">
         <div class="card-body">
-            <form method="GET" class="row g-3">
+            <form method="GET" action="<?php echo e(route('admin.login-logs.index')); ?>" class="row g-3 align-items-end">
 
                 <div class="col-md-3">
                     <label class="form-label">Desde</label>
-                    <input type="date" name="from" class="form-control"
-                           value="<?php echo e(request('from')); ?>">
+                    <input type="date" name="from" class="form-control" value="<?php echo e(request('from')); ?>">
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Hasta</label>
-                    <input type="date" name="to" class="form-control"
-                           value="<?php echo e(request('to')); ?>">
+                    <input type="date" name="to" class="form-control" value="<?php echo e(request('to')); ?>">
                 </div>
 
-                <div class="col-md-3 d-flex align-items-end">
-                    <button class="btn btn-primary w-100">
-                        🔍 Filtrar
-                    </button>
-                </div>
-
-                <div class="col-md-3 d-flex align-items-end">
-                    <a href="<?php echo e(route('admin.login-logs.index')); ?>" class="btn btn-secondary w-100">
-                        ♻ Limpiar
-                    </a>
+                <div class="col-md-6">
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            🔍 Filtrar
+                        </button>
+                        <a href="<?php echo e(route('admin.login-logs.index')); ?>" class="btn btn-secondary">
+                            ♻ Limpiar
+                        </a>
+                    </div>
                 </div>
 
             </form>

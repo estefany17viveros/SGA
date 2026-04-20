@@ -1,33 +1,198 @@
-/* ==============================
-   👁 DETALLE DE PERIODO
-============================== */
+/* ============================================================ */
+/* periods/show.css — Detalle de Periodo                        */
+/* ============================================================ */
 
-.show-container {
-    max-width: 600px;
-    margin: auto;
-    background: #fff;
-    padding: 25px;
-    border-radius: 14px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+    --azul-profundo:  #0f4c81;
+    --azul-medio:     #1e88e5;
+    --azul-claro:     #e3f2fd;
+    --verde-primario: #26a69a;
+    --verde-claro:    #80cbc4;
+    --verde-muy-claro:#e0f2f1;
+    --gris-claro:     #f5f7fa;
+    --blanco:         #ffffff;
+    --texto:          #263238;
+    --texto-suave:    #607d8b;
+
+    --shadow-sm: 0 2px 8px rgba(38,50,56,0.07);
+    --shadow-md: 0 6px 28px rgba(38,50,56,0.10);
+    --radius-lg: 16px;
+    --radius-xl: 20px;
 }
 
-.show-title {
-    font-size: 22px;
+*, *::before, *::after { box-sizing: border-box; }
+
+
+/* ===== CONTENEDOR ===== */
+.container {
+    max-width: 650px;
+    margin: 80px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* ===== TÍTULO ===== */
+
+h2 {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e88e5 55%, #26a69a 100%);
+    background-size: 200% auto;
+    padding: clamp(14px, 3vw, 18px) clamp(16px, 4vw, 26px);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 8px 20px -6px rgba(30, 136, 229, 0.25);
+    animation: gradientShift 7s ease infinite;
+}
+
+/* ===== CARD DE DETALLE ===== */
+
+.card-detalle {
+    background: var(--blanco);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    border: 1px solid #e8edf2;
+    overflow: hidden;
+    animation: fadeInUp 0.5s ease 0.08s both;
+}
+
+/* Fallback: si no hay .card-detalle, apuntamos a los <p> directamente */
+p {
+    display: flex;
+    align-items: center;
+    padding: 13px 22px;
+    margin: 0;
+    border-bottom: 1px solid #f0f3f6;
+    font-size: 14px;
+    background: var(--blanco);
+    gap: 12px;
+}
+
+p:first-of-type {
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    padding-top: 20px;
+}
+
+p:last-of-type {
+    border-bottom: none;
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    padding-bottom: 20px;
+}
+
+p:nth-child(even) {
+    background: #fafbfc;
+}
+
+p strong {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--texto-suave);
+    min-width: 110px;
+    flex-shrink: 0;
+}
+
+/* Valor del estado — si es "activo" se muestra verde */
+p:has(strong:last-of-type) span,
+p:last-of-type {
     font-weight: 600;
-    margin-bottom: 20px;
 }
 
-.show-item {
-    margin-bottom: 10px;
-    font-size: 15px;
-}
+/* ===== CHIP ESTADO ===== */
 
-.show-item strong {
-    color: #0f172a;
-}
-
-.show-back {
+/* Podés agregar clase .badge-activo / .badge-cerrado en el blade si querés */
+.badge-activo {
     display: inline-block;
-    margin-top: 15px;
-    color: #2563eb;
+    background: var(--verde-muy-claro);
+    color: var(--verde-primario);
+    border: 1px solid var(--verde-claro);
+    border-radius: 999px;
+    padding: 3px 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.badge-cerrado {
+    display: inline-block;
+    background: #eceff1;
+    color: #78909c;
+    border: 1px solid #cfd8dc;
+    border-radius: 999px;
+    padding: 3px 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* ===== LINK VOLVER ===== */
+
+a[href*="periods"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--azul-medio);
+    text-decoration: none;
+    padding: 9px 18px;
+    background: var(--azul-claro);
+    border: 1px solid #bbdefb;
+    border-radius: 10px;
+    margin-top: 20px;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+a[href*="periods"]:hover {
+    background: var(--azul-medio);
+    color: var(--blanco);
+    border-color: var(--azul-medio);
+    transform: translateX(-2px);
+    box-shadow: 0 4px 14px rgba(30, 136, 229, 0.25);
+}
+
+br { display: none; }
+
+/* ===== ANIMACIONES ===== */
+
+@keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 600px) {
+    .container, main { padding: 16px; }
+
+    p {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding: 12px 16px;
+    }
+
+    p strong {
+        font-size: 10.5px;
+        min-width: unset;
+    }
+
+    p:first-of-type { border-radius: 14px 14px 0 0; padding-top: 16px; }
+    p:last-of-type  { border-radius: 0 0 14px 14px; padding-bottom: 16px; }
+}
+
+@media (max-width: 360px) {
+    h2 { font-size: 1rem; padding: 14px 16px; }
 }

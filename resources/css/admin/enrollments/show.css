@@ -42,30 +42,87 @@
 /* ===================================== */
 /* ========== PAGE TITLE =============== */
 /* ===================================== */
-
 .container h2 {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--azul-profundo);
-    margin-bottom: 25px;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 20px 0;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 15px;
+    
+    /* Fondo con Gradiente Animado */
+    background: linear-gradient(135deg, #0f172a 0%, #3b82f6 50%, #10b981 100%);
+    background-size: 200% auto;
+    padding: 18px 28px;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.2);
+    
+    animation: gradientShift 6s ease infinite, fadeRight 0.6s ease both;
 }
 
+/* Pseudo-elemento para el icono */
 .container h2::before {
     content: '📋';
-    font-size: 20px;
+    font-size: 1.2rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 42px;
     height: 42px;
-    background: var(--verde-muy-claro);
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15); /* Efecto cristalizado */
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
     flex-shrink: 0;
 }
 
+/* ===================================== */
+/* ========== ANIMACIONES ============== */
+/* ===================================== */
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeRight {
+    from { 
+        opacity: 0; 
+        transform: translateX(-20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateX(0); 
+    }
+}
+
+@keyframes fadeInDown {
+    from { 
+        opacity: 0; 
+        transform: translateY(-10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* Ajuste para móviles */
+@media (max-width: 576px) {
+    .container h2 {
+        font-size: 1.2rem;
+        padding: 15px 20px;
+        width: 100%; /* El título ocupa todo el ancho en móvil */
+        justify-content: center;
+    }
+    
+    .d-flex.justify-content-between {
+        justify-content: center;
+        text-align: center;
+    }
+}
 /* ===================================== */
 /* ========== CARD ===================== */
 /* ===================================== */

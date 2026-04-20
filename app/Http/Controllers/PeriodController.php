@@ -6,22 +6,45 @@ use App\Models\Period;
 use App\Models\AcademicYear;
 use Illuminate\Http\Request;
 
+use Carbon\Carbon;
 class PeriodController extends Controller
 {
     /**
      * 📋 Listar periodos
      */
     public function index($yearId)
-    {
-        $year = AcademicYear::findOrFail($yearId);
+{
+    $this->updateStatusByDate(); // 👈 AQUÍ
 
-        $periods = Period::where('academic_year_id', $yearId)
-            ->orderBy('number')
-            ->get();
+    $year = AcademicYear::findOrFail($yearId);
 
-        return view('admin.periods.index', compact('periods', 'year'));
+    $periods = Period::where('academic_year_id', $yearId)
+        ->orderBy('number')
+        ->get();
+
+    return view('admin.periods.index', compact('periods', 'year'));
+}
+
+public function updateStatusByDate()
+{
+    $today = Carbon::today();
+
+    $periods = Period::all();
+
+    foreach ($periods as $period) {
+
+        if ($today->between($period->start_date, $period->end_date)) {
+
+            // 🔓 ESTE SE ACTIVA
+            $period->update(['status' => 'activo']);
+
+        } else {
+
+            // 🔒 LOS DEMÁS SE CIERRAN
+            $period->update(['status' => 'cerrado']);
+        }
     }
-
+}
     /**
      * ✏️ Editar periodo (SIN porcentaje)
      */

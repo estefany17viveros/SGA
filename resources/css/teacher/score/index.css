@@ -1,0 +1,381 @@
+/* ===================================== */
+/* ========== VARIABLES ================ */
+/* ===================================== */
+
+:root {
+    --azul-profundo: #0f4c81;
+    --azul-medio: #1e88e5;
+    --azul-claro: #e3f2fd;
+    --verde-primario: #26a69a;
+    --verde-claro: #80cbc4;
+    --verde-muy-claro: #e0f2f1;
+    --gris-claro: #f5f7fa;
+    --blanco: #ffffff;
+    --texto: #263238;
+    --texto-suave: #6b7280;
+    --rojo: #ef5350;
+    --rojo-claro: #ffebee;
+    --naranja: #fb8c00;
+    --naranja-claro: #fff3e0;
+    --info: #0288d1;
+    --info-claro: #e1f5fe;
+    --borde: #e0e7ef;
+    --sombra: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ===================================== */
+/* ========== HEADER =================== */
+/* ===================================== */
+.container .d-flex.justify-content-between {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-top: 4px solid var(--azul-medio);
+    border-radius: 16px;
+    padding: 20px 26px;
+    
+    /* BAJAR EL ELEMENTO */
+    margin-top: 40px; /* Ajusta este valor según cuánto quieras bajarlo */
+    margin-bottom: 20px !important; 
+    
+    box-shadow: var(--sombra);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    animation: fadeInUp 0.4s ease both;
+}
+.container .d-flex h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e88e5 55%, #26a69a 100%);
+    background-size: 200% auto;
+    padding: 14px 22px;
+    border-radius: 12px;
+    margin: 0 0 10px;
+    box-shadow: 0 6px 18px -4px rgba(30, 136, 229, 0.22);
+    animation: gradientShift 7s ease infinite;
+}
+
+.container .d-flex p {
+    font-size: 13.5px;
+    color: var(--texto-suave);
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    align-items: center;
+}
+
+.container .d-flex p strong {
+    font-weight: 700;
+    color: var(--azul-profundo);
+}
+
+/* ===================================== */
+/* ========== BTN VOLVER =============== */
+/* ===================================== */
+
+.container .d-flex .btn.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: inherit;
+    border: 1.5px solid #d4dbe6;
+    cursor: pointer;
+    background: var(--gris-claro);
+    color: #475569;
+    text-decoration: none;
+    transition: all 0.22s ease;
+    white-space: nowrap;
+}
+
+.container .d-flex .btn.btn-secondary:hover {
+    background: #e2e8f0;
+    border-color: #aab8cc;
+    transform: translateY(-1px);
+}
+
+/* ===================================== */
+/* ========== ALERTAS ================== */
+/* ===================================== */
+
+.alert-danger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 18px;
+    background: linear-gradient(135deg, var(--rojo-claro), #ffcdd2);
+    border-left: 4px solid var(--rojo);
+    border-radius: 10px;
+    color: #b71c1c;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 3px 12px rgba(239, 83, 80, 0.1);
+    margin-bottom: 16px;
+    animation: slideIn 0.3s ease;
+}
+
+.alert-danger::before { content: '❌'; font-size: 16px; flex-shrink: 0; }
+
+.alert-success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 18px;
+    background: linear-gradient(135deg, var(--verde-muy-claro), #b2dfdb);
+    border-left: 4px solid var(--verde-primario);
+    border-radius: 10px;
+    color: #00695c;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 3px 12px rgba(38, 166, 154, 0.12);
+    margin-bottom: 16px;
+    animation: slideIn 0.3s ease;
+}
+
+.alert-success::before { content: '✅'; font-size: 16px; flex-shrink: 0; }
+
+.alert-warning {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 18px;
+    background: linear-gradient(135deg, var(--naranja-claro), #ffe0b2);
+    border-left: 4px solid var(--naranja);
+    border-radius: 10px;
+    color: #7b4f00;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 3px 12px rgba(251, 140, 0, 0.1);
+    margin-bottom: 16px;
+    animation: slideIn 0.3s ease;
+}
+
+/* ===================================== */
+/* ========== TABLA NOTAS ============== */
+/* ===================================== */
+
+.table-responsive {
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--sombra);
+    animation: fadeInUp 0.45s ease 0.1s both;
+}
+
+.table.table-bordered.table-striped {
+    width: 100%;
+    border-collapse: collapse;
+    border: none !important;
+    background: var(--blanco);
+    font-size: 13.5px;
+    margin: 0;
+}
+
+/* cabecera */
+.table thead.table-dark.text-center {
+    background: linear-gradient(135deg, var(--azul-medio), var(--azul-profundo)) !important;
+}
+
+.table thead.table-dark th {
+    padding: 14px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.92);
+    border: none !important;
+    white-space: nowrap;
+    text-align: center;
+    background: transparent !important;
+}
+
+/* filas */
+.table tbody tr {
+    border-bottom: 1px solid #f0f4f8 !important;
+    transition: background 0.15s ease;
+}
+
+.table tbody tr:last-child { border-bottom: none !important; }
+.table tbody tr:nth-child(even) { background: var(--gris-claro); }
+.table tbody tr:hover { background: var(--azul-claro) !important; }
+
+.table tbody td {
+    padding: 10px 12px;
+    vertical-align: middle;
+    color: var(--texto);
+    border: none !important;
+}
+
+/* # iteración */
+.table tbody td:first-child {
+    font-family: monospace;
+    font-size: 12px;
+    color: #90a4ae;
+    font-weight: 700;
+    text-align: center;
+    width: 44px;
+}
+
+/* nombre */
+.table tbody td:nth-child(2) {
+    font-weight: 700;
+    color: var(--azul-profundo);
+    min-width: 150px;
+}
+
+/* total */
+.table tbody td:nth-child(6) {
+    text-align: center;
+    font-family: monospace;
+    font-size: 14px;
+}
+
+.table tbody td:nth-child(6) strong {
+    color: var(--azul-profundo);
+    font-weight: 800;
+}
+
+/* puesto */
+.table tbody td:last-child { text-align: center; }
+
+/* ===================================== */
+/* ========== INPUTS DE NOTA =========== */
+/* ===================================== */
+
+.table .form-control.nota {
+    width: 80px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1.5px solid #d4dbe6;
+    background: var(--gris-claro);
+    font-size: 13px;
+    color: var(--texto);
+    font-family: inherit;
+    text-align: center;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    margin: 0 auto;
+    display: block;
+}
+
+.table .form-control.nota:hover {
+    border-color: #aab8cc;
+    background: var(--blanco);
+}
+
+.table .form-control.nota:focus {
+    outline: none;
+    border-color: var(--verde-primario);
+    background: var(--blanco);
+    box-shadow: 0 0 0 3px rgba(38, 166, 154, 0.15);
+}
+
+/* ===================================== */
+/* ========== BADGE PUESTO ============= */
+/* ===================================== */
+
+.badge.bg-warning.text-dark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 26px;
+    padding: 0 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffb300, var(--naranja)) !important;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(251, 140, 0, 0.28);
+    letter-spacing: 0.02em;
+}
+
+/* ===================================== */
+/* ========== BTN GUARDAR ============== */
+/* ===================================== */
+
+.mt-3.text-end {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px !important;
+}
+
+.btn.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border-radius: 11px;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: linear-gradient(135deg, var(--azul-medio), var(--verde-primario));
+    color: white;
+    box-shadow: 0 4px 16px rgba(38, 166, 154, 0.3);
+    transition: all 0.25s ease;
+}
+
+.btn.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(38, 166, 154, 0.4);
+}
+
+.btn.btn-primary:active { transform: scale(0.97); }
+
+/* celda vacía */
+.table tbody td[colspan] {
+    text-align: center;
+    color: #9e9e9e;
+    font-size: 14px;
+    padding: 44px 20px !important;
+}
+
+/* ===================================== */
+/* ========== ANIMACIONES ============== */
+/* ===================================== */
+
+@keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-14px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ===================================== */
+/* ========== RESPONSIVE =============== */
+/* ===================================== */
+
+@media (max-width: 900px) {
+    .container .d-flex h2 { font-size: 1.15rem; padding: 12px 18px; }
+    .container .d-flex.justify-content-between { padding: 16px 18px; }
+}
+
+@media (max-width: 600px) {
+    .container .d-flex.justify-content-between { flex-direction: column; align-items: flex-start; }
+    .container .d-flex h2 { font-size: 1rem; padding: 11px 15px; width: 100%; }
+    .container .d-flex .btn.btn-secondary { width: 100%; justify-content: center; }
+    .mt-3.text-end { justify-content: stretch; }
+    .btn.btn-primary { width: 100%; justify-content: center; }
+    .table .form-control.nota { width: 68px; font-size: 12px; padding: 6px 7px; }
+}

@@ -1,5 +1,8 @@
 @extends('layouts.app')
-
+@section('title', 'Registro de Notas')
+@push('styles')
+    @vite('resources/css/teacher/score/index.css')
+@endpush
 @section('content')
 
 <div class="container">

@@ -23,7 +23,8 @@
         <?php if(isset($header)): ?>
             <header class="app-header">
                 <div class="container">
-                    <h2><?php echo e($header); ?></h2>
+                    <?php echo e($header); ?>
+
                 </div>
             </header>
         <?php endif; ?>

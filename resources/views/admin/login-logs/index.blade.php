@@ -1,37 +1,38 @@
 @extends('layouts.app')
 
+@push('styles')
+@vite('resources/css/admin/loginlogs/index.css')
+@endpush
+
 @section('content')
 <div class="container">
 
-    <h2 class="mb-4">📊 Registro de Ingresos al Sistema</h2>
+    <h2 class="mb-4">Registro de Ingresos al Sistema</h2>
 
     {{-- 🔍 FILTRO POR FECHAS --}}
     <div class="card mb-3 shadow-sm">
         <div class="card-body">
-            <form method="GET" class="row g-3">
+            <form method="GET" action="{{ route('admin.login-logs.index') }}" class="row g-3 align-items-end">
 
                 <div class="col-md-3">
                     <label class="form-label">Desde</label>
-                    <input type="date" name="from" class="form-control"
-                           value="{{ request('from') }}">
+                    <input type="date" name="from" class="form-control" value="{{ request('from') }}">
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Hasta</label>
-                    <input type="date" name="to" class="form-control"
-                           value="{{ request('to') }}">
+                    <input type="date" name="to" class="form-control" value="{{ request('to') }}">
                 </div>
 
-                <div class="col-md-3 d-flex align-items-end">
-                    <button class="btn btn-primary w-100">
-                        🔍 Filtrar
-                    </button>
-                </div>
-
-                <div class="col-md-3 d-flex align-items-end">
-                    <a href="{{ route('admin.login-logs.index') }}" class="btn btn-secondary w-100">
-                        ♻ Limpiar
-                    </a>
+                <div class="col-md-6">
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            🔍 Filtrar
+                        </button>
+                        <a href="{{ route('admin.login-logs.index') }}" class="btn btn-secondary">
+                            ♻ Limpiar
+                        </a>
+                    </div>
                 </div>
 
             </form>
