@@ -29,18 +29,35 @@ public function updateStatusByDate()
 {
     $today = Carbon::today();
 
+    // 🔥 Buscar si hay uno activo (por botón o lo que sea)
+    $active = Period::where('status', 'activo')->first();
+
+    if ($active) {
+
+        // 🔥 Si HOY está dentro de su rango → normal (no tocar)
+        if ($today->between($active->start_date, $active->end_date)) {
+            return;
+        }
+
+        // 🔥 Si NO está en fechas, solo respetarlo por HOY
+        // usamos updated_at como referencia
+        $lastUpdate = Carbon::parse($active->updated_at);
+
+        if ($lastUpdate->isToday()) {
+            return; // 👈 botón válido SOLO hoy
+        }
+
+        // 🔄 ya pasó el día → se libera control automático
+    }
+
+    // 🔥 CONTROL AUTOMÁTICO POR FECHAS
     $periods = Period::all();
 
     foreach ($periods as $period) {
 
         if ($today->between($period->start_date, $period->end_date)) {
-
-            // 🔓 ESTE SE ACTIVA
             $period->update(['status' => 'activo']);
-
         } else {
-
-            // 🔒 LOS DEMÁS SE CIERRAN
             $period->update(['status' => 'cerrado']);
         }
     }

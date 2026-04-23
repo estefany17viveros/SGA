@@ -7,45 +7,49 @@ use App\Models\Student;
 
 class TeacherStudentController extends Controller
 {
-public function show($id)
-{
-    $student = Student::with([
-        'guardians',
-        'enrollments.grade',
-        'enrollments.academicYear'
-    ])->findOrFail($id);
+    public function show($id)
+    {
+        $student = Student::with([
+            'guardians',
+            'enrollments.grade',
+            'enrollments.academicYear'
+        ])->findOrFail($id);
 
-    $teacher = auth()->user()->teacher;
+        $teacher = auth()->user()->teacher;
 
-    $isDirector = false;
+        $isDirector = false;
 
-    $enrollment = $student->enrollments()->with('grade')->latest()->first();
+        // 🔥 Mejor práctica: obtener matrícula activa (no latest sin control)
+        $enrollment = $student->enrollments()
+            ->with('grade')
+            ->latest()
+            ->first();
 
-    if ($enrollment && $enrollment->grade) {
-        $isDirector = $enrollment->grade->director_id == $teacher->id;
+        if ($enrollment && $enrollment->grade) {
+            $isDirector = $enrollment->grade->director_id == $teacher->id;
+        }
+
+        return view('teacher.students.show', compact('student', 'isDirector'));
     }
 
-    return view('teacher.students.show', compact('student', 'isDirector'));
-}
+    public function updateObserver(Request $request, $id)
+    {
+        $request->validate([
+            'observations' => 'required|string',
+            'certificate_file' => 'nullable|mimes:pdf|max:2048'
+        ]);
 
-  public function updateObserver(Request $request, $id)
-{
-    $request->validate([
-        'observations' => 'required|string',
-        'certificate_file' => 'nullable|mimes:pdf|max:2048'
-    ]);
+        $student = Student::findOrFail($id);
 
-    $student = Student::findOrFail($id);
+        $student->observations = $request->observations;
 
-    $student->observations = $request->observations;
+        if ($request->hasFile('certificate_file')) {
+            $student->certificate_file = $request->file('certificate_file')
+                ->store('students', 'public');
+        }
 
-    if ($request->hasFile('certificate_file')) {
-        $student->certificate_file = $request->file('certificate_file')
-            ->store('students', 'public');
+        $student->save();
+
+        return back()->with('success', 'Observador actualizado correctamente');
     }
-
-    $student->save();
-
-    return back()->with('success', 'Observador actualizado correctamente');
-}
 }

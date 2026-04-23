@@ -51,12 +51,14 @@ public function index(Request $request)
                 }
             });
         })
-
-        ->latest()
+        ->orderBy('last_name', 'asc')
+        ->orderBy('first_name', 'asc')
         ->paginate(10);
 
     return view('teacher.director.index', compact('grades', 'allStudents'));
 }
+
+
  public function students(Request $request, $gradeId)
 {
     $teacher = Auth::user()->teacher;
@@ -89,7 +91,9 @@ public function index(Request $request)
     })
 
     ->with(['enrollments.grade', 'enrollments.academicYear'])
-    ->get();
+->orderBy('last_name', 'asc')
+->orderBy('first_name', 'asc')
+->get();
 
     return view('teacher.director.students', compact('students', 'grade'));
 }

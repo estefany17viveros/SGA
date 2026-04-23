@@ -416,44 +416,77 @@ html, body {
         </td>
       </tr>
     </table>
+<?php
+    $allPeriods = \App\Models\Period::where('academic_year_id', $period->academic_year_id)
+        ->orderBy('id')
+        ->pluck('id')
+        ->toArray();
 
-    <?php $__currentLoopData = $scores; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $score): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-    <?php
-      $subject = optional($score->teacherSubject->subject)->name ?? 'Sin materia';
-      $teacher = optional(optional($score->teacherSubject->teacher)->user)->name ?? 'Sin docente';
+    $lastPeriodId = end($allPeriods);
+    $isLastPeriod = $period->id == $lastPeriodId;
+?>
 
-      $comentarios = \App\Models\DimensionComment::where('teacher_subject_id', $score->teacher_subject_id)
-          ->where('period_id', $period->id)
-          ->get()->keyBy('dimension');
+<?php $__currentLoopData = $scores; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $score): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+<?php
+    $subject = optional($score->teacherSubject->subject)->name ?? 'Sin materia';
+    $teacher = optional(optional($score->teacherSubject->teacher)->user)->name ?? 'Sin docente';
 
-      $historial = $allScores[$score->teacher_subject_id] ?? collect();
-      $nota      = $score->total;
+    $comentarios = \App\Models\DimensionComment::where('teacher_subject_id', $score->teacher_subject_id)
+        ->where('period_id', $period->id)
+        ->get()
+        ->keyBy('dimension');
 
-      $prefijo = match(true) {
+    // 🔥 HISTORIAL DE TODOS LOS PERIODOS
+    $historial = $allScores[$score->teacher_subject_id] ?? collect();
+
+    // 🔥 LÓGICA CLAVE
+    if ($isLastPeriod) {
+
+        // 👉 PROMEDIO FINAL
+        $total = $historial->whereNotNull('total')->sum('total');
+        $count = $historial->whereNotNull('total')->count();
+
+        $nota = $count > 0 ? round($total / $count, 2) : 0;
+
+        // 👉 DIMENSIONES PROMEDIO
+        $saber = round($historial->avg('saber'), 2);
+        $hacer = round($historial->avg('hacer'), 2);
+        $ser   = round($historial->avg('ser'), 2);
+
+    } else {
+
+        // 👉 PERIODO NORMAL
+        $nota  = $score->total;
+        $saber = $score->saber;
+        $hacer = $score->hacer;
+        $ser   = $score->ser;
+    }
+
+    // 🔥 NIVEL
+    $prefijo = match(true) {
         $nota >= 4.6 => 'Siempre',
         $nota >= 4.0 => 'Casi siempre',
         $nota >= 3.0 => 'Algunas veces',
         default      => 'Con dificultad',
-      };
+    };
 
-      $nivelClass = match(true) {
+    $nivelClass = match(true) {
         $nota >= 4.6 => 'nvl-superior',
         $nota >= 4.0 => 'nvl-alto',
         $nota >= 3.0 => 'nvl-basico',
         default      => 'nvl-bajo',
-      };
+    };
 
-      $nivelNombre = match(true) {
+    $nivelNombre = match(true) {
         $nota >= 4.6 => 'Superior',
         $nota >= 4.0 => 'Alto',
         $nota >= 3.0 => 'Básico',
         default      => 'Bajo',
-      };
-    ?>
-
+    };
+?>
     <div class="mat-card">
 
-      <table class="mat-top">
+         <table class="mat-top">
         <tr>
           <td class="mat-izq-td">
             <span class="mat-nom"><?php echo e($subject); ?></span>
@@ -461,7 +494,7 @@ html, body {
             <?php if($historial->isNotEmpty()): ?>
               <div style="margin-top:3px;">
                 <?php $__currentLoopData = $historial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $h): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <span class="hist-pill"><?php echo e($h->period->name); ?>: <?php echo e(number_format($h->total, 1)); ?></span>
+                  <span class="hist-pill"><?php echo e($h->period->name); ?>: <?php echo e(number_format(floor($h->total * 100) / 100, 2, '.', '')); ?></span>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
               </div>
             <?php endif; ?>
@@ -473,6 +506,7 @@ html, body {
           </td>
         </tr>
       </table>
+
 
       <table class="dims-table">
         <tr>
@@ -522,7 +556,7 @@ html, body {
             <?php endif; ?>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         <?php else: ?>
-          <span class="com-vacio">Sin comentario registrado.</span>
+          <span class="com-vacio">Definitiva en la materia.</span>
         <?php endif; ?>
       </div>
 

@@ -201,8 +201,9 @@ public function promoteStudents()
     $lastYear->update(['status' => 'inactivo']);
 
     // 🔥 4. traer estudiantes del año anterior
-    $enrollments = Enrollment::where('academic_year_id', $lastYear->id)->get();
-
+    $enrollments = Enrollment::with('grade')
+    ->where('academic_year_id', $lastYear->id)
+    ->get();
     foreach ($enrollments as $enrollment) {
 
         // ❌ ignorar retirados
@@ -290,4 +291,39 @@ public function promoteStudents()
             return back()->with('error','Error');
         }
     }
+    public function graduated(Request $request)
+{
+    $query = Enrollment::with(['student','grade','academicYear'])
+        ->where('status', 'graduado');
+
+    if ($request->year) {
+        $query->whereHas('academicYear', function ($q) use ($request) {
+            $q->where('year', $request->year);
+        });
+    }
+
+    // 🔥 AQUÍ EL CAMBIO
+   $enrollments = $query->paginate(10)->withQueryString();
+    $years = AcademicYear::orderBy('year', 'desc')->get();
+
+    return view('admin.enrollments.graduated', compact('enrollments', 'years'));
+}
+public function retired(Request $request)
+{
+    $query = Enrollment::with(['student','grade','academicYear'])
+        ->where('status', 'retirado');
+
+    // filtro por año (opcional)
+    if ($request->year) {
+        $query->whereHas('academicYear', function ($q) use ($request) {
+            $q->where('year', $request->year);
+        });
+    }
+
+    $enrollments = $query->paginate(10)->withQueryString();
+
+    $years = AcademicYear::orderBy('year', 'desc')->get();
+
+    return view('admin.enrollments.retired', compact('enrollments', 'years'));
+}
 }

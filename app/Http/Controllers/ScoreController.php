@@ -9,9 +9,52 @@ use App\Models\TeacherSubject;
 use App\Models\Student;
 use App\Models\AcademicYear;
 use App\Models\Period;
+use App\Exports\ScoresTemplateExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ScoresImport;
+
 
 class ScoreController extends Controller
 {
+
+public function import(Request $request)
+{
+    $request->validate([
+        'file' => 'required|mimes:xlsx,xls',
+        'teacher_subject_id' => 'required',
+        'period_id' => 'required'
+    ]);
+
+    Excel::import(
+        new ScoresImport(
+            $request->teacher_subject_id,
+            $request->period_id
+        ),
+        $request->file('file')
+    );
+
+    return back()->with('success', 'Notas importadas correctamente');
+}
+
+
+public function export($teacherSubjectId)
+{
+    $assignment = TeacherSubject::findOrFail($teacherSubjectId);
+
+    $year = AcademicYear::where('status', 'activo')->first();
+
+   $students = Student::whereHas('enrollments', function ($q) use ($assignment, $year) {
+    $q->where('grade_id', $assignment->grade_id)
+      ->where('academic_year_id', $year->id);
+})
+->orderBy('last_name', 'asc') // 👈 APELLIDO
+->get();
+
+    return Excel::download(
+        new ScoresTemplateExport($students),
+        'plantilla_notas.xlsx'
+    );
+}
     /**
      * 📊 VER NOTAS + RANKING
      */
@@ -66,22 +109,14 @@ class ScoreController extends Controller
             ];
         }
 
-        usort($ranking, function ($a, $b) {
-            return $b['total'] <=> $a['total'];
-        });
+       
+        // 🔥 Sacar solo los totales y ordenarlos aparte
+$totals = collect($ranking)->pluck('total')->sortDesc()->values();
 
-        $position = 1;
-
-        foreach ($ranking as $index => &$item) {
-
-            if ($index > 0 && $item['total'] == $ranking[$index - 1]['total']) {
-                $item['position'] = $ranking[$index - 1]['position'];
-            } else {
-                $item['position'] = $position;
-            }
-
-            $position++;
-        }
+// 🔥 Asignar posición sin cambiar orden visual
+foreach ($ranking as &$item) {
+    $item['position'] = $totals->search($item['total']) + 1;
+}
 
         return view('teacher.scores.index', compact(
             'ranking',

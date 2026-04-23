@@ -82,23 +82,23 @@ Route::middleware(['auth', 'role:admin'])
         ->name('login-logs.index');
 
 
-        
-    // 🔥 PANEL BOLETINES (ADMIN)
-    Route::get('/boletin', [BoletinController::class,'index'])
-        ->name('boletin.index');
+   // 🔥 PANEL BOLETINES
+Route::get('/boletin', [BoletinController::class,'index'])
+    ->name('boletin.index');
 
-    Route::get('/boletin/grado/{id}', [BoletinController::class,'grade'])
-        ->name('boletin.grade');
+// 🔥 LISTAR POR GRADO
+Route::get('/boletin/grado/{id}', [BoletinController::class,'grade'])
+    ->name('boletin.grade');
 
-    // 📊 VER BOLETÍN
-    Route::get('/boletin/{student}/{period}', [BoletinController::class, 'show'])
-        ->name('boletin.show');
+// 📊 VER BOLETÍN INDIVIDUAL
+Route::get('/boletin/{student}/{period}', [BoletinController::class, 'show'])
+    ->name('boletin.show');
 
-    // 📄 PDF
-    Route::get('/boletin/pdf/{student}/{period}', [BoletinController::class, 'pdf'])
-        ->name('boletin.pdf');
-Route::get('/boletin/grado/{grade}/pdf/{period}', [BoletinController::class, 'pdfByGrade'])
-    ->name('boletin.pdf.grade');
+// 📄 PDF INDIVIDUAL
+Route::get('/boletin/pdf/{student}/{period}', [BoletinController::class, 'pdf'])
+    ->name('boletin.pdf');
+
+// 🔥 PDF MASIVO (CORRECTO)
 Route::get('/boletin/grado/{grade}/pdf/{period}', 
     [BoletinController::class,'pdfMasivo']
 )->name('boletin.pdf.masivo');
@@ -238,14 +238,20 @@ Route::middleware(['auth', 'role:teacher'])
         Route::get('subject/{subject}/grade/{grade}/students', [TeacherDashboardController::class, 'students'])
             ->name('subject.students');
 
-    
+    // scores sube notas de docentes 
+ Route::get('scores/{id}', [ScoreController::class, 'index'])
+        ->name('scores.index');
 
-            Route::get('scores/{id}', [ScoreController::class, 'index'])
-    ->name('scores.index');
+    Route::post('scores', [ScoreController::class, 'store'])
+        ->name('scores.store');
 
-// 💾 Guardar notas
-Route::post('scores', [ScoreController::class, 'store'])
-    ->name('scores.store');
+    // 🔥 EXPORTAR
+    Route::get('scores/export/{id}', [ScoreController::class, 'export'])
+        ->name('scores.export');
+
+    // 🔥 IMPORTAR
+    Route::post('scores/import', [ScoreController::class, 'import'])
+        ->name('scores.import');
 
     Route::resource('dimension_comments', DimensionCommentController::class);
     

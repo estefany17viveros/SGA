@@ -1,45 +1,45 @@
-@extends('layouts.app')
-@section('title', 'Registro de Notas')
+<?php $__env->startSection('title', 'Registro de Notas'); ?>
 
-@push('styles')
-    @vite('resources/css/teacher/score/index.css')
-@endpush
+<?php $__env->startPush('styles'); ?>
+    <?php echo app('Illuminate\Foundation\Vite')('resources/css/teacher/score/index.css'); ?>
+<?php $__env->stopPush(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <div class="container">
 
-    {{-- 🔥 HEADER --}}
+    
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2>📊 Registro de Notas</h2>
             <p class="mb-0">
-                <strong>Materia:</strong> {{ $assignment->subject->name }} |
-                <strong>Grado:</strong> {{ $assignment->grade->name }} |
-                <strong>Periodo:</strong> {{ $period->name ?? 'Sin periodo activo' }}
+                <strong>Materia:</strong> <?php echo e($assignment->subject->name); ?> |
+                <strong>Grado:</strong> <?php echo e($assignment->grade->name); ?> |
+                <strong>Periodo:</strong> <?php echo e($period->name ?? 'Sin periodo activo'); ?>
+
             </p>
         </div>
 
-        <a href="{{ route('teacher.dashboard') }}" class="btn btn-secondary">
+        <a href="<?php echo e(route('teacher.dashboard')); ?>" class="btn btn-secondary">
             ⬅ Volver
         </a>
     </div>
 
-    {{-- 🔥 BOTONES EXCEL --}}
-    @if(isset($period))
+    
+    <?php if(isset($period)): ?>
     <div class="mb-3 d-flex gap-2">
 
-        {{-- 📥 Descargar --}}
-        <a href="{{ route('teacher.scores.export', $assignment->id) }}" class="btn btn-success">
+        
+        <a href="<?php echo e(route('teacher.scores.export', $assignment->id)); ?>" class="btn btn-success">
             📥 Descargar Plantilla Excel
         </a>
 
-        {{-- 📤 Subir --}}
-        <form action="{{ route('teacher.scores.import') }}" method="POST" enctype="multipart/form-data" class="d-flex gap-2">
-            @csrf
+        
+        <form action="<?php echo e(route('teacher.scores.import')); ?>" method="POST" enctype="multipart/form-data" class="d-flex gap-2">
+            <?php echo csrf_field(); ?>
 
-            <input type="hidden" name="teacher_subject_id" value="{{ $assignment->id }}">
-            <input type="hidden" name="period_id" value="{{ $period->id }}">
+            <input type="hidden" name="teacher_subject_id" value="<?php echo e($assignment->id); ?>">
+            <input type="hidden" name="period_id" value="<?php echo e($period->id); ?>">
 
             <input type="file" name="file" class="form-control" required>
 
@@ -49,35 +49,37 @@
         </form>
 
     </div>
-    @endif
+    <?php endif; ?>
 
-    {{-- 🚨 ERROR --}}
-    @if(session('error'))
+    
+    <?php if(session('error')): ?>
         <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+            <?php echo e(session('error')); ?>
 
-    {{-- ✅ SUCCESS --}}
-    @if(session('success'))
+        </div>
+    <?php endif; ?>
+
+    
+    <?php if(session('success')): ?>
         <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+            <?php echo e(session('success')); ?>
 
-    {{-- ❌ SIN PERIODO --}}
-    @if(!isset($period))
+        </div>
+    <?php endif; ?>
+
+    
+    <?php if(!isset($period)): ?>
         <div class="alert alert-warning">
             ⚠ No hay periodo activo. Contacta al administrador.
         </div>
-    @else
+    <?php else: ?>
 
-    {{-- 📥 FORM --}}
-    <form action="{{ route('teacher.scores.store') }}" method="POST">
-        @csrf
+    
+    <form action="<?php echo e(route('teacher.scores.store')); ?>" method="POST">
+        <?php echo csrf_field(); ?>
 
-        <input type="hidden" name="teacher_subject_id" value="{{ $assignment->id }}">
-        <input type="hidden" name="period_id" value="{{ $period->id }}">
+        <input type="hidden" name="teacher_subject_id" value="<?php echo e($assignment->id); ?>">
+        <input type="hidden" name="period_id" value="<?php echo e($period->id); ?>">
 
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
@@ -95,82 +97,84 @@
                 </thead>
 
                 <tbody>
-                    @php
+                    <?php
                     function nota($n) {
                         return $n !== null 
                             ? rtrim(rtrim(number_format($n, 2, '.', ''), '0'), '.') 
                             : '';
                     }
-                    @endphp
+                    ?>
 
-                    @forelse($ranking as $item)
+                    <?php $__empty_1 = true; $__currentLoopData = $ranking; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
-                        @php
+                        <?php
                             $student = $item['student'];
                             $score   = $item['score'];
-                        @endphp
+                        ?>
 
                         <tr>
-                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td class="text-center"><?php echo e($loop->iteration); ?></td>
 
-                            <td>{{ $student->full_name }}</td>
+                            <td><?php echo e($student->full_name); ?></td>
 
-                            {{-- SABER --}}
+                            
                             <td>
                                 <input type="number"
                                     step="0.01"
                                     min="1"
                                     max="5"
                                     class="form-control nota"
-                                    data-id="{{ $student->id }}"
+                                    data-id="<?php echo e($student->id); ?>"
                                     data-type="saber"
-                                    name="scores[{{ $student->id }}][saber]"
-                                    value="{{ isset($score->saber) ? number_format($score->saber, 2, '.', '') : '' }}">
+                                    name="scores[<?php echo e($student->id); ?>][saber]"
+                                    value="<?php echo e(isset($score->saber) ? number_format($score->saber, 2, '.', '') : ''); ?>">
                             </td>
 
-                            {{-- HACER --}}
+                            
                             <td>
                                 <input type="number"
                                     step="0.01"
                                     min="1"
                                     max="5"
                                     class="form-control nota"
-                                    data-id="{{ $student->id }}"
+                                    data-id="<?php echo e($student->id); ?>"
                                     data-type="hacer"
-                                    name="scores[{{ $student->id }}][hacer]"
-                                    value="{{ isset($score->hacer) ? number_format($score->hacer, 2, '.', '') : '' }}">
+                                    name="scores[<?php echo e($student->id); ?>][hacer]"
+                                    value="<?php echo e(isset($score->hacer) ? number_format($score->hacer, 2, '.', '') : ''); ?>">
                             </td>
 
-                            {{-- SER --}}
+                            
                             <td>
                                 <input type="number"
                                     step="0.01"
                                     min="1"
                                     max="5"
                                     class="form-control nota"
-                                    data-id="{{ $student->id }}"
+                                    data-id="<?php echo e($student->id); ?>"
                                     data-type="ser"
-                                    name="scores[{{ $student->id }}][ser]"
-                                    value="{{ isset($score->ser) ? number_format($score->ser, 2, '.', '') : '' }}">
+                                    name="scores[<?php echo e($student->id); ?>][ser]"
+                                    value="<?php echo e(isset($score->ser) ? number_format($score->ser, 2, '.', '') : ''); ?>">
                             </td>
 
-                            {{-- TOTAL --}}
+                            
                             <td class="text-center">
-                                <strong id="total-{{ $student->id }}">
-                                    {{ isset($score->total) ? number_format($score->total, 2, '.', '') : '-' }}
+                                <strong id="total-<?php echo e($student->id); ?>">
+                                    <?php echo e(isset($score->total) ? number_format($score->total, 2, '.', '') : '-'); ?>
+
                                 </strong>
                             </td>
 
-                            {{-- PUESTO --}}
+                            
                             <td class="text-center">
                                 <span class="badge bg-warning text-dark">
-                                    {{ $item['position'] }}
+                                    <?php echo e($item['position']); ?>
+
                                 </span>
                             </td>
 
                         </tr>
 
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
                         <tr>
                             <td colspan="7" class="text-center">
@@ -178,14 +182,14 @@
                             </td>
                         </tr>
 
-                    @endforelse
+                    <?php endif; ?>
 
                 </tbody>
 
             </table>
         </div>
 
-        {{-- BOTÓN --}}
+        
         <div class="mt-3 text-end">
             <button class="btn btn-primary">
                 💾 Guardar Notas
@@ -194,11 +198,11 @@
 
     </form>
 
-    @endif
+    <?php endif; ?>
 
 </div>
 
-{{-- 🔥 SCRIPT --}}
+
 <script>
 function truncateDecimals(num, decimals) {
     let factor = Math.pow(10, decimals);
@@ -233,5 +237,6 @@ document.querySelectorAll('.nota').forEach(input => {
 });
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
  
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\SGA\resources\views/teacher/scores/index.blade.php ENDPATH**/ ?>

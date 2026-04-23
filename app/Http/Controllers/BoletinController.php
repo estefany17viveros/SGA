@@ -49,6 +49,12 @@ class BoletinController extends Controller
         $student = Student::findOrFail($studentId);
         $period  = Period::findOrFail($periodId);
 
+        $allPeriods = Period::where('academic_year_id', $year->id)
+            ->orderBy('id')
+            ->get();
+
+        $lastPeriod = $allPeriods->last();
+
         $enrollment = Enrollment::with('grade')
             ->where('student_id', $studentId)
             ->where('academic_year_id', $year->id)
@@ -62,13 +68,11 @@ class BoletinController extends Controller
             ->where('period_id', $periodId)
             ->get();
 
-        // Historial de todos los periodos agrupado por materia
         $allScores = Score::with('period')
             ->where('student_id', $studentId)
             ->get()
             ->groupBy('teacher_subject_id');
 
-        // Puesto en clase
         $scoresGrado = Score::where('period_id', $periodId)
             ->whereIn('student_id',
                 Enrollment::where('grade_id', $enrollment->grade_id)
@@ -85,15 +89,19 @@ class BoletinController extends Controller
         $puesto = array_search($studentId, $scoresGrado);
         $puesto = ($puesto !== false) ? $puesto + 1 : '—';
 
-        // Logo en base64 para PDF y web
         $logoPath   = public_path('images/logo-itaf.jpg');
         $logoBase64 = file_exists($logoPath)
             ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logoPath))
             : null;
 
         return view('admin.boletin.show', compact(
-            'student', 'period', 'scores', 'allScores',
-            'puesto', 'yearLectivo', 'logoBase64'
+            'student',
+            'period',
+            'scores',
+            'allScores',
+            'puesto',
+            'logoBase64',
+            'lastPeriod'
         ))->with([
             'grade'       => optional($enrollment->grade)->name ?? 'N/A',
             'yearLectivo' => $year->year,
@@ -111,6 +119,12 @@ class BoletinController extends Controller
         $student = Student::findOrFail($studentId);
         $period  = Period::findOrFail($periodId);
 
+        $allPeriods = Period::where('academic_year_id', $year->id)
+            ->orderBy('id')
+            ->get();
+
+        $lastPeriod = $allPeriods->last();
+
         $enrollment = Enrollment::with('grade')
             ->where('student_id', $studentId)
             ->where('academic_year_id', $year->id)
@@ -145,7 +159,6 @@ class BoletinController extends Controller
         $puesto = array_search($studentId, $scoresGrado);
         $puesto = ($puesto !== false) ? $puesto + 1 : '—';
 
-        // ✅ Logo en base64 — OBLIGATORIO para DomPDF (no soporta asset())
         $logoPath   = public_path('images/logo-itaf.jpg');
         $logoBase64 = file_exists($logoPath)
             ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logoPath))
@@ -160,18 +173,12 @@ class BoletinController extends Controller
                 'grade'       => optional($enrollment->grade)->name ?? 'N/A',
                 'yearLectivo' => $year->year,
                 'logoBase64'  => $logoBase64,
+                'lastPeriod'  => $lastPeriod,
                 'isPdf'       => true,
             ])
-            ->setPaper('a4', 'portrait')
-            ->setOptions([
-                'dpi'                => 150,
-                'isRemoteEnabled'    => false,
-                'isHtml5ParserEnabled' => true,
-                'defaultFont'        => 'DejaVu Sans',
-            ]);
+            ->setPaper('a4', 'portrait');
 
-        $nombre = 'boletin_' . $student->identification_number . '_p' . $periodId . '.pdf';
-        return $pdf->download($nombre);
+        return $pdf->download('boletin.pdf');
     }
 
     // ══════════════════════════════════════
@@ -187,73 +194,81 @@ class BoletinController extends Controller
 
         $period = Period::findOrFail($periodId);
 
-        $enrollments = Enrollment::with('student', 'grade')
+        // ✅ 1. UN enrollment por estudiante — sin duplicados
+        //    Usamos groupBy en SQL level para evitar que unique() en colección
+        //    falle si hay IDs de enrollment distintos para el mismo student_id
+        $studentIds = Enrollment::where('grade_id', $gradeId)
+            ->where('academic_year_id', $year->id)
+            ->pluck('student_id')
+            ->unique()          // elimina student_ids repetidos
+            ->values();
+
+        if ($studentIds->isEmpty()) abort(404, 'No hay estudiantes');
+
+        // Cargamos enrollments — uno por student_id garantizado
+        $enrollmentsByStudent = Enrollment::with(['student', 'grade'])
             ->where('grade_id', $gradeId)
             ->where('academic_year_id', $year->id)
-            ->get();
+            ->get()
+            ->keyBy('student_id');   // keyed por student_id → máximo 1 por estudiante
 
-        if ($enrollments->isEmpty()) abort(404, 'No hay estudiantes');
-
-        $studentIds = $enrollments->pluck('student_id');
-
-        $scoresAll = Score::with([
+        // ✅ 2. Notas del periodo agrupadas por student_id
+        $scoresGrouped = Score::with([
                 'teacherSubject.subject',
                 'teacherSubject.teacher.user'
             ])
             ->where('period_id', $periodId)
             ->whereIn('student_id', $studentIds)
-            ->get();
-
-        $allScoresAll = Score::with('period')
-            ->whereIn('student_id', $studentIds)
             ->get()
             ->groupBy('student_id');
 
-        $ranking = $scoresAll->groupBy('student_id')
-            ->map(fn($items, $id) => [
-                'student_id' => $id,
+        // ✅ 3. Ranking
+        $ranking = $scoresGrouped
+            ->map(fn($items, $sid) => [
+                'student_id' => $sid,
                 'promedio'   => round($items->avg('total'), 2),
             ])
             ->sortByDesc('promedio')
             ->values();
 
-        $scoresGrouped = $scoresAll->groupBy('student_id');
-
-        $commentsAll = DimensionComment::where('period_id', $periodId)
-            ->whereIn('teacher_subject_id', $scoresAll->pluck('teacher_subject_id'))
+        // ✅ 4. Historial completo agrupado por student_id → teacher_subject_id
+        $allScoresAll = Score::with('period')
+            ->whereIn('student_id', $studentIds)
             ->get()
-            ->groupBy('teacher_subject_id')
-            ->map(fn($items) => $items->keyBy('dimension'));
+            ->groupBy('student_id')
+            ->map(fn($items) => $items->groupBy('teacher_subject_id'));
 
-        // ✅ Logo base64 una sola vez
+        // ✅ 5. Logo
         $logoPath   = public_path('images/logo-itaf.jpg');
         $logoBase64 = file_exists($logoPath)
             ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logoPath))
             : null;
 
+        // ✅ 6. Construir boletines — iteramos sobre studentIds únicos
         $boletines = [];
 
-        foreach ($enrollments as $enrollment) {
-            $student = $enrollment->student;
-            $scores  = $scoresGrouped[$student->id] ?? collect();
+        foreach ($studentIds as $sid) {
 
-            $allScores = ($allScoresAll[$student->id] ?? collect())
-                ->groupBy('teacher_subject_id');
+            $enrollment = $enrollmentsByStudent[$sid] ?? null;
+            if (!$enrollment) continue;   // seguridad extra
 
-            $puestoIndex = $ranking->search(fn($item) => $item['student_id'] == $student->id);
-            $puesto = ($puestoIndex !== false) ? $puestoIndex + 1 : '—';
+            $student       = $enrollment->student;
+            $studentScores = $scoresGrouped[$sid] ?? collect();
+            $allScores     = $allScoresAll[$sid]   ?? collect();
+
+            $puestoIndex = $ranking->search(fn($item) => $item['student_id'] == $sid);
 
             $boletines[] = [
-                'student'    => $student,
-                'scores'     => $scores,
-                'allScores'  => $allScores,
-                'puesto'     => $puesto,
-                'grade'      => optional($enrollment->grade)->name ?? 'N/A',
-                'comments'   => $commentsAll,
+                'student'   => $student,
+                'scores'    => $studentScores,
+                'allScores' => $allScores,   // ya es teacher_subject_id => scores
+                'puesto'    => $puestoIndex !== false ? $puestoIndex + 1 : '—',
+                'grade'     => optional($enrollment->grade)->name ?? 'N/A',
             ];
         }
 
-        $pdf = Pdf::loadView('admin.boletin.pdf_masivo', [
+        // ✅ 7. Generar PDF
+        return Pdf::loadView('admin.boletin.pdf_masivo', [
                 'boletines'   => $boletines,
                 'period'      => $period,
                 'yearLectivo' => $year->year,
@@ -261,13 +276,6 @@ class BoletinController extends Controller
                 'isPdf'       => true,
             ])
             ->setPaper('a4', 'portrait')
-            ->setOptions([
-                'dpi'                  => 150,
-                'isRemoteEnabled'      => false,
-                'isHtml5ParserEnabled' => true,
-                'defaultFont'          => 'DejaVu Sans',
-            ]);
-
-        return $pdf->download('boletines_grado_' . $gradeId . '.pdf');
+            ->download('boletines_grado_' . $gradeId . '.pdf');
     }
 }
