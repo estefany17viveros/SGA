@@ -13,9 +13,9 @@
         <div>
             <h2>📊 Registro de Notas</h2>
             <p class="mb-0">
-                <strong>Materia:</strong> <?php echo e($assignment->subject->name); ?> |
+                <strong>Asignatura:</strong> <?php echo e($assignment->subject->name); ?> |
                 <strong>Grado:</strong> <?php echo e($assignment->grade->name); ?> |
-                <strong>Periodo:</strong> <?php echo e($period->name ?? 'Sin periodo activo'); ?>
+                <strong>Trimestre:</strong> <?php echo e($period->name ?? 'Sin trimestre activo'); ?>
 
             </p>
         </div>
@@ -91,7 +91,7 @@
                         <th>Saber (33%)</th>
                         <th>Hacer (33%)</th>
                         <th>Ser (33%)</th>
-                        <th>Total</th>
+                        <th>Promedio</th>
                         <th>Puesto</th>
                     </tr>
                 </thead>

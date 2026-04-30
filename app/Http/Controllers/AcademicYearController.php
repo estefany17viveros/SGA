@@ -14,13 +14,12 @@ class AcademicYearController extends Controller
     /**
      * Listar años académicos
      */
-  public function index()
-{
-    $academicYears = AcademicYear::orderBy('year', 'desc')
-        ->paginate(10);
+    public function index()
+    {
+        $academicYears = AcademicYear::orderBy('year', 'desc')->paginate(10);
+        return view('admin.academic_years.index', compact('academicYears'));
+    }
 
-    return view('admin.academic_years.index', compact('academicYears'));
-}
     /**
      * Formulario crear
      */
@@ -30,163 +29,196 @@ class AcademicYearController extends Controller
     }
 
     /**
-     * Guardar nuevo año académico + clonación + promoción
+     * Guardar nuevo año académico + TODO automático
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'year' => 'required|integer|unique:academic_years,year',
-            'calendar' => 'required|in:A,B',
-            'periods' => 'required|integer|min:1',
+   public function store(Request $request)
+{
+    $request->validate([
+        'year' => 'required|integer|unique:academic_years,year',
+        'calendar' => 'required|in:A,B',
+        'periods' => 'required|integer|min:1',
+    ]);
+
+    DB::beginTransaction();
+
+    try {
+
+        // 🔥 Obtener año activo actual
+        $oldYear = AcademicYear::where('status', 'activo')->first();
+
+        // 🔥 Cerrar cualquier año activo
+        AcademicYear::where('status', 'activo')->update(['status' => 'cerrado']);
+
+        // 🔥 Crear nuevo año
+        $newYear = AcademicYear::create([
+            'year' => $request->year,
+            'calendar' => $request->calendar,
+            'periods' => $request->periods,
+            'status' => 'activo'
         ]);
 
-        DB::beginTransaction();
+        // 🔥 Fechas
+        self::setDates($newYear);
+        $newYear->save();
 
-        try {
-
-            // Año activo actual
-            $oldYear = AcademicYear::where('status', 'activo')->first();
-
-            // Crear nuevo año
-            $newYear = AcademicYear::create([
-                'year' => $request->year,
-                'calendar' => $request->calendar,
-                'periods' => $request->periods,
-            ]);
-
-              // 🔥 AQUI VA ESTO (CREA LOS PERIODOS)
+        // 🔥 Periodos
         $this->createPeriods($newYear);
 
-            // Clonar estructura y promover estudiantes
-            if ($oldYear) {
-                 $this->promoteStudents($oldYear, $newYear);
+        // 🔥 Clonar datos
+        if ($oldYear) {
+            $this->promoteStudents($oldYear, $newYear);
+            $this->cloneTeacherSubjects($oldYear, $newYear);
+        }
+
+        DB::commit();
+
+        return redirect()->route('admin.academic_years.index')
+            ->with('success', 'Año creado correctamente');
+
+    } catch (\Exception $e) {
+
+        DB::rollBack();
+
+        return back()->with('error', $e->getMessage());
+    }
+}
+
+    /**
+     * 🔥 PROMOVER ESTUDIANTES
+     */
+    private function promoteStudents($oldYear, $newYear)
+    {
+        $enrollments = Enrollment::where('academic_year_id', $oldYear->id)
+            ->with('grade')
+            ->get();
+
+        foreach ($enrollments as $enrollment) {
+
+            if ($enrollment->status == 'retirado') {
+                continue;
             }
 
-            DB::commit();
+            // 🎓 Graduar
+            if ($enrollment->status == 'aprobado' && $enrollment->grade->level == 11) {
+                $enrollment->update(['status' => 'graduado']);
+                continue;
+            }
 
-            return redirect()->route('admin.academic_years.index')
-                ->with('success', 'Año académico creado, activado y estudiantes promovidos correctamente.');
+            $gradeId = $enrollment->grade_id;
 
-        } catch (\Exception $e) {
+            if ($enrollment->status == 'aprobado') {
+                $nextGrade = Grade::where('level', $enrollment->grade->level + 1)->first();
+                if ($nextGrade) {
+                    $gradeId = $nextGrade->id;
+                }
+            }
 
-            DB::rollBack();
+            if ($enrollment->status == 'reprobado') {
+                $gradeId = $enrollment->grade_id;
+            }
 
-            return back()->with('error', 'Error al crear el año académico: ' . $e->getMessage());
+            $exists = Enrollment::where('student_id', $enrollment->student_id)
+                ->where('academic_year_id', $newYear->id)
+                ->exists();
+
+            if (!$exists) {
+                Enrollment::create([
+                    'student_id' => $enrollment->student_id,
+                    'grade_id' => $gradeId,
+                    'academic_year_id' => $newYear->id,
+                    'group_id' => null,
+                    'status' => $enrollment->status == 'reprobado'
+                        ? 'reprobado'
+                        : 'matriculado'
+                ]);
+            }
         }
     }
 
     /**
-     * Promover estudiantes aprobados al siguiente grado
+     * 🔥 CLONAR ASIGNACIONES (LO IMPORTANTE)
      */
-    private function promoteStudents($oldYear, $newYear)
-{
-    $enrollments = Enrollment::where('academic_year_id', $oldYear->id)
-        ->with('grade')
-        ->get();
+    private function cloneTeacherSubjects($oldYear, $newYear)
+    {
+        $assignments = \App\Models\TeacherSubject::where('academic_year_id', $oldYear->id)->get();
 
-    foreach ($enrollments as $enrollment) {
+        foreach ($assignments as $assignment) {
 
-        // ❌ ignorar retirados
-        if ($enrollment->status == 'retirado') {
-            continue;
-        }
+            $exists = \App\Models\TeacherSubject::where([
+                'teacher_id' => $assignment->teacher_id,
+                'subject_id' => $assignment->subject_id,
+                'grade_id' => $assignment->grade_id,
+                'group_id' => $assignment->group_id,
+                'academic_year_id' => $newYear->id,
+            ])->exists();
 
-        // 🎓 GRADUAR SOLO AQUÍ
-        if ($enrollment->status == 'aprobado' && $enrollment->grade->level == 11) {
-
-            $enrollment->update(['status' => 'graduado']);
-            continue;
-        }
-
-        $gradeId = $enrollment->grade_id;
-
-        // ✅ APROBADO → sube de grado
-        if ($enrollment->status == 'aprobado') {
-
-            $nextGrade = Grade::where('level', $enrollment->grade->level + 1)->first();
-
-            if ($nextGrade) {
-                $gradeId = $nextGrade->id;
+            if (!$exists) {
+                \App\Models\TeacherSubject::create([
+                    'teacher_id' => $assignment->teacher_id,
+                    'subject_id' => $assignment->subject_id,
+                    'grade_id' => $assignment->grade_id,
+                    'group_id' => $assignment->group_id,
+                    'academic_year_id' => $newYear->id,
+                    'status' => $assignment->status ?? 1
+                ]);
             }
         }
+    }
 
-        // 🔁 REPROBADO → mismo grado
-        if ($enrollment->status == 'reprobado') {
-            $gradeId = $enrollment->grade_id;
-        }
+    /**
+     * 🔥 CREAR PERIODOS
+     */
+    private function createPeriods($academicYear)
+    {
+        $totalPeriods = $academicYear->periods;
 
-        // 🔒 evitar duplicados
-        $exists = Enrollment::where('student_id', $enrollment->student_id)
-            ->where('academic_year_id', $newYear->id)
-            ->exists();
+        $start = Carbon::parse($academicYear->start_date);
+        $end   = Carbon::parse($academicYear->end_date);
 
-        if (!$exists) {
+        $daysPerPeriod = floor($start->diffInDays($end) / $totalPeriods);
 
-            Enrollment::create([
-                'student_id' => $enrollment->student_id,
-                'grade_id' => $gradeId,
-                'academic_year_id' => $newYear->id,
-                'group_id' => null,
+        $basePercentage = floor((100 / $totalPeriods) * 100) / 100;
+        $totalAssigned = 0;
 
-                // 🔥 CLAVE PARA REPITENTES
-                'status' => $enrollment->status == 'reprobado'
-                    ? 'reprobado'
-                    : 'matriculado'
+        for ($i = 1; $i <= $totalPeriods; $i++) {
+
+            $periodStart = $start->copy()->addDays(($i - 1) * $daysPerPeriod);
+            $periodEnd   = $start->copy()->addDays(($i * $daysPerPeriod) - 1);
+
+            if ($i == $totalPeriods) {
+                $percentage = 100 - $totalAssigned;
+            } else {
+                $percentage = $basePercentage;
+                $totalAssigned += $percentage;
+            }
+
+            \App\Models\Period::create([
+                'academic_year_id' => $academicYear->id,
+                'number' => $i,
+                'name' => "Trimestre $i",
+                'start_date' => $periodStart,
+                'end_date' => $periodEnd,
+                'percentage' => $percentage,
+                'status' => $i == 1 ? 'activo' : 'cerrado'
             ]);
         }
     }
-}
-  private function createPeriods($academicYear)
-{
-    $totalPeriods = $academicYear->periods;
 
-    $start = \Carbon\Carbon::parse($academicYear->start_date);
-    $end   = \Carbon\Carbon::parse($academicYear->end_date);
-
-    $daysPerPeriod = floor($start->diffInDays($end) / $totalPeriods);
-
-    // 🔥 dividir porcentaje
-    $basePercentage = floor((100 / $totalPeriods) * 100) / 100; // 2 decimales
-    $totalAssigned = 0;
-
-    for ($i = 1; $i <= $totalPeriods; $i++) {
-
-        $periodStart = $start->copy()->addDays(($i - 1) * $daysPerPeriod);
-        $periodEnd   = $start->copy()->addDays(($i * $daysPerPeriod) - 1);
-
-        // 🔥 último periodo ajusta sobrante
-        if ($i == $totalPeriods) {
-            $percentage = 100 - $totalAssigned;
-        } else {
-            $percentage = $basePercentage;
-            $totalAssigned += $percentage;
-        }
-
-        \App\Models\Period::create([
-            'academic_year_id' => $academicYear->id,
-            'number' => $i,
-            'name' => "Periodo $i",
-            'start_date' => $periodStart,
-            'end_date' => $periodEnd,
-            'percentage' => $percentage,
-            'status' => $i == 1 ? 'activo' : 'cerrado'
-        ]);
-    }
-}
     /**
-     * Cerrar año académico
+     * 🔥 ASIGNAR FECHAS SEGÚN CALENDARIO
      */
-    public function close($id)
+    protected static function setDates($academicYear)
     {
-        $year = AcademicYear::findOrFail($id);
+        if ($academicYear->calendar === 'A') {
 
-        if ($year->status === 'cerrado') {
-            return back()->with('error', 'El año ya está cerrado.');
+            $academicYear->start_date = Carbon::create($academicYear->year, 1, 1);
+            $academicYear->end_date   = Carbon::create($academicYear->year, 12, 31);
+
+        } else {
+
+            $academicYear->start_date = Carbon::create($academicYear->year, 7, 1);
+            $academicYear->end_date   = Carbon::create($academicYear->year + 1, 6, 30);
         }
-
-        $year->update(['status' => 'cerrado']);
-
-        return back()->with('success', 'Año académico cerrado correctamente.');
     }
 
     /**
@@ -198,7 +230,6 @@ class AcademicYearController extends Controller
         return view('admin.academic_years.show', compact('academicYear'));
     }
 
-// no lleva la funcion edit para no dañar el sistema completo ni año ni periodo ni calendario
     /**
      * Eliminar
      */
@@ -207,30 +238,11 @@ class AcademicYearController extends Controller
         $academicYear = AcademicYear::findOrFail($id);
 
         if ($academicYear->status === 'activo') {
-            return redirect()->route('admin.academic_years.index')
-                ->with('error', 'No se puede eliminar un año académico activo.');
+            return back()->with('error', 'No se puede eliminar un año activo.');
         }
 
         $academicYear->delete();
 
-        return redirect()->route('admin.academic_years.index')
-            ->with('success', 'Año académico eliminado correctamente.');
-    }
-
-    /**
-     * Asignar fechas según calendario
-     */
-    protected static function setDates($academicYear)
-    {
-        if ($academicYear->calendar === 'A') {
-
-            $academicYear->start_date = Carbon::create($academicYear->year, 1, 1);
-            $academicYear->end_date   = Carbon::create($academicYear->year, 12, 31);
-
-        } elseif ($academicYear->calendar === 'B') {
-
-            $academicYear->start_date = Carbon::create($academicYear->year, 7, 1);
-            $academicYear->end_date   = Carbon::create($academicYear->year + 1, 6, 30);
-        }
+        return back()->with('success', 'Eliminado correctamente.');
     }
 }

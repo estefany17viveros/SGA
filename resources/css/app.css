@@ -1,7 +1,110 @@
 @import './login.css';
+/* ============================= */
+/* TAILWIND (SIEMPRE PRIMERO) */
+/* ============================= */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* ============================= */
+/* CORE APP */
+/* ============================= */
+
+@import './dashboard.css';
+@import './profile.css';
+
+/* ============================= */
+/* ADMIN PANEL */
+/* ============================= */
+
+/* Academic Years */
+@import "./admin/academic_years/create.css";
+@import "./admin/academic_years/index.css";
+@import "./admin/academic_years/show.css";
+
+/* Boletin */
+@import "./admin/boletin/index.css";
+@import "./admin/boletin/grade.css";
+
+/* Enrollments */
+@import "./admin/enrollments/create.css";
+@import "./admin/enrollments/edit.css";
+@import "./admin/enrollments/graduated.css";
+@import "./admin/enrollments/index.css";
+@import "./admin/enrollments/show.css";
+@import "./admin/enrollments/retired.css";
+
+/* Grades */
+@import "./admin/grades/create.css";
+@import "./admin/grades/edit.css";
+@import "./admin/grades/index.css";
+@import "./admin/grades/show.css";
+
+/* Groups */
+@import "./admin/groups/create.css";
+@import "./admin/groups/edit.css";
+@import "./admin/groups/index.css";
+@import "./admin/groups/show.css";
+
+/* Guardians */
+@import "./admin/guardians/create.css";
+@import "./admin/guardians/edit.css";
+@import "./admin/guardians/index.css";
+@import "./admin/guardians/show.css";
+
+/* Login Logs */
+@import "./admin/loginlogs/index.css";
+
+/* Periods */
+@import "./admin/periods/edit.css";
+@import "./admin/periods/index.css";
+@import "./admin/periods/show.css";
+
+/* Students */
+@import "./admin/students/create.css";
+@import "./admin/students/edit.css";
+@import "./admin/students/index.css";
+@import "./admin/students/show.css";
+
+/* Subjects */
+@import "./admin/subjects/create.css";
+@import "./admin/subjects/edit.css";
+@import "./admin/subjects/index.css";
+@import "./admin/subjects/show.css";
+
+/* Teachers */
+@import "./admin/teachers/create.css";
+@import "./admin/teachers/edit.css";
+@import "./admin/teachers/index.css";
+@import "./admin/teachers/show.css";
+
+/* Teacher Subject */
+@import "./admin/teachersubject/create.css";
+@import "./admin/teachersubject/edit.css";
+@import "./admin/teachersubject/index.css";
+@import "./admin/teachersubject/show.css";
+
+/* ============================= */
+/* TEACHER PANEL */
+/* ============================= */
+
+@import "./teacher/dimension_comments/index.css";
+
+@import "./teacher/director/index.css";
+@import "./teacher/director/student.css"; 
+
+@import "./teacher/students/show.css";
+
+
+@import "./teacher/dashboard.css";
+
+@import "./teacher/grades.css";
+
+@import "./teacher/students.css";
+
+
+
 /* ============================= */
 /* ===== FOOTER ===== */
 /* ============================= */

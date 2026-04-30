@@ -4,7 +4,7 @@
 @endpush
 @section('content')
 
-<h2>Detalle del Periodo</h2>
+<h2>Detalle del Trimestre</h2>
 
 <p><strong>#:</strong> {{ $period->number }}</p>
 <p><strong>Nombre:</strong> {{ $period->name }}</p>

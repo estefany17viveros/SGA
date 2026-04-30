@@ -34,7 +34,7 @@
                 <th>Calendario</th>
                 <th>Inicio</th>
                 <th>Fin</th>
-                <th>Períodos</th>
+                <th>Trimestres</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -50,7 +50,7 @@
     <td data-label="Fin">
         {{ \Carbon\Carbon::parse($year->end_date)->format('d/m/Y') }}
     </td>
-    <td data-label="Períodos">{{ $year->periods }}</td>
+    <td data-label="Trimestres">{{ $year->periods }}</td>
     <td data-label="Estado">
         @if($year->status === 'activo')
             <span class="badge bg-success">Activo</span>

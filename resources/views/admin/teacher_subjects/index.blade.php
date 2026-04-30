@@ -29,56 +29,54 @@
                     <th>Materia</th>
                     <th>Grado</th>
                     <th>Grupo</th>
-                    <th>Año</th>
+                    <th>Año actual</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
 
             <tbody>
-                @forelse($assignments as $a)
+                @forelse($assignments as $group)
+
+                    @php
+                        $a = $group->first();
+
+                        $activeYear = $group->firstWhere('academicYear.status', 'activo');
+                    @endphp
+
                     <tr>
-                        <td data-label="Profesor">
-                            <strong>{{ $a->teacher->first_name ?? 'Sin docente' }}</strong>
-                            <span>{{ $a->teacher->last_name ?? '' }}</span>
+                        <td>
+                            <strong>{{ $a->teacher->first_name ?? '' }}</strong>
+                            {{ $a->teacher->last_name ?? '' }}
                         </td>
 
-                        <td data-label="Materia">
-                            {{ $a->subject->name ?? 'Sin materia' }}
+                        <td>{{ $a->subject->name ?? '' }}</td>
+
+                        <td>{{ $a->grade->name ?? '' }}</td>
+
+                        <td>{{ $a->group ? $a->group->name : 'General' }}</td>
+
+                        <td>
+                            {{ $activeYear->academicYear->year ?? 'Sin año activo' }}
                         </td>
 
-                        <td data-label="Grado">
-                            <span class="badge-info">{{ $a->grade->name ?? 'Sin grado' }}</span>
-                        </td>
+                        <td class="actions-cell">
 
-                        <td data-label="Grupo">
-                            {{ $a->group ? $a->group->name : 'General' }}
-                        </td>
-
-                        <td data-label="Año">
-                            {{ $a->academicYear ? $a->academicYear->year : 'Sin año' }}
-                        </td>
-
-                        <td data-label="Acciones" class="actions-cell">
-                            <a href="{{ route('admin.teacher-subjects.show', $a->id) }}" class="btn-action show" title="Ver">
-                                👁️
+                            {{-- HISTORIAL --}}
+                            <a href="{{ route('admin.teacher-subjects.history', $a->id) }}" class="btn-action show" title="Historial">
+                                📅
                             </a>
 
+                            {{-- EDITAR --}}
                             <a href="{{ route('admin.teacher-subjects.edit', $a->id) }}" class="btn-action edit" title="Editar">
                                 ✏️
                             </a>
 
-                            <form action="{{ route('admin.teacher-subjects.destroy', $a->id) }}" method="POST" class="delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn-delete" onclick="return confirm('¿Estás seguro de eliminar esta asignación?')" title="Eliminar">
-                                    🗑️
-                                </button>
-                            </form>
                         </td>
                     </tr>
+
                 @empty
                     <tr>
-                        <td colspan="6" class="empty-row">No hay registros encontrados</td>
+                        <td colspan="6">No hay registros</td>
                     </tr>
                 @endforelse
             </tbody>

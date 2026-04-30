@@ -16,9 +16,20 @@
         <p class="form-subtitle">Actualiza la información del estudiante</p>
     </div>
 
+    <!-- ERRORES -->
+    @if ($errors->any())
+        <div class="alert-error">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>⚠️ {{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <!-- Formulario -->
     <div class="form-card">
-        <form action="{{ route('admin.students.update', $student) }}" method="POST" enctype="multipart/form-data" class="edit-form">
+        <form action="{{ route('admin.students.update', $student->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -26,63 +37,36 @@
 
                 <!-- Nombre -->
                 <div class="form-group">
-                    <label for="first_name">
-                        <span class="label-icon">✏️</span>
-                        Nombre
-                    </label>
-                    <input 
-                        type="text" 
-                        id="first_name"
-                        name="first_name" 
-                        value="{{ old('first_name', $student->first_name) }}" 
-                        class="form-input"
-                        required
-                    >
+                    <label>Nombre</label>
+                    <input type="text" name="first_name"
+                        value="{{ old('first_name', $student->first_name) }}"
+                        class="form-input" required>
                 </div>
 
                 <!-- Apellido -->
                 <div class="form-group">
-                    <label for="last_name">
-                        <span class="label-icon">✏️</span>
-                        Apellido
-                    </label>
-                    <input 
-                        type="text" 
-                        id="last_name"
-                        name="last_name" 
-                        value="{{ old('last_name', $student->last_name) }}" 
-                        class="form-input"
-                        required
-                    >
+                    <label>Apellido</label>
+                    <input type="text" name="last_name"
+                        value="{{ old('last_name', $student->last_name) }}"
+                        class="form-input" required>
                 </div>
 
                 <!-- Género -->
                 <div class="form-group">
-                    <label for="gender">
-                        <span class="label-icon">⚧️</span>
-                        Género
-                    </label>
-                    <select name="gender" id="gender" class="form-input">
-                        <option value="masculino" {{ old('gender', $student->gender) == 'masculino' ? 'selected' : '' }}>
-                            Masculino
-                        </option>
-                        <option value="femenino" {{ old('gender', $student->gender) == 'femenino' ? 'selected' : '' }}>
-                            Femenino
-                        </option>
+                    <label>Género</label>
+                    <select name="gender" class="form-input">
+                        <option value="masculino" {{ old('gender', $student->gender) == 'masculino' ? 'selected' : '' }}>Masculino</option>
+                        <option value="femenino" {{ old('gender', $student->gender) == 'femenino' ? 'selected' : '' }}>Femenino</option>
                     </select>
                 </div>
 
-                <!-- Fecha de nacimiento -->
+                <!-- ✅ FECHA CORREGIDA -->
                 <div class="form-group">
-                    <label for="birth_date">
-                        <span class="label-icon">📅</span>
-                        Fecha de Nacimiento
-                    </label>
+                    <label>Fecha de Nacimiento</label>
                     <input 
-                        type="date" 
-                        id="birth_date"
+                        type="date"
                         name="birth_date"
-                        value="{{ old('birth_date', $student->birth_date->format('Y-m-d')) }}"
+                        value="{{ old('birth_date', optional($student->birth_date)->format('Y-m-d')) }}"
                         class="form-input"
                         required
                     >
@@ -90,131 +74,65 @@
 
                 <!-- Documento -->
                 <div class="form-group">
-                    <label for="identification_number">
-                        <span class="label-icon">🆔</span>
-                        Número de Documento
-                    </label>
-                    <input 
-                        type="text" 
-                        id="identification_number"
-                        name="identification_number"
+                    <label>Documento</label>
+                    <input type="text" name="identification_number"
                         value="{{ old('identification_number', $student->identification_number) }}"
-                        class="form-input"
-                        required
-                    >
+                        class="form-input" required>
                 </div>
 
                 <!-- EPS -->
                 <div class="form-group">
-                    <label for="eps">
-                        <span class="label-icon">🏥</span>
-                        EPS
-                    </label>
-                    <input 
-                        type="text" 
-                        id="eps"
-                        name="eps"
+                    <label>EPS</label>
+                    <input type="text" name="eps"
                         value="{{ old('eps', $student->eps) }}"
-                        class="form-input"
-                        required
-                    >
+                        class="form-input" required>
                 </div>
-<!-- Tipo de población -->
-<div class="form-group">
-    <label>
-        <span class="label-icon">🌎</span>
-        Tipo de población
-    </label>
 
-    <select name="population_type" class="form-input" id="population_type">
+                <!-- Tipo de población -->
+                <div class="form-group">
+                    <label>Tipo de población</label>
+                    <select name="population_type" class="form-input">
+                        <option value="ninguno" {{ old('population_type', $student->population_type) == 'ninguno' ? 'selected' : '' }}>Ninguno</option>
+                        <option value="afro" {{ old('population_type', $student->population_type) == 'afro' ? 'selected' : '' }}>Afro</option>
+                        <option value="indigena" {{ old('population_type', $student->population_type) == 'indigena' ? 'selected' : '' }}>Indígena</option>
+                        <option value="desplazado" {{ old('population_type', $student->population_type) == 'desplazado' ? 'selected' : '' }}>Desplazado</option>
+                    </select>
+                </div>
 
-        <option value="ninguno"
-            {{ old('population_type', $student->population_type) == 'ninguno' ? 'selected' : '' }}>
-            Ninguno
-        </option>
+                <!-- Certificado -->
+                <div class="form-group full-width">
+                    <label>Certificado población</label>
 
-        <option value="afro"
-            {{ old('population_type', $student->population_type) == 'afro' ? 'selected' : '' }}>
-            Afro
-        </option>
+                    @if($student->population_certificate)
+                        <a href="{{ asset('storage/'.$student->population_certificate) }}" target="_blank">
+                            📄 Ver actual
+                        </a>
+                    @endif
 
-        <option value="indigena"
-            {{ old('population_type', $student->population_type) == 'indigena' ? 'selected' : '' }}>
-            Indígena
-        </option>
+                    <input type="file" name="population_certificate" class="form-input">
+                </div>
 
-        <option value="desplazado"
-            {{ old('population_type', $student->population_type) == 'desplazado' ? 'selected' : '' }}>
-            Desplazado
-        </option>
-
-    </select>
-</div>
-
-
-<!-- Certificado población -->
-<div class="form-group full-width" id="certificado_container">
-    <label>
-        <span class="label-icon">📄</span>
-        Certificado población (PDF)
-    </label>
-
-    @if($student->population_certificate)
-        <div class="current-photo">
-            <a href="{{ asset('storage/'.$student->population_certificate) }}"
-               target="_blank"
-               class="btn-certificate">
-               📄 Ver certificado actual
-            </a>
-        </div>
-    @endif
-
-    <input 
-        type="file" 
-        name="population_certificate"
-        class="form-input file-input"
-        accept="application/pdf"
-    >
-
-    <small class="form-hint">
-        Solo PDF. Subir solo si deseas cambiarlo.
-    </small>
-</div>
                 <!-- Foto -->
                 <div class="form-group full-width">
-                    <label for="photo">
-                        <span class="label-icon">📷</span>
-                        Foto
-                    </label>
-                    
+                    <label>Foto</label>
+
                     @if($student->photo)
-                        <div class="current-photo">
-                            <img src="{{ asset('storage/'.$student->photo) }}" alt="Foto actual" class="photo-preview">
-                            <span class="photo-label">Foto actual</span>
-                        </div>
+                        <img src="{{ asset('storage/'.$student->photo) }}" width="80">
                     @endif
-                    
-                    <input 
-                        type="file" 
-                        id="photo"
-                        name="photo" 
-                        class="form-input file-input"
-                        accept="image/*"
-                    >
-                    <small class="form-hint">Selecciona una nueva foto si deseas cambiarla</small>
+
+                    <input type="file" name="photo" class="form-input">
                 </div>
 
             </div>
 
-            <!-- Botones de acción -->
+            <!-- Botones -->
             <div class="form-actions">
                 <a href="{{ route('admin.students.index') }}" class="btn-cancel">
-                    <span class="icon">❌</span>
                     Cancelar
                 </a>
+
                 <button type="submit" class="btn-submit">
-                    <span class="icon">💾</span>
-                    Actualizar Estudiante
+                    💾 Actualizar
                 </button>
             </div>
 

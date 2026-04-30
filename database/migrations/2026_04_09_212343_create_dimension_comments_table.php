@@ -15,7 +15,10 @@ return new class extends Migration
             $table->foreignId('teacher_subject_id')->constrained()->cascadeOnDelete();
             $table->foreignId('grade_id')->constrained()->cascadeOnDelete();
             $table->foreignId('period_id')->constrained('periods')->cascadeOnDelete();
-
+$table->foreignId('academic_year_id')
+      ->constrained()
+      ->cascadeOnDelete();
+               
             // 📊 Dimensión
             $table->enum('dimension', ['saber', 'hacer', 'ser']);
 
@@ -29,6 +32,7 @@ return new class extends Migration
                 'teacher_subject_id',
                 'grade_id',
                 'period_id',
+                'academic_year_id',
                 'dimension'
             ], 'dimension_comments_unique');
         });

@@ -24,20 +24,16 @@
 
     $year = AcademicYear::where('status', 'activo')->first();
 
-    $periods = [];
+    // ✅ SIEMPRE colección
+    $periods = collect();
 
     if ($year) {
         $periods = Period::where('academic_year_id', $year->id)
-            ->orderBy('id')
-            ->pluck('id')
-            ->toArray();
+            ->orderBy('number')
+            ->get(); // 🔥 SIN toArray()
     }
 
-    if (empty($periods)) {
-        $periods = [1,2,3,4];
-    }
-
-    // 🔥 ORDENAR POR PROMEDIO (TRUNCADO)
+    // 🔥 ORDENAR POR PROMEDIO
     $studentsSorted = $students->sortByDesc(function($student) use ($teacher_subject_id, $periods) {
 
         $total = 0;
@@ -46,7 +42,7 @@
         foreach ($periods as $period) {
             $score = $student->scores
                 ->where('teacher_subject_id', $teacher_subject_id)
-                ->where('period_id', $period)
+                ->where('period_id', $period->id) // ✅ correcto
                 ->first();
 
             if ($score && $score->total !== null) {
@@ -64,16 +60,17 @@
 <div class="table-responsive mt-3">
     <table class="table table-bordered">
 
+        
         <thead class="table-dark">
             <tr>
                 <th>#</th>
                 <th>Nombre</th>
 
                 <?php $__currentLoopData = $periods; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $period): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <th>P<?php echo e($period); ?></th>
+                    <th>P<?php echo e($period->number); ?></th>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                <th>Total Materia</th>
+                <th>Promedio Acumulado</th>
                 <th>Puesto</th>
             </tr>
         </thead>
@@ -93,7 +90,7 @@
 
                         $score = $student->scores
                             ->where('teacher_subject_id', $teacher_subject_id)
-                            ->where('period_id', $period)
+                            ->where('period_id', $period->id)
                             ->first();
 
                         $value = $score->total ?? null;
@@ -103,15 +100,15 @@
                             $count++;
                         }
 
-                        $periodTotals[$period] = $value;
+                        // ✅ usar ID como clave
+                        $periodTotals[$period->id] = $value;
                     }
 
-                    // 🔥 PROMEDIO FINAL TRUNCADO
                     $averageFinal = $count > 0 
                         ? floor(($totalFinal / $count) * 100) / 100 
                         : 0;
 
-                    // 🔥 CALCULAR PUESTO (USANDO TRUNCADO)
+                    // 🔥 POSICIÓN
                     $position = 1;
 
                     foreach ($studentsSorted as $index => $s) {
@@ -122,7 +119,7 @@
                         foreach ($periods as $p) {
                             $sc = $s->scores
                                 ->where('teacher_subject_id', $teacher_subject_id)
-                                ->where('period_id', $p)
+                                ->where('period_id', $p->id)
                                 ->first();
 
                             if ($sc && $sc->total !== null) {
@@ -144,7 +141,7 @@
                             foreach ($periods as $p) {
                                 $psc = $prev->scores
                                     ->where('teacher_subject_id', $teacher_subject_id)
-                                    ->where('period_id', $p)
+                                    ->where('period_id', $p->id)
                                     ->first();
 
                                 if ($psc && $psc->total !== null) {
@@ -177,15 +174,14 @@
                     <?php $__currentLoopData = $periods; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $period): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <td class="text-center">
                             <span class="badge bg-secondary">
-                                <?php echo e(isset($periodTotals[$period]) 
-                                    ? number_format(floor($periodTotals[$period] * 100) / 100, 2, '.', '') 
+                                <?php echo e(isset($periodTotals[$period->id]) 
+                                    ? number_format(floor($periodTotals[$period->id] * 100) / 100, 2, '.', '') 
                                     : '-'); ?>
 
                             </span>
                         </td>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                    
                     <td class="text-center">
                         <span class="badge bg-success">
                             <?php echo e(number_format($averageFinal, 2, '.', '')); ?>
@@ -193,7 +189,6 @@
                         </span>
                     </td>
 
-                    
                     <td class="text-center">
                         <span class="badge bg-warning text-dark">
                             <?php echo e($position); ?>
@@ -205,7 +200,7 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
                 <tr>
-                    <td colspan="<?php echo e(count($periods) + 4); ?>" class="text-center">
+                    <td colspan="<?php echo e($periods->count() + 4); ?>" class="text-center">
                         No hay estudiantes
                     </td>
                 </tr>

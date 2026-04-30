@@ -5,7 +5,7 @@
 @endpush
 @section('content')
 
-<h2>Editar Periodo</h2>
+<h2>Editar Trimestre</h2>
 
 @if(session('error'))
 <p style="color:red">{{ session('error') }}</p>

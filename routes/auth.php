@@ -184,7 +184,8 @@ Route::resource('subjects', SubjectController::class);
 //teacher_subjets
 
 Route::resource('teacher-subjects', TeacherSubjectController::class);
-
+route::get('teacher-subjects/history/{id}', [TeacherSubjectController::class, 'history'])
+    ->name('teacher-subjects.history');
 //periods 
 
  // 📋 Listar periodos por año
@@ -313,3 +314,9 @@ use App\Http\Controllers\DashboardController;
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth'])
     ->name('dashboard');
+
+    
+    Route::post('/notifications/read', function () {
+    auth()->user()->unreadNotifications->markAsRead();
+    return back();
+})->name('notifications.read');

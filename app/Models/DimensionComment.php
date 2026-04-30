@@ -13,6 +13,7 @@ class DimensionComment extends Model
         'teacher_subject_id',
         'grade_id',
         'period_id',
+        'academic_year_id',
         'dimension',
         'comment'
     ];
@@ -23,6 +24,10 @@ class DimensionComment extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function academicYear()
+    {
+        return $this->belongsTo(AcademicYear::class);
+    }
     /**
      * 🔗 Asignatura del profesor (materia + docente + grado)
      */

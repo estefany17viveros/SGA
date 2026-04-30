@@ -217,108 +217,78 @@ public function show(Student $student)
         return view('admin.students.edit', compact('student'));
     }
 
+public function update(Request $request, Student $student)
+{
+    $request->validate([
 
-    /**
-     * Actualizar estudiante
-     */
-    public function update(Request $request, Student $student)
-    {
+        'photo' => 'nullable|image|max:2048',
 
-        $request->validate([
+        'first_name' => 'nullable|string|max:255',
+        'last_name' => 'nullable|string|max:255',
+        'gender' => 'nullable|in:masculino,femenino',
+        'birth_date' => 'nullable|date',
 
-            // foto
-            'photo' => 'nullable|image|max:2048',
+        'identification_type' => 'nullable|in:registro_civil,tarjeta_identidad,cedula_ciudadania,cedula_extranjeria,pasaporte,permiso_proteccion_temporal',
 
-            // datos personales
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'gender' => 'required|in:masculino,femenino',
-            'birth_date' => 'required|date',
+        'identification_number' =>
+            'nullable|string|unique:students,identification_number,' . $student->id,
 
-            // documento
-            'identification_type' => 'required|in:registro_civil,tarjeta_identidad,cedula_ciudadania,cedula_extranjeria,pasaporte,permiso_proteccion_temporal',
+        'expedition_date' => 'nullable|date',
+        'expedition_department' => 'nullable|string|max:255',
+        'expedition_municipality' => 'nullable|string|max:255',
 
-            'identification_number' =>
-            'required|string|unique:students,identification_number,' . $student->id,
+        'address' => 'nullable|string|max:255',
 
-            // expedición
-            'expedition_date' => 'required|date',
-            'expedition_department' => 'required|string|max:255',
-            'expedition_municipality' => 'required|string|max:255',
+        'eps' => 'nullable|string|max:255',
+        'blood_type' => 'nullable|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
 
-            // dirección
-            'address' => 'required|string|max:255',
+        'medical_conditions' => 'nullable|string',
+        'observations' => 'nullable|string',
 
-            // salud
-            'eps' => 'required|string|max:255',
-            'blood_type' => 'required|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
+        'certificate_file' => 'nullable|file|mimes:pdf|max:2048',
 
-            // opcionales
-            'medical_conditions' => 'nullable|string',
-            'observations' => 'nullable|string',
+        'population_type' => 'nullable|in:ninguno,afro,indigena,desplazado',
 
-            'certificate_file' => 'nullable|file|mimes:pdf|max:2048',
- 'population_type' => 'required|in:ninguno,afro,indigena,desplazado',
+        'population_certificate' => 'nullable|file|mimes:pdf',
+    ]);
 
-            'population_certificate' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'required_if:population_type,afro,indigena,desplazado'
-            ]
-                ]);
+    $data = $request->all();
 
-        $data = $request->all();
-
-        /*
-        |---------------------------------
-        | Actualizar foto
-        |---------------------------------
-        */
-        if ($request->hasFile('photo')) {
-
-            if ($student->photo && Storage::disk('public')->exists($student->photo)) {
-
-                Storage::disk('public')->delete($student->photo);
-            }
-
-            $data['photo'] = $request->file('photo')
-                ->store('students/photos', 'public');
+    // FOTO
+    if ($request->hasFile('photo')) {
+        if ($student->photo && Storage::disk('public')->exists($student->photo)) {
+            Storage::disk('public')->delete($student->photo);
         }
 
-        /*
-        |---------------------------------
-        | Actualizar certificado
-        |---------------------------------
-        */
-        if ($request->hasFile('certificate_file')) {
-
-            if ($student->certificate_file && Storage::disk('public')->exists($student->certificate_file)) {
-
-                Storage::disk('public')->delete($student->certificate_file);
-            }
-
-            $data['certificate_file'] = $request->file('certificate_file')
-                ->store('students/certificates', 'public');
-        }
- // 🔥 CERTIFICADO POBLACIÓN
-        if ($request->hasFile('population_certificate')) {
-
-            if ($student->population_certificate && Storage::disk('public')->exists($student->population_certificate)) {
-                Storage::disk('public')->delete($student->population_certificate);
-            }
-
-            $data['population_certificate'] = $request->file('population_certificate')
-                ->store('students/population', 'public');
-        }
-
-        $student->update($data);
-
-        return redirect()->route('admin.students.index')
-            ->with('success', 'Estudiante actualizado correctamente.');
+        $data['photo'] = $request->file('photo')
+            ->store('students/photos', 'public');
     }
 
+    // CERTIFICADO GENERAL
+    if ($request->hasFile('certificate_file')) {
+        if ($student->certificate_file && Storage::disk('public')->exists($student->certificate_file)) {
+            Storage::disk('public')->delete($student->certificate_file);
+        }
 
+        $data['certificate_file'] = $request->file('certificate_file')
+            ->store('students/certificates', 'public');
+    }
+
+    // CERTIFICADO POBLACIÓN
+    if ($request->hasFile('population_certificate')) {
+        if ($student->population_certificate && Storage::disk('public')->exists($student->population_certificate)) {
+            Storage::disk('public')->delete($student->population_certificate);
+        }
+
+        $data['population_certificate'] = $request->file('population_certificate')
+            ->store('students/population', 'public');
+    }
+
+    $student->update($data);
+
+    return redirect()->route('admin.students.index')
+        ->with('success', 'Estudiante actualizado correctamente.');
+}
     /**
      * Eliminar estudiante
      */

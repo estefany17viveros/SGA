@@ -2,7 +2,7 @@
 <!-- 🔽 PROFESORES -->
 <div class="flex gap-3">
     <a href="{{ route('teacher.dashboard') }}" class="text-white px-3 py-2">
-        Áreas Asignadas
+        Asignaturas
     </a>
 
     <a href="{{ route('teacher.dimension_comments.index') }}" class="text-white px-3 py-2">

@@ -6,7 +6,7 @@
 
 <div class="container">
 
-    <h2>Periodos - Año <?php echo e($year->year); ?></h2>
+    <h2>Trimestres - Año <?php echo e($year->year); ?></h2>
 
     <a href="<?php echo e(route('admin.academic_years.index')); ?>">← Volver</a>
 

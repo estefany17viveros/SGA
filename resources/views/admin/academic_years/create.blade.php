@@ -39,7 +39,7 @@
         </div>
 
         <div class="mb-3">
-            <label>Períodos Académicos</label>
+            <label>Trimestres Académicos</label>
             <input type="number" name="periods"
                    class="form-control"
                    value="{{ old('periods') }}"

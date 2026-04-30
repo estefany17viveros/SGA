@@ -44,7 +44,7 @@
 section.content,
 div.content,
 main {
-    max-width: 900px;
+    max-width: 1500px;
     margin-inline: auto;
     padding: clamp(20px, 4vw, 48px) clamp(16px, 4vw, 32px);
     animation: fadeInUp 0.45s ease both;

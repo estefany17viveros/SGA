@@ -40,7 +40,10 @@ class AcademicYear extends Model
     /**
      * Relaciones
      */
-    
+    public function dimension_comments()
+    {
+        return $this->hasMany(DimensionComment::class);
+    }
 
     // Un año académico tiene muchas matrículas
     public function enrollments()

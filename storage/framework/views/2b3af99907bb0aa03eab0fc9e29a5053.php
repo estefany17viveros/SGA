@@ -35,7 +35,7 @@
                 <th>Calendario</th>
                 <th>Inicio</th>
                 <th>Fin</th>
-                <th>Períodos</th>
+                <th>Trimestres</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -53,7 +53,7 @@
         <?php echo e(\Carbon\Carbon::parse($year->end_date)->format('d/m/Y')); ?>
 
     </td>
-    <td data-label="Períodos"><?php echo e($year->periods); ?></td>
+    <td data-label="Trimestres"><?php echo e($year->periods); ?></td>
     <td data-label="Estado">
         <?php if($year->status === 'activo'): ?>
             <span class="badge bg-success">Activo</span>

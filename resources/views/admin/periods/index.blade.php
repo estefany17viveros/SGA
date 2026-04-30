@@ -8,7 +8,7 @@
 
 <div class="container">
 
-    <h2>Periodos - Año {{ $year->year }}</h2>
+    <h2>Trimestres - Año {{ $year->year }}</h2>
 
     <a href="{{ route('admin.academic_years.index') }}">← Volver</a>
 

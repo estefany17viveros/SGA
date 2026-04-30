@@ -14,9 +14,9 @@
         <div>
             <h2>📊 Registro de Notas</h2>
             <p class="mb-0">
-                <strong>Materia:</strong> {{ $assignment->subject->name }} |
+                <strong>Asignatura:</strong> {{ $assignment->subject->name }} |
                 <strong>Grado:</strong> {{ $assignment->grade->name }} |
-                <strong>Periodo:</strong> {{ $period->name ?? 'Sin periodo activo' }}
+                <strong>Trimestre:</strong> {{ $period->name ?? 'Sin trimestre activo' }}
             </p>
         </div>
 
@@ -89,7 +89,7 @@
                         <th>Saber (33%)</th>
                         <th>Hacer (33%)</th>
                         <th>Ser (33%)</th>
-                        <th>Total</th>
+                        <th>Promedio</th>
                         <th>Puesto</th>
                     </tr>
                 </thead>
@@ -154,7 +154,7 @@
                                     value="{{ isset($score->ser) ? number_format($score->ser, 2, '.', '') : '' }}">
                             </td>
 
-                            {{-- TOTAL --}}
+                            {{-- PROMEDIO --}}
                             <td class="text-center">
                                 <strong id="total-{{ $student->id }}">
                                     {{ isset($score->total) ? number_format($score->total, 2, '.', '') : '-' }}

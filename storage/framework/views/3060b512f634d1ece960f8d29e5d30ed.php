@@ -2,7 +2,7 @@
 <!-- 🔽 PROFESORES -->
 <div class="flex gap-3">
     <a href="<?php echo e(route('teacher.dashboard')); ?>" class="text-white px-3 py-2">
-        Áreas Asignadas
+        Asignaturas
     </a>
 
     <a href="<?php echo e(route('teacher.dimension_comments.index')); ?>" class="text-white px-3 py-2">

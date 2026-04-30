@@ -89,7 +89,7 @@ public function updateStatusByDate()
     $period->update($data);
 
     return redirect()->route('admin.periods.index', $period->academic_year_id)
-        ->with('success', 'Periodo actualizado correctamente');
+        ->with('success', 'Trimestre actualizado correctamente');
 }
 
     /**
@@ -106,7 +106,7 @@ public function updateStatusByDate()
         $period->update(['status' => 'cerrado']);
 
         return redirect()->route('admin.periods.index', $period->academic_year_id)
-            ->with('success', 'Periodo cerrado');
+            ->with('success', 'Trimestre cerrado');
     }
 
     /**
@@ -122,7 +122,7 @@ public function updateStatusByDate()
         $period->update(['status' => 'activo']);
 
         return redirect()->route('admin.periods.index', $period->academic_year_id)
-            ->with('success', 'Periodo activado');
+            ->with('success', 'Trimestre activado');
     }
 
     /**
@@ -143,7 +143,7 @@ public function updateStatusByDate()
         $period = Period::findOrFail($id);
 
         if ($period->status === 'activo') {
-            return back()->with('error', 'No puedes eliminar un periodo activo');
+            return back()->with('error', 'No puedes eliminar un trimestre activo');
         }
 
         $yearId = $period->academic_year_id;
@@ -151,6 +151,6 @@ public function updateStatusByDate()
         $period->delete();
 
         return redirect()->route('admin.periods.index', $yearId)
-            ->with('success', 'Periodo eliminado correctamente');
+            ->with('success', 'Trimestre eliminado correctamente');
     }
 }

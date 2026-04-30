@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DimensionComment;
 use App\Models\TeacherSubject;
+use App\Models\AcademicYear;
 use App\Models\Period;
 
 class DimensionCommentController extends Controller
@@ -23,18 +24,35 @@ class DimensionCommentController extends Controller
 
         $teacher = $user->teacher;
 
-        // 🔥 Materias asignadas al profesor
+        // 🔥 AÑOS ACADÉMICOS
+        $years = AcademicYear::orderBy('year', 'desc')->get();
+
+        // 🔥 Año seleccionado
+        $yearId = $request->academic_year_id
+            ?? AcademicYear::where('status', 'activo')->value('id');
+
+        // 🔥 Materias del profesor (sin duplicados)
         $assignments = TeacherSubject::where('teacher_id', $teacher->id)
             ->with(['subject', 'grade'])
+            ->get()
+            ->unique(fn ($item) => $item->subject_id . '-' . $item->grade_id)
+            ->values();
+
+        // 🔥 Periodos del año seleccionado
+        $periods = Period::where('academic_year_id', $yearId)
+            ->orderBy('id', 'asc')
             ->get();
 
-        // 🔥 Periodos
-        $periods = Period::all();
+        // 🔥 Periodo seleccionado (OBJETO REAL)
+        $selectedPeriod = null;
+        if ($request->period_id) {
+            $selectedPeriod = Period::find($request->period_id);
+        }
 
         $assignment = null;
         $comments = collect();
 
-        // 🔥 Si selecciona asignación + periodo
+        // 🔥 SOLO SI TODO ESTÁ SELECCIONADO
         if ($request->teacher_subject_id && $request->period_id) {
 
             $assignment = TeacherSubject::where('teacher_id', $teacher->id)
@@ -44,6 +62,8 @@ class DimensionCommentController extends Controller
 
             $comments = DimensionComment::where('teacher_subject_id', $assignment->id)
                 ->where('period_id', $request->period_id)
+                ->where('academic_year_id', $yearId)
+                ->where('grade_id', $assignment->grade_id)
                 ->get()
                 ->keyBy('dimension');
         }
@@ -52,7 +72,10 @@ class DimensionCommentController extends Controller
             'assignments',
             'assignment',
             'comments',
-            'periods'
+            'periods',
+            'years',
+            'yearId',
+            'selectedPeriod'
         ));
     }
 
@@ -64,7 +87,8 @@ class DimensionCommentController extends Controller
         $request->validate([
             'teacher_subject_id' => 'required|exists:teacher_subjects,id',
             'grade_id' => 'required|exists:grades,id',
-            'period_id' => 'required|exists:periods,id'
+            'period_id' => 'required|exists:periods,id',
+            'academic_year_id' => 'required|exists:academic_years,id'
         ]);
 
         $user = Auth::user();
@@ -75,7 +99,6 @@ class DimensionCommentController extends Controller
 
         $teacher = $user->teacher;
 
-        // 🔥 Validar que la materia pertenezca al profesor
         $assignment = TeacherSubject::where('teacher_id', $teacher->id)
             ->where('id', $request->teacher_subject_id)
             ->firstOrFail();
@@ -87,6 +110,7 @@ class DimensionCommentController extends Controller
                     'teacher_subject_id' => $assignment->id,
                     'grade_id' => $request->grade_id,
                     'period_id' => $request->period_id,
+                    'academic_year_id' => $request->academic_year_id,
                     'dimension' => $dimension
                 ],
                 [

@@ -1,8 +1,10 @@
 
 <?php $__env->startSection('title', 'Comentarios por Dimensión'); ?>
+
 <?php $__env->startPush('styles'); ?>
     <?php echo app('Illuminate\Foundation\Vite')('resources/css/teacher/dimension_comments/index.css'); ?>
 <?php $__env->stopPush(); ?>
+
 <?php $__env->startSection('content'); ?>
 
 <div class="container">
@@ -12,6 +14,18 @@
     
     <form method="GET" action="<?php echo e(route('teacher.dimension_comments.index')); ?>" class="mb-3">
 
+        
+        <label class="form-label">Seleccionar año</label>
+        <select name="academic_year_id" class="form-control mb-2" onchange="this.form.submit()">
+            <?php $__currentLoopData = $years; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $y): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($y->id); ?>"
+                    <?php echo e($yearId == $y->id ? 'selected' : ''); ?>>
+                    <?php echo e($y->year); ?> (<?php echo e($y->status); ?>)
+                </option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </select>
+
+        
         <label class="form-label">Seleccionar materia</label>
         <select name="teacher_subject_id" class="form-control mb-2" onchange="this.form.submit()">
             <option value="">-- Seleccione --</option>
@@ -41,14 +55,16 @@
 
     </form>
 
+    
     <?php if($assignment): ?>
 
         <p class="mb-3">
             <strong>Materia:</strong> <?php echo e($assignment->subject->name); ?> |
             <strong>Grado:</strong> <?php echo e($assignment->grade->name); ?> |
-            <strong>Período:</strong> <?php echo e(request('period_id')); ?>
+            <strong>Año:</strong> <?php echo e($years->where('id', $yearId)->first()->year ?? ''); ?> |
+            <strong>Período:</strong> <?php echo e($selectedPeriod->name ?? 'Sin seleccionar'); ?>
 
-        </p>
+         </p>
 
         
         <?php if(session('success')): ?>
@@ -65,34 +81,26 @@
             <input type="hidden" name="teacher_subject_id" value="<?php echo e($assignment->id); ?>">
             <input type="hidden" name="grade_id" value="<?php echo e($assignment->grade_id); ?>">
             <input type="hidden" name="period_id" value="<?php echo e(request('period_id')); ?>">
+            <input type="hidden" name="academic_year_id" value="<?php echo e($yearId); ?>">
 
             <div class="card p-4">
 
                 
                 <div class="mb-3">
                     <label>📊 Saber</label>
-                    <textarea name="comments[saber]" class="form-control" rows="3">
-                        <?php echo e($comments['saber']->comment ?? ''); ?>
-
-                    </textarea>
+                    <textarea name="comments[saber]" class="form-control" rows="3"><?php echo e($comments['saber']->comment ?? ''); ?></textarea>
                 </div>
 
                 
                 <div class="mb-3">
                     <label>🛠 Hacer</label>
-                    <textarea name="comments[hacer]" class="form-control" rows="3">
-                        <?php echo e($comments['hacer']->comment ?? ''); ?>
-
-                    </textarea>
+                    <textarea name="comments[hacer]" class="form-control" rows="3"><?php echo e($comments['hacer']->comment ?? ''); ?></textarea>
                 </div>
 
                 
                 <div class="mb-3">
                     <label>🤝 Ser</label>
-                    <textarea name="comments[ser]" class="form-control" rows="3">
-                        <?php echo e($comments['ser']->comment ?? ''); ?>
-
-                    </textarea>
+                    <textarea name="comments[ser]" class="form-control" rows="3"><?php echo e($comments['ser']->comment ?? ''); ?></textarea>
                 </div>
 
             </div>

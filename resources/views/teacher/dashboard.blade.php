@@ -8,7 +8,7 @@
 
 <div class="container">
 
-    <h2>📚 Mis materias</h2>
+    <h2>📚 Mis Asignaturas</h2>
 
     <div class="grid">
 

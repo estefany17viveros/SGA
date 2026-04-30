@@ -37,7 +37,7 @@
 
         @if($activeYear)
             <a href="{{ route('admin.periods.index', $activeYear->id) }}" class="block px-4 py-2 hover:bg-gray-200">
-                Periodos
+                Trimestres
             </a>
         @endif
 
@@ -57,7 +57,7 @@
         </a>
 
         <a href="{{ route('admin.enrollments.index') }}" class="block px-4 py-2 hover:bg-gray-200">
-            Matrículas
+                Asignaturas
         </a>
 
         <a href="{{ route('admin.enrollments.graduated') }}" class="block px-4 py-2 hover:bg-gray-200">
@@ -75,20 +75,20 @@
     </div>
 </div>
 
-<!-- 🔽 MATERIAS -->
+<!-- 🔽 ASIGNATURAS -->
 <div class="relative">
     <button onclick="toggleMenu('menu4')" class="text-white">
-        Materias ▾
+        Asignaturas ▾
     </button>
 
     <div id="menu4" class="hidden absolute bg-white text-black mt-2 rounded shadow-lg w-48 z-50">
 
         <a href="{{ route('admin.subjects.index') }}" class="block px-4 py-2 hover:bg-gray-200">
-            Ver materias
+            Ver asignaturas
         </a>
 
         <a href="{{ route('admin.subjects.create') }}" class="block px-4 py-2 hover:bg-gray-200">
-            Crear materia
+            Crear asignatura
         </a>
 
     </div>
