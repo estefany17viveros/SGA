@@ -27,38 +27,46 @@
 /* ========== CONTAINER ================ */
 /* ===================================== */
 
+/* ===================================== */
+/* ========== CONTAINER ================ */
+/* ===================================== */
+
 .container {
-    max-width: 1050px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 30px 20px;
-    animation: fadeInUp 0.5s ease;
+    animation: fadeInUp 0.45s ease;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ===================================== */
-/* ========== HEADER ROW =============== */
+/* ========== HEADER =================== */
 /* ===================================== */
 
 .d-flex.justify-content-between.align-items-center.mb-3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 26px;
     flex-wrap: wrap;
     gap: 14px;
-     background: linear-gradient(135deg,
+    background: linear-gradient(135deg,
         var(--azul-profundo) 0%,
         #1565c0 40%,
         var(--azul-medio) 65%,
         var(--verde-primario) 100%
     );
-      border-radius: 16px;
+    border-radius: 16px;
     padding: 22px 28px;
+    margin-bottom: 22px;
     box-shadow: 0 6px 24px rgba(15, 76, 129, 0.3);
     position: relative;
     overflow: hidden;
 }
 
-/* Destello decorativo */
 .d-flex.justify-content-between.align-items-center.mb-3::before {
     content: '';
     position: absolute;
@@ -78,29 +86,60 @@
 }
 
 .container h2 {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 800;
     color: var(--blanco);
     margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
     position: relative;
     z-index: 1;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     letter-spacing: -0.01em;
 }
 
-/* Subrayado verde bajo el título */
 .container h2::after {
     content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 50px;
-    height: 3px;
+    display: block;
+    margin-top: 5px;
+    width: 50px; height: 3px;
     background: linear-gradient(90deg, var(--verde-claro), transparent);
     border-radius: 2px;
+}
+
+/* Botones del header */
+.d-flex.justify-content-between.align-items-center.mb-3 .btn-success {
+    background: var(--verde-primario);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blanco);
+    box-shadow: 0 2px 8px rgba(38, 166, 154, 0.35);
+    position: relative; z-index: 1;
+    transition: background 0.15s;
+    text-decoration: none;
+}
+
+.d-flex.justify-content-between.align-items-center.mb-3 .btn-success:hover {
+    background: #1e8e82;
+}
+
+.d-flex.justify-content-between.align-items-center.mb-3 .btn-secondary {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--blanco);
+    position: relative; z-index: 1;
+    backdrop-filter: blur(4px);
+    transition: background 0.15s;
+    text-decoration: none;
+}
+
+.d-flex.justify-content-between.align-items-center.mb-3 .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.28);
 }
 
 /* ===================================== */

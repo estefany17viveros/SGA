@@ -55,6 +55,7 @@ class TeacherSubjectController extends Controller
             'subject_id' => 'required|exists:subjects,id',
             'grade_id' => 'required|exists:grades,id',
             'group_id' => 'nullable|exists:groups,id',
+              'weekly_hours' => 'required|integer|min:1|max:40',
         ]);
 
         $activeYear = AcademicYear::where('status', 'activo')->first();
@@ -71,6 +72,8 @@ class TeacherSubjectController extends Controller
             'grade_id' => $request->grade_id,
             'group_id' => $groupId,
             'academic_year_id' => $activeYear->id,
+
+    'weekly_hours' => $request->weekly_hours,
         ])->exists();
 
         if ($exists) {
@@ -83,6 +86,7 @@ class TeacherSubjectController extends Controller
             'grade_id' => $request->grade_id,
             'group_id' => $groupId,
             'academic_year_id' => $activeYear->id,
+            'weekly_hours' => $request->weekly_hours,
         ]);
 
         return redirect()->route('admin.teacher-subjects.index')
@@ -142,6 +146,7 @@ class TeacherSubjectController extends Controller
             'grade_id' => 'required',
             'group_id' => 'nullable',
             'status' => 'required|boolean',
+            'weekly_hours' => 'required|integer|min:1|max:40',
         ]);
 
         $teacherSubject->update([
@@ -150,6 +155,7 @@ class TeacherSubjectController extends Controller
             'grade_id' => $request->grade_id,
             'group_id' => $request->group_id ?: null,
             'status' => $request->status,
+            'weekly_hours' => $request->weekly_hours,
         ]);
 
         return redirect()->route('admin.teacher-subjects.index')

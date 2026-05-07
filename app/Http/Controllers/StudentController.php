@@ -242,20 +242,23 @@ public function update(Request $request, Student $student)
         'eps' => 'nullable|string|max:255',
         'blood_type' => 'nullable|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
 
-        'medical_conditions' => 'nullable|string',
+        // 🔥 NUEVO: OBSERVACIONES
         'observations' => 'nullable|string',
 
+        // 🔥 CERTIFICADO NORMAL
         'certificate_file' => 'nullable|file|mimes:pdf|max:2048',
 
         'population_type' => 'nullable|in:ninguno,afro,indigena,desplazado',
 
-        'population_certificate' => 'nullable|file|mimes:pdf',
+        // 🔥 CERTIFICADO POBLACIÓN
+        'population_certificate' => 'nullable|file|mimes:pdf|max:2048',
     ]);
 
     $data = $request->all();
 
-    // FOTO
+    // 🔥 FOTO
     if ($request->hasFile('photo')) {
+
         if ($student->photo && Storage::disk('public')->exists($student->photo)) {
             Storage::disk('public')->delete($student->photo);
         }
@@ -264,8 +267,9 @@ public function update(Request $request, Student $student)
             ->store('students/photos', 'public');
     }
 
-    // CERTIFICADO GENERAL
+    // 🔥 CERTIFICADO GENERAL (PDF)
     if ($request->hasFile('certificate_file')) {
+
         if ($student->certificate_file && Storage::disk('public')->exists($student->certificate_file)) {
             Storage::disk('public')->delete($student->certificate_file);
         }
@@ -274,8 +278,9 @@ public function update(Request $request, Student $student)
             ->store('students/certificates', 'public');
     }
 
-    // CERTIFICADO POBLACIÓN
+    // 🔥 CERTIFICADO POBLACIÓN
     if ($request->hasFile('population_certificate')) {
+
         if ($student->population_certificate && Storage::disk('public')->exists($student->population_certificate)) {
             Storage::disk('public')->delete($student->population_certificate);
         }
@@ -284,10 +289,15 @@ public function update(Request $request, Student $student)
             ->store('students/population', 'public');
     }
 
+    // 🔥 OBSERVACIONES (solo texto normal)
+    if ($request->filled('observations')) {
+        $data['observations'] = $request->observations;
+    }
+
     $student->update($data);
 
     return redirect()->route('admin.students.index')
-        ->with('success', 'Estudiante actualizado correctamente.');
+        ->with('success', '✅ Estudiante actualizado correctamente con observaciones y archivo.');
 }
     /**
      * Eliminar estudiante

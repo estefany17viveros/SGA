@@ -9,13 +9,14 @@ class Enrollment extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'student_id',
-        'grade_id',
-        'academic_year_id',
-        'group_id',
-        'status'
-    ];
+  protected $fillable = [
+    'student_id',
+    'grade_id',
+    'academic_year_id',
+    'group_id',
+    'status',
+    'graduation_year'
+];
 
     // Relaciones
     public function student()

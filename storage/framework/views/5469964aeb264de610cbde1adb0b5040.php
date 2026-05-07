@@ -25,6 +25,7 @@
                 <tr>
                     <th>Profesor</th>
                     <th>Materia</th>
+                    <th>Horas</th>
                     <th>Grado</th>
                     <th>Grupo</th>
                     <th>Año actual</th>
@@ -49,7 +50,9 @@
                         </td>
 
                         <td><?php echo e($a->subject->name ?? ''); ?></td>
-
+                        
+                        <td><?php echo e($a->weekly_hours); ?> HS</td>
+                        
                         <td><?php echo e($a->grade->name ?? ''); ?></td>
 
                         <td><?php echo e($a->group ? $a->group->name : 'General'); ?></td>

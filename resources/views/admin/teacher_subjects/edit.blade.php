@@ -65,7 +65,16 @@
         @endforeach
     </select>
 
-    <br><br>
+   <br><br>
+
+<label>Horas por semana</label>
+<div style="display:flex; align-items:center; gap:5px;">
+    <input type="number" name="weekly_hours"
+           value="{{ $assignment->weekly_hours }}"
+           min="1" max="40" required
+           style="width:80px;">
+    <span><strong>HS</strong></span>
+</div>
 
     <label>Estado</label>
     <select name="status">

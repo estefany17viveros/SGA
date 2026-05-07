@@ -1,43 +1,43 @@
-@extends('layouts.app')
 
-@section('title', 'Estudiantes del grado')
 
-@push('styles')
-    @vite('resources/css/teacher/director/student.css')
-@endpush
+<?php $__env->startSection('title', 'Estudiantes del grado'); ?>
 
-@section('content')
+<?php $__env->startPush('styles'); ?>
+    <?php echo app('Illuminate\Foundation\Vite')('resources/css/teacher/director/student.css'); ?>
+<?php $__env->stopPush(); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="container">
 
-    <h2>👨‍🎓 Estudiantes del grado: {{ $grade->name ?? '' }}</h2>
+    <h2>👨‍🎓 Estudiantes del grado: <?php echo e($grade->name ?? ''); ?></h2>
 
-    <a href="{{ url()->previous() }}" class="btn btn-secondary btn-sm mb-3">
+    <a href="<?php echo e(url()->previous()); ?>" class="btn btn-secondary btn-sm mb-3">
         ⬅ Volver
     </a>
 
-    @if($students->isEmpty())
+    <?php if($students->isEmpty()): ?>
         <div class="alert alert-warning text-center">
             No hay estudiantes en este grado
         </div>
-    @else
+    <?php else: ?>
 
-        {{-- 🔍 FILTRO --}}
+        
         <form method="GET" class="mb-3">
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
 
                 <input type="text" name="name" placeholder="Nombre"
-                    value="{{ request('name') }}"
+                    value="<?php echo e(request('name')); ?>"
                     class="form-control" style="max-width:200px;">
 
                 <input type="text" name="last_name" placeholder="Apellido"
-                    value="{{ request('last_name') }}"
+                    value="<?php echo e(request('last_name')); ?>"
                     class="form-control" style="max-width:200px;">
 
                 <button type="submit" class="btn btn-primary btn-sm">
                     🔍 Buscar
                 </button>
 
-                <a href="{{ route('teacher.director.students', $grade->id) }}"
+                <a href="<?php echo e(route('teacher.director.students', $grade->id)); ?>"
                    class="btn btn-secondary btn-sm">
                     ❌ Limpiar
                 </a>
@@ -45,11 +45,11 @@
             </div>
         </form>
 
-        {{-- 🔥 FORMULARIO GLOBAL (TODO DENTRO) --}}
-        <form action="{{ route('teacher.director.note.store') }}" method="POST">
-            @csrf
+        
+        <form action="<?php echo e(route('teacher.director.note.store')); ?>" method="POST">
+            <?php echo csrf_field(); ?>
 
-            <input type="hidden" name="grade_id" value="{{ $grade->id }}">
+            <input type="hidden" name="grade_id" value="<?php echo e($grade->id); ?>">
 
             <table class="table table-bordered table-hover">
 
@@ -64,29 +64,31 @@
 
                 <tbody>
 
-                    @foreach($students as $i => $student)
+                    <?php $__currentLoopData = $students; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                        @php
+                        <?php
                             $note = \App\Models\DisciplinaryNote::where('student_id', $student->id)
                                 ->where('grade_id', $grade->id)
                                 ->first();
-                        @endphp
+                        ?>
 
                         <tr>
-                            <td>{{ $i + 1 }}</td>
+                            <td><?php echo e($i + 1); ?></td>
 
                             <td>
-                                {{ $student->first_name }} {{ $student->last_name }}
+                                <?php echo e($student->first_name); ?> <?php echo e($student->last_name); ?>
+
                             </td>
 
                             <td>
-                                {{ $student->identification_number }}
+                                <?php echo e($student->identification_number); ?>
+
                             </td>
 
                             <td>
                                 <input type="number"
-                                       name="notes[{{ $student->id }}]"
-                                       value="{{ $note->note ?? '' }}"
+                                       name="notes[<?php echo e($student->id); ?>]"
+                                       value="<?php echo e($note->note ?? ''); ?>"
                                        step="0.1"
                                        min="0"
                                        max="5"
@@ -95,13 +97,13 @@
                             </td>
                         </tr>
 
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                 </tbody>
 
             </table>
 
-            {{-- 🔥 BOTÓN DENTRO DEL FORM --}}
+            
             <div class="text-end mt-3">
                 <button type="submit" class="btn btn-success">
                     💾 Guardar todas las notas
@@ -110,7 +112,8 @@
 
         </form>
 
-    @endif
+    <?php endif; ?>
 
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\SGA\resources\views/teacher/director/students.blade.php ENDPATH**/ ?>

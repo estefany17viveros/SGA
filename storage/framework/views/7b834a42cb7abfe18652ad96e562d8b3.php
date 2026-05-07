@@ -1,79 +1,82 @@
-@extends('layouts.app')
 
-@section('title', 'Estudiantes Egresados')
-@push('styles')
-    @vite(['resources/css/admin/enrollments/graduated.css'])
-@endpush
-@section('content')
+
+<?php $__env->startSection('title', 'Estudiantes Egresados'); ?>
+<?php $__env->startPush('styles'); ?>
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/admin/enrollments/graduated.css']); ?>
+<?php $__env->stopPush(); ?>
+<?php $__env->startSection('content'); ?>
 
 <div class="container">
 
-    {{-- HEADER --}}
+    
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>🎓 Estudiantes Egresados</h2>
 
         <div class="d-flex gap-2">
-            <a href="{{ route('admin.enrollments.create_graduate') }}" class="btn btn-success">
+            <a href="<?php echo e(route('admin.enrollments.create_graduate')); ?>" class="btn btn-success">
                 ➕ Nuevo Egresado
             </a>
 
-            <a href="{{ route('admin.enrollments.index') }}" class="btn btn-secondary">
+            <a href="<?php echo e(route('admin.enrollments.index')); ?>" class="btn btn-secondary">
                 ← Volver
             </a>
         </div>
     </div>
 
-    {{-- MENSAJES --}}
-    @if(session('success'))
+    
+    <?php if(session('success')): ?>
         <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+            <?php echo e(session('success')); ?>
 
-    @if(session('error'))
+        </div>
+    <?php endif; ?>
+
+    <?php if(session('error')): ?>
         <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+            <?php echo e(session('error')); ?>
 
-    {{-- FILTROS --}}
+        </div>
+    <?php endif; ?>
+
+    
     <div class="card mb-3 p-3">
         <form method="GET">
 
             <div class="row">
 
-                {{-- APELLIDO --}}
+                
                 <div class="col-md-4">
                     <label>Buscar por apellido</label>
                     <input type="text"
                            name="last_name"
                            class="form-control"
-                           value="{{ request('last_name') }}"
+                           value="<?php echo e(request('last_name')); ?>"
                            placeholder="Ej: Pérez">
                 </div>
 
-                {{-- AÑO --}}
+                
                 <div class="col-md-4">
                     <label>Filtrar por año</label>
                     <select name="year" class="form-control">
 
                         <option value="">Todos</option>
 
-                        @foreach($years ?? [] as $year)
-                            <option value="{{ $year }}"
-                                {{ request('year') == $year ? 'selected' : '' }}>
-                                {{ $year }}
+                        <?php $__currentLoopData = $years ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $year): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($year); ?>"
+                                <?php echo e(request('year') == $year ? 'selected' : ''); ?>>
+                                <?php echo e($year); ?>
+
                             </option>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                     </select>
                 </div>
 
-                {{-- BOTONES --}}
+                
                 <div class="col-md-4 d-flex align-items-end gap-2">
                     <button class="btn btn-primary">🔍 Buscar</button>
 
-                    <a href="{{ route('admin.enrollments.graduated') }}" class="btn btn-secondary">
+                    <a href="<?php echo e(route('admin.enrollments.graduated')); ?>" class="btn btn-secondary">
                         Limpiar
                     </a>
                 </div>
@@ -83,7 +86,7 @@
         </form>
     </div>
 
-    {{-- TABLA --}}
+    
     <div class="card">
         <div class="table-responsive">
 
@@ -100,32 +103,35 @@
 
                 <tbody>
 
-                    @forelse($enrollments as $enrollment)
+                    <?php $__empty_1 = true; $__currentLoopData = $enrollments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $enrollment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
                         <tr>
 
-                            {{-- ESTUDIANTE --}}
+                            
                             <td>
-                                {{ $enrollment->student->first_name ?? '' }}
-                                {{ $enrollment->student->last_name ?? '' }}
+                                <?php echo e($enrollment->student->first_name ?? ''); ?>
+
+                                <?php echo e($enrollment->student->last_name ?? ''); ?>
+
                             </td>
 
-                            {{-- AÑO --}}
+                            
                             <td class="text-center">
-                                {{ $enrollment->graduation_year ?? 'Sin año' }}
+                                <?php echo e($enrollment->graduation_year ?? 'Sin año'); ?>
+
                             </td>
 
-                            {{-- ESTADO --}}
+                            
                             <td class="text-center">
                                 <span class="badge bg-success">
                                     🎓 Egresado
                                 </span>
                             </td>
 
-                            {{-- ACCIONES (CORREGIDO) --}}
+                            
                             <td class="text-center">
 
-                                <a href="{{ route('admin.students.show', $enrollment->student_id) }}"
+                                <a href="<?php echo e(route('admin.students.show', $enrollment->student_id)); ?>"
                                    class="btn btn-info btn-sm">
                                     👁 Ver estudiante
                                 </a>
@@ -134,7 +140,7 @@
 
                         </tr>
 
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
                         <tr>
                             <td colspan="4" class="text-center">
@@ -142,15 +148,16 @@
                             </td>
                         </tr>
 
-                    @endforelse
+                    <?php endif; ?>
 
                 </tbody>
 
             </table>
 
-            {{-- PAGINACIÓN --}}
+            
             <div class="mt-3 px-3">
-                {{ $enrollments->links() }}
+                <?php echo e($enrollments->links()); ?>
+
             </div>
 
         </div>
@@ -158,4 +165,5 @@
 
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\SGA\resources\views/admin/enrollments/graduated.blade.php ENDPATH**/ ?>

@@ -12,6 +12,8 @@ class TeacherSubject extends Model
         'grade_id',
         'group_id',
         'academic_year_id',
+        'is_director',
+        'weekly_hours',
         'status'
     ];
 
@@ -37,9 +39,9 @@ class TeacherSubject extends Model
         return $this->belongsTo(Group::class);
     }
 
-public function dimension_Comments()
+public function dimensionComments()
 {
-    return $this->hasMany(Dimension_Comment::class);
+    return $this->hasMany(DimensionComment::class);
 }
 
    public function academicYear()

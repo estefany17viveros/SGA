@@ -27,6 +27,7 @@
                 <tr>
                     <th>Profesor</th>
                     <th>Materia</th>
+                    <th>Horas</th>
                     <th>Grado</th>
                     <th>Grupo</th>
                     <th>Año actual</th>
@@ -50,7 +51,9 @@
                         </td>
 
                         <td>{{ $a->subject->name ?? '' }}</td>
-
+                        
+                        <td>{{ $a->weekly_hours }} HS</td>
+                        
                         <td>{{ $a->grade->name ?? '' }}</td>
 
                         <td>{{ $a->group ? $a->group->name : 'General' }}</td>

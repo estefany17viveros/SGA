@@ -31,6 +31,7 @@
 @import "./admin/enrollments/create.css";
 @import "./admin/enrollments/edit.css";
 @import "./admin/enrollments/graduated.css";
+@import "./admin/enrollments/graduatescreate.css";
 @import "./admin/enrollments/index.css";
 @import "./admin/enrollments/show.css";
 @import "./admin/enrollments/retired.css";

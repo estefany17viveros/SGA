@@ -81,7 +81,7 @@
 
     /* 🔥 CLAVE: recorta horizontalmente */
     max-width: 1600px;   /* controla qué tan ancho es */
-    margin: 30px auto;     /* lo centra */
+    margin: 1px 150px;     /* lo centra */
 
     border-radius: 12px;
 }

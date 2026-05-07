@@ -57,7 +57,7 @@
         </a>
 
         <a href="{{ route('admin.enrollments.index') }}" class="block px-4 py-2 hover:bg-gray-200">
-                Asignaturas
+                Matriculas
         </a>
 
         <a href="{{ route('admin.enrollments.graduated') }}" class="block px-4 py-2 hover:bg-gray-200">

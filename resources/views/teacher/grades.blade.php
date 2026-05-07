@@ -14,7 +14,7 @@
 
     <div class="grid">
 
-        @foreach($assignments as $grade)
+        @forelse($grades as $grade)
 
             <div class="card">
 
@@ -26,7 +26,9 @@
 
             </div>
 
-        @endforeach
+        @empty
+            <p>No hay grados asignados.</p>
+        @endforelse
 
     </div>
 

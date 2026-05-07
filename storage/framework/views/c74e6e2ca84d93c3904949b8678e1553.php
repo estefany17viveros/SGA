@@ -1,114 +1,134 @@
 
 <?php $__env->startSection('title', 'Comentarios por Dimensión'); ?>
-
 <?php $__env->startPush('styles'); ?>
-    <?php echo app('Illuminate\Foundation\Vite')('resources/css/teacher/dimension_comments/index.css'); ?>
+   <?php echo app('Illuminate\Foundation\Vite')(['resources/css/teacher/dimension_comments/index.css']); ?>
 <?php $__env->stopPush(); ?>
-
 <?php $__env->startSection('content'); ?>
 
 <div class="container">
 
-    <h3 class="mb-4">📝 Comentarios por Dimensión</h3>
+    <h3>📝 Comentarios por Dimensión</h3>
 
     
-    <form method="GET" action="<?php echo e(route('teacher.dimension_comments.index')); ?>" class="mb-3">
+    <form method="GET" action="<?php echo e(route('teacher.dimension_comments.index')); ?>" class="filtros-form">
 
-        
-        <label class="form-label">Seleccionar año</label>
-        <select name="academic_year_id" class="form-control mb-2" onchange="this.form.submit()">
-            <?php $__currentLoopData = $years; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $y): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <option value="<?php echo e($y->id); ?>"
-                    <?php echo e($yearId == $y->id ? 'selected' : ''); ?>>
-                    <?php echo e($y->year); ?> (<?php echo e($y->status); ?>)
+        <div class="filtro-grupo">
+            <label>Año</label>
+            <select name="academic_year_id" onchange="this.form.submit()">
+                <?php $__currentLoopData = $years; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $y): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($y->id); ?>" <?php echo e($yearId == $y->id ? 'selected' : ''); ?>>
+                        <?php echo e($y->year); ?>
+
+                    </option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </select>
+        </div>
+
+        <div class="filtro-grupo">
+            <label>Materia</label>
+            <select name="teacher_subject_id" onchange="this.form.submit()">
+                <option value="">-- Seleccione --</option>
+
+                
+                <option value="discipline_all"
+                    <?php echo e(request('teacher_subject_id') == 'discipline_all' ? 'selected' : ''); ?>>
+                    🚨 Disciplina
                 </option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </select>
 
-        
-        <label class="form-label">Seleccionar materia</label>
-        <select name="teacher_subject_id" class="form-control mb-2" onchange="this.form.submit()">
-            <option value="">-- Seleccione --</option>
+                
+                <?php $__currentLoopData = $assignments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $a): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php if($a->id !== 'discipline_all'): ?>
+                        <option value="<?php echo e($a->id); ?>"
+                            <?php echo e(request('teacher_subject_id') == $a->id ? 'selected' : ''); ?>>
+                            <?php echo e($a->subject->name ?? ''); ?> - <?php echo e($a->grade->name ?? ''); ?>
 
-            <?php $__currentLoopData = $assignments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $a): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <option value="<?php echo e($a->id); ?>"
-                    <?php echo e(request('teacher_subject_id') == $a->id ? 'selected' : ''); ?>>
-                    <?php echo e($a->subject->name); ?> - <?php echo e($a->grade->name); ?>
+                        </option>
+                    <?php endif; ?>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </select>
+        </div>
 
-                </option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </select>
+        <div class="filtro-grupo">
+            <label>Periodo</label>
+            <select name="period_id" onchange="this.form.submit()">
+                <?php $__currentLoopData = $periods; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($p->id); ?>" <?php echo e(request('period_id') == $p->id ? 'selected' : ''); ?>>
+                        <?php echo e($p->name); ?>
 
-        
-        <label class="form-label">Seleccionar período</label>
-        <select name="period_id" class="form-control" onchange="this.form.submit()">
-            <option value="">-- Seleccione período --</option>
+                    </option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </select>
+        </div>
 
-            <?php $__currentLoopData = $periods; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $period): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <option value="<?php echo e($period->id); ?>"
-                    <?php echo e(request('period_id') == $period->id ? 'selected' : ''); ?>>
-                    <?php echo e($period->name); ?>
-
-                </option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </select>
+        <button type="submit" class="btn-filtrar">🔍 Filtrar</button>
 
     </form>
 
     
-    <?php if($assignment): ?>
+    <?php if($assignment && request('period_id')): ?>
 
-        <p class="mb-3">
-            <strong>Materia:</strong> <?php echo e($assignment->subject->name); ?> |
-            <strong>Grado:</strong> <?php echo e($assignment->grade->name); ?> |
-            <strong>Año:</strong> <?php echo e($years->where('id', $yearId)->first()->year ?? ''); ?> |
-            <strong>Período:</strong> <?php echo e($selectedPeriod->name ?? 'Sin seleccionar'); ?>
-
-         </p>
-
-        
-        <?php if(session('success')): ?>
-            <div class="alert alert-success">
-                <?php echo e(session('success')); ?>
-
-            </div>
-        <?php endif; ?>
-
-        
-        <form method="POST" action="<?php echo e(route('teacher.dimension_comments.store')); ?>">
+        <form method="POST" action="<?php echo e(route('teacher.dimension_comments.store')); ?>" class="form-comentarios">
             <?php echo csrf_field(); ?>
 
             <input type="hidden" name="teacher_subject_id" value="<?php echo e($assignment->id); ?>">
-            <input type="hidden" name="grade_id" value="<?php echo e($assignment->grade_id); ?>">
+            <?php if(!$isDiscipline): ?>
+                <input type="hidden" name="grade_id" value="<?php echo e($assignment->grade_id); ?>">
+            <?php endif; ?>
             <input type="hidden" name="period_id" value="<?php echo e(request('period_id')); ?>">
             <input type="hidden" name="academic_year_id" value="<?php echo e($yearId); ?>">
 
-            <div class="card p-4">
+            
+            <?php if($isDiscipline): ?>
 
-                
-                <div class="mb-3">
-                    <label>📊 Saber</label>
-                    <textarea name="comments[saber]" class="form-control" rows="3"><?php echo e($comments['saber']->comment ?? ''); ?></textarea>
+                <div class="dimensiones-grid disciplina-solo">
+                    <div class="dimension-card disciplina">
+                        <div class="dimension-header">
+                            <span class="dimension-icon">🚨</span>
+                            <span class="dimension-title">Disciplina</span>
+                        </div>
+                        <textarea name="comments[disciplina]" class="form-control" rows="8"
+                            placeholder="Escribe el comentario de disciplina..."><?php echo e($comments['disciplina']->comment ?? ''); ?></textarea>
+                    </div>
                 </div>
 
-                
-                <div class="mb-3">
-                    <label>🛠 Hacer</label>
-                    <textarea name="comments[hacer]" class="form-control" rows="3"><?php echo e($comments['hacer']->comment ?? ''); ?></textarea>
+            
+            <?php else: ?>
+
+                <div class="dimensiones-grid">
+
+                    <div class="dimension-card saber">
+                        <div class="dimension-header">
+                            <span class="dimension-icon">📘</span>
+                            <span class="dimension-title">Saber</span>
+                        </div>
+                        <textarea name="comments[saber]" class="form-control" rows="7"
+                            placeholder="Comentario sobre el saber..."><?php echo e(trim($comments['saber']->comment ?? '')); ?></textarea>
+                    </div>
+
+                    <div class="dimension-card hacer">
+                        <div class="dimension-header">
+                            <span class="dimension-icon">🛠</span>
+                            <span class="dimension-title">Hacer</span>
+                        </div>
+                        <textarea name="comments[hacer]" class="form-control" rows="7"
+                            placeholder="Comentario sobre el hacer..."><?php echo e(trim($comments['hacer']->comment ?? '')); ?></textarea>
+                    </div>
+
+                    <div class="dimension-card ser">
+                        <div class="dimension-header">
+                            <span class="dimension-icon">🤝</span>
+                            <span class="dimension-title">Ser</span>
+                        </div>
+                        <textarea name="comments[ser]" class="form-control" rows="7"
+                            placeholder="Comentario sobre el ser..."><?php echo e(trim($comments['ser']->comment ?? '')); ?></textarea>
+                    </div>
+
                 </div>
 
-                
-                <div class="mb-3">
-                    <label>🤝 Ser</label>
-                    <textarea name="comments[ser]" class="form-control" rows="3"><?php echo e($comments['ser']->comment ?? ''); ?></textarea>
-                </div>
+            <?php endif; ?>
 
-            </div>
-
-            <div class="mt-3 text-end">
-                <button class="btn btn-primary">
-                    💾 Guardar
-                </button>
+            <div class="form-footer">
+                <button type="submit" class="btn-guardar">💾 Guardar Comentarios</button>
             </div>
 
         </form>

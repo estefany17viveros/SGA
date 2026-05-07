@@ -24,43 +24,41 @@
 
     $year = AcademicYear::where('status', 'activo')->first();
 
-    // ✅ SIEMPRE colección
     $periods = collect();
 
     if ($year) {
         $periods = Period::where('academic_year_id', $year->id)
             ->orderBy('number')
-            ->get(); // 🔥 SIN toArray()
+            ->get();
     }
 
-    // 🔥 ORDENAR POR PROMEDIO
-    $studentsSorted = $students->sortByDesc(function($student) use ($teacher_subject_id, $periods) {
+// 🔥 ORDENAR POR APELLIDOS
+$studentsSorted = $students->sortBy(function ($student) {
 
-        $total = 0;
-        $count = 0;
+    $parts = preg_split('/\s+/', trim($student->full_name));
 
-        foreach ($periods as $period) {
-            $score = $student->scores
-                ->where('teacher_subject_id', $teacher_subject_id)
-                ->where('period_id', $period->id) // ✅ correcto
-                ->first();
+    // NOMBRES COLOMBIANOS:
+    // NOMBRE NOMBRE APELLIDO APELLIDO
 
-            if ($score && $score->total !== null) {
-                $total += $score->total;
-                $count++;
-            }
-        }
+    $total = count($parts);
 
-        return $count > 0 
-            ? floor(($total / $count) * 100) / 100 
-            : 0;
-    })->values();
+    if ($total >= 4) {
+
+        $apellido1 = $parts[$total - 2];
+        $apellido2 = $parts[$total - 1];
+
+        return strtolower($apellido1 . ' ' . $apellido2);
+    }
+
+    return strtolower($student->full_name);
+
+})->values();
+
 @endphp
 
 <div class="table-responsive mt-3">
     <table class="table table-bordered">
 
-        {{-- ✅ HEADER DINÁMICO --}}
         <thead class="table-dark">
             <tr>
                 <th>#</th>
@@ -100,12 +98,11 @@
                             $count++;
                         }
 
-                        // ✅ usar ID como clave
                         $periodTotals[$period->id] = $value;
                     }
 
                     $averageFinal = $count > 0 
-                        ? floor(($totalFinal / $count) * 100) / 100 
+                        ? floor(($totalFinal / $count) * 10) / 10 
                         : 0;
 
                     // 🔥 POSICIÓN
@@ -129,7 +126,7 @@
                         }
 
                         $sAvg = $sCount > 0 
-                            ? floor(($sTotal / $sCount) * 100) / 100 
+                            ? floor(($sTotal / $sCount) * 10) / 10 
                             : 0;
 
                         if ($index > 0) {
@@ -151,7 +148,7 @@
                             }
 
                             $prevAvg = $prevCount > 0 
-                                ? floor(($prevTotal / $prevCount) * 100) / 100 
+                                ? floor(($prevTotal / $prevCount) * 10) / 10 
                                 : 0;
 
                             if ($sAvg != $prevAvg) {
@@ -170,20 +167,21 @@
 
                     <td>{{ $student->full_name }}</td>
 
-                    {{-- ✅ NOTAS POR PERIODO --}}
+                    {{-- NOTAS POR PERIODO --}}
                     @foreach($periods as $period)
                         <td class="text-center">
                             <span class="badge bg-secondary">
                                 {{ isset($periodTotals[$period->id]) 
-                                    ? number_format(floor($periodTotals[$period->id] * 100) / 100, 2, '.', '') 
+                                    ? number_format(floor($periodTotals[$period->id] * 10) / 10, 1, '.', '') 
                                     : '-' }}
                             </span>
                         </td>
                     @endforeach
 
+                    {{-- 🔥 PROMEDIO (TRUNCADO, NO REDONDEA) --}}
                     <td class="text-center">
                         <span class="badge bg-success">
-                            {{ number_format($averageFinal, 2, '.', '') }}
+                            {{ number_format(floor($averageFinal * 10) / 10, 1, '.', '') }}
                         </span>
                     </td>
 

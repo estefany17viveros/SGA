@@ -688,7 +688,7 @@
 
 <body>
 
-@php
+<?php
 
 $isLastPeriod = \App\Models\Period::where('academic_year_id', $period->academic_year_id)
     ->orderBy('id')
@@ -708,11 +708,11 @@ if (!function_exists('truncar1')) {
     }
 }
 
-@endphp
+?>
 
-@foreach($boletines as $data)
+<?php $__currentLoopData = $boletines; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-@php
+<?php
 
 $student           = $data['student'];
 $scores            = $data['scores'];
@@ -747,29 +747,29 @@ $discNivelNombre = match(true) {
     default                => 'Bajo',
 };
 
-@endphp
+?>
 
 <div class="pagina-boletin">
 
-    @if(!empty($logoBase64))
-        <img class="marca-agua" src="{{ $logoBase64 }}" alt="">
-    @endif
+    <?php if(!empty($logoBase64)): ?>
+        <img class="marca-agua" src="<?php echo e($logoBase64); ?>" alt="">
+    <?php endif; ?>
 
     <div class="bol-wrap">
 
         <span class="franja-top"></span>
         <span class="franja-gold"></span>
 
-        {{-- CABECERA --}}
+        
         <table class="cab-table">
             <tr>
 
                 <td class="cab-logo-td">
 
-                    @if(!empty($logoBase64))
+                    <?php if(!empty($logoBase64)): ?>
 
                         <img
-                            src="{{ $logoBase64 }}"
+                            src="<?php echo e($logoBase64); ?>"
                             alt="Logo"
                             style="
                                 width:55px;
@@ -780,11 +780,11 @@ $discNivelNombre = match(true) {
                             "
                         >
 
-                    @else
+                    <?php else: ?>
 
                         <span class="logo-fb">ITAF</span>
 
-                    @endif
+                    <?php endif; ?>
 
                 </td>
 
@@ -812,7 +812,7 @@ $discNivelNombre = match(true) {
 
                     <span class="meta-fila">
                         Año lectivo:
-                        <strong>{{ $yearLectivo ?? '2025' }}</strong>
+                        <strong><?php echo e($yearLectivo ?? '2025'); ?></strong>
                     </span>
 
                     <span class="meta-fila">
@@ -822,12 +822,12 @@ $discNivelNombre = match(true) {
 
                     <span class="meta-fila">
                         Trimestre:
-                        <strong>{{ $period->name }}</strong>
+                        <strong><?php echo e($period->name); ?></strong>
                     </span>
 
                     <span class="meta-fila">
                         Fecha:
-                        <strong>{{ now()->format('d/m/Y') }}</strong>
+                        <strong><?php echo e(now()->format('d/m/Y')); ?></strong>
                     </span>
 
                 </td>
@@ -835,7 +835,7 @@ $discNivelNombre = match(true) {
             </tr>
         </table>
 
-        {{-- ESTUDIANTE --}}
+        
         <div class="est-wrap">
 
             <table class="est-table">
@@ -873,7 +873,8 @@ $discNivelNombre = match(true) {
                         <span class="est-lbl">Nombre del Estudiante</span>
 
                         <span class="est-nom">
-                            {{ strtoupper($student->full_name) }}
+                            <?php echo e(strtoupper($student->full_name)); ?>
+
                         </span>
 
                     </td>
@@ -885,7 +886,8 @@ $discNivelNombre = match(true) {
                         <span class="est-dlbl">Identificación</span>
 
                         <span class="est-dval">
-                            {{ $student->identification_number }}
+                            <?php echo e($student->identification_number); ?>
+
                         </span>
 
                     </td>
@@ -897,7 +899,8 @@ $discNivelNombre = match(true) {
                         <span class="est-dlbl">Grado</span>
 
                         <span class="est-dval">
-                            {{ $grade }}
+                            <?php echo e($grade); ?>
+
                         </span>
 
                     </td>
@@ -907,7 +910,7 @@ $discNivelNombre = match(true) {
 
         </div>
 
-        {{-- KPIs --}}
+        
         <div class="kpis-wrap">
 
             <table class="kpis-table">
@@ -923,7 +926,8 @@ $discNivelNombre = match(true) {
                             </span>
 
                             <span class="kpi-val">
-                                {{ truncar1($promedioAcumulado) }}
+                                <?php echo e(truncar1($promedioAcumulado)); ?>
+
                             </span>
 
                             <span class="kpi-sub">
@@ -943,7 +947,8 @@ $discNivelNombre = match(true) {
                             </span>
 
                             <span class="kpi-val">
-                                {{ $puesto ?? '—' }}
+                                <?php echo e($puesto ?? '—'); ?>
+
                             </span>
 
                             <span class="kpi-sub">
@@ -963,7 +968,8 @@ $discNivelNombre = match(true) {
                             </span>
 
                             <span class="kpi-val">
-                                {{ $scores->count() }}
+                                <?php echo e($scores->count()); ?>
+
                             </span>
 
                             <span class="kpi-sub">
@@ -983,11 +989,13 @@ $discNivelNombre = match(true) {
                             </span>
 
                             <span class="kpi-val" style="font-size:15px;">
-                                {{ $period->name }}
+                                <?php echo e($period->name); ?>
+
                             </span>
 
                             <span class="kpi-sub">
-                                {{ $yearLectivo ?? '2025' }}
+                                <?php echo e($yearLectivo ?? '2025'); ?>
+
                             </span>
 
                         </div>
@@ -998,12 +1006,12 @@ $discNivelNombre = match(true) {
 
         </div>
 
-        {{-- MATERIAS --}}
+        
         <div class="mats-wrap">
 
-            @foreach($scores as $score)
+            <?php $__currentLoopData = $scores; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $score): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-            @php
+            <?php
 
             $subject = optional($score->teacherSubject->subject)->name ?? 'Sin Asignatura';
 
@@ -1072,7 +1080,7 @@ $discNivelNombre = match(true) {
                 default      => 'Bajo',
             };
 
-            @endphp
+            ?>
 
             <div class="mat-card">
 
@@ -1082,53 +1090,58 @@ $discNivelNombre = match(true) {
                         <td class="mat-izq-td">
 
                             <span class="mat-nom">
-                                {{ $subject }}
+                                <?php echo e($subject); ?>
+
                             </span>
 
                             <span class="mat-doc">
 
                                 Docente:
-                                {{ strtoupper($teacher) }}
+                                <?php echo e(strtoupper($teacher)); ?>
 
-                                @if($horas)
+
+                                <?php if($horas): ?>
 
                                     <span class="mat-horas">
-                                        · {{ $horas }} h/sem
+                                        · <?php echo e($horas); ?> h/sem
                                     </span>
 
-                                @endif
+                                <?php endif; ?>
 
                             </span>
 
-                            @if($historial->isNotEmpty())
+                            <?php if($historial->isNotEmpty()): ?>
 
                                 <div style="margin-top:3px;">
 
-                                    @foreach($historial as $h)
+                                    <?php $__currentLoopData = $historial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $h): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                                         <span class="hist-pill">
 
-                                            {{ $h->period->name }}:
-                                            {{ truncar1($h->total) }}
+                                            <?php echo e($h->period->name); ?>:
+                                            <?php echo e(truncar1($h->total)); ?>
+
 
                                         </span>
 
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                                 </div>
 
-                            @endif
+                            <?php endif; ?>
 
                         </td>
 
                         <td class="mat-der-td">
 
-                            <span class="nvl-badge {{ $nivelClass }}">
-                                {{ $nivelNombre }}
+                            <span class="nvl-badge <?php echo e($nivelClass); ?>">
+                                <?php echo e($nivelNombre); ?>
+
                             </span>
 
                             <span class="mat-nota-g">
-                                {{ $notaFmt }}
+                                <?php echo e($notaFmt); ?>
+
                             </span>
 
                             <span class="mat-nota-lbl">
@@ -1159,7 +1172,8 @@ $discNivelNombre = match(true) {
                                         </span>
 
                                         <span class="dim-nt">
-                                            {{ $saberFmt }}
+                                            <?php echo e($saberFmt); ?>
+
                                         </span>
 
                                     </td>
@@ -1185,7 +1199,8 @@ $discNivelNombre = match(true) {
                                         </span>
 
                                         <span class="dim-nt">
-                                            {{ $hacerFmt }}
+                                            <?php echo e($hacerFmt); ?>
+
                                         </span>
 
                                     </td>
@@ -1211,7 +1226,8 @@ $discNivelNombre = match(true) {
                                         </span>
 
                                         <span class="dim-nt">
-                                            {{ $serFmt }}
+                                            <?php echo e($serFmt); ?>
+
                                         </span>
 
                                     </td>
@@ -1226,19 +1242,20 @@ $discNivelNombre = match(true) {
 
                 <div class="coms-wrap">
 
-                    @if($comentarios->isNotEmpty())
+                    <?php if($comentarios->isNotEmpty()): ?>
 
-                        @foreach(['saber','hacer','ser'] as $dim)
+                        <?php $__currentLoopData = ['saber','hacer','ser']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dim): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                            @if(isset($comentarios[$dim]) && $comentarios[$dim]->comment)
+                            <?php if(isset($comentarios[$dim]) && $comentarios[$dim]->comment): ?>
 
                                 <table class="com-table">
                                     <tr>
 
                                         <td style="width:46px;padding-right:4px;">
 
-                                            <span class="com-tag tag-{{ $dim }}">
-                                                {{ ucfirst($dim) }}
+                                            <span class="com-tag tag-<?php echo e($dim); ?>">
+                                                <?php echo e(ucfirst($dim)); ?>
+
                                             </span>
 
                                         </td>
@@ -1246,36 +1263,37 @@ $discNivelNombre = match(true) {
                                         <td>
 
                                             <span class="com-pre">
-                                                {{ $prefijo }},
+                                                <?php echo e($prefijo); ?>,
                                             </span>
 
-                                            {{ $comentarios[$dim]->comment }}
+                                            <?php echo e($comentarios[$dim]->comment); ?>
+
 
                                         </td>
 
                                     </tr>
                                 </table>
 
-                            @endif
+                            <?php endif; ?>
 
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                    @else
+                    <?php else: ?>
 
                         <span class="com-vacio">
                             Definitiva en la asignatura.
                         </span>
 
-                    @endif
+                    <?php endif; ?>
 
                 </div>
 
             </div>
 
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-            {{-- DISCIPLINA --}}
-            @if(!empty($disciplineComment) && $disciplineComment->comment)
+            
+            <?php if(!empty($disciplineComment) && $disciplineComment->comment): ?>
 
             <div class="mat-card mat-card-disciplina">
 
@@ -1293,7 +1311,8 @@ $discNivelNombre = match(true) {
                             <span class="mat-doc">
 
                                 Director(a) de Grado:
-                                {{ strtoupper($directorName ?? 'Director de Grupo') }}
+                                <?php echo e(strtoupper($directorName ?? 'Director de Grupo')); ?>
+
 
                             </span>
 
@@ -1301,12 +1320,13 @@ $discNivelNombre = match(true) {
 
                         <td class="mat-der-td">
 
-                            <span class="nvl-badge {{ $discNivelClass }}">
-                                {{ $discNivelNombre }}
+                            <span class="nvl-badge <?php echo e($discNivelClass); ?>">
+                                <?php echo e($discNivelNombre); ?>
+
                             </span>
 
                             <span class="mat-nota-g">
-                        {{ truncar1($notaDisciplina) }}       
+                        <?php echo e(truncar1($notaDisciplina)); ?>       
                         </span>
 
                             <span class="mat-nota-lbl">
@@ -1326,10 +1346,11 @@ $discNivelNombre = match(true) {
                             <td>
 
                                 <span class="com-pre">
-                                    {{ $discPrefijo }},
+                                    <?php echo e($discPrefijo); ?>,
                                 </span>
 
-                                {{ $disciplineComment->comment }}
+                                <?php echo e($disciplineComment->comment); ?>
+
 
                             </td>
 
@@ -1340,11 +1361,11 @@ $discNivelNombre = match(true) {
 
             </div>
 
-            @endif
+            <?php endif; ?>
 
         </div>
 
-        {{-- PIE --}}
+        
         <div class="pie-wrap">
 
             <div class="escala-box">
@@ -1423,7 +1444,8 @@ $discNivelNombre = match(true) {
                         <span class="firma-linea"></span>
 
                         <span class="firma-nom">
-                            {{ $directorName ?? 'Director de Grupo' }}
+                            <?php echo e($directorName ?? 'Director de Grupo'); ?>
+
                         </span>
 
                         <span class="firma-car">
@@ -1461,7 +1483,8 @@ $discNivelNombre = match(true) {
                     </td>
 
                     <td class="nota-pie-right">
-                        Documento oficial · {{ now()->format('d/m/Y') }}
+                        Documento oficial · <?php echo e(now()->format('d/m/Y')); ?>
+
                     </td>
 
                 </tr>
@@ -1476,7 +1499,7 @@ $discNivelNombre = match(true) {
 
 </div>
 
-@endforeach
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 </body>
-</html>
+</html><?php /**PATH C:\xampp\htdocs\SGA\resources\views/admin/boletin/pdf_masivo.blade.php ENDPATH**/ ?>

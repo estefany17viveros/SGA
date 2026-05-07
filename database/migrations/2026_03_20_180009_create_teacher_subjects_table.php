@@ -37,8 +37,9 @@ return new class extends Migration
         $table->foreignId('academic_year_id')
               ->constrained('academic_years') // ⚠️ explícito para evitar errores
               ->cascadeOnDelete();
-
-        // 🔒 EVITAR DUPLICADOS (CLAVE PROFESIONAL)
+        $table->unsignedTinyInteger('weekly_hours')->default(0); // horas por semana
+       
+// 🔒 EVITAR DUPLICADOS (CLAVE PROFESIONAL)
         $table->unique([
             'teacher_id',
             'subject_id',

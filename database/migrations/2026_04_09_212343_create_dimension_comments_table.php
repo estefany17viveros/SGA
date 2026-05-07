@@ -12,15 +12,21 @@ return new class extends Migration
             $table->id();
 
             // 🔗 Relaciones clave
-            $table->foreignId('teacher_subject_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('grade_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('period_id')->constrained('periods')->cascadeOnDelete();
+          $table->foreignId('teacher_subject_id')
+    ->nullable()
+    ->constrained()
+    ->cascadeOnDelete();
+    $table->foreignId('grade_id')
+    ->nullable()
+    ->constrained()
+    ->cascadeOnDelete();      
+    $table->foreignId('period_id')->constrained('periods')->cascadeOnDelete();
 $table->foreignId('academic_year_id')
       ->constrained()
       ->cascadeOnDelete();
                
             // 📊 Dimensión
-            $table->enum('dimension', ['saber', 'hacer', 'ser']);
+            $table->enum('dimension', ['saber', 'hacer', 'ser', 'disciplina']);
 
             // 📝 Comentario
             $table->text('comment');

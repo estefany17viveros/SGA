@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('enrollments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
-            $table->foreignId('grade_id')->constrained()->onDelete('cascade');
-            $table->foreignId('academic_year_id')->constrained()->onDelete('cascade');
-            $table->foreignId('group_id')->nullable()->constrained()->onDelete('cascade');
-              $table->enum('status', [
+          $table->foreignId('grade_id')->constrained()->onDelete('cascade');
+$table->foreignId('academic_year_id')->constrained()->onDelete('cascade');
+   $table->foreignId('group_id')->nullable()->constrained()->onDelete('cascade');
+             $table->string('graduation_year')->nullable();
+            $table->enum('status', [
                 'matriculado',
                 'aprobado',
                 'reprobado',

@@ -8,7 +8,6 @@
 
 <div class="container">
 
-    
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2>📊 Registro de Notas</h2>
@@ -25,16 +24,13 @@
         </a>
     </div>
 
-    
     <?php if(isset($period)): ?>
     <div class="mb-3 d-flex gap-2">
 
-        
         <a href="<?php echo e(route('teacher.scores.export', $assignment->id)); ?>" class="btn btn-success">
             📥 Descargar Plantilla Excel
         </a>
 
-        
         <form action="<?php echo e(route('teacher.scores.import')); ?>" method="POST" enctype="multipart/form-data" class="d-flex gap-2">
             <?php echo csrf_field(); ?>
 
@@ -51,30 +47,20 @@
     </div>
     <?php endif; ?>
 
-    
     <?php if(session('error')): ?>
-        <div class="alert alert-danger">
-            <?php echo e(session('error')); ?>
-
-        </div>
+        <div class="alert alert-danger"><?php echo e(session('error')); ?></div>
     <?php endif; ?>
 
-    
     <?php if(session('success')): ?>
-        <div class="alert alert-success">
-            <?php echo e(session('success')); ?>
-
-        </div>
+        <div class="alert alert-success"><?php echo e(session('success')); ?></div>
     <?php endif; ?>
 
-    
     <?php if(!isset($period)): ?>
         <div class="alert alert-warning">
             ⚠ No hay periodo activo. Contacta al administrador.
         </div>
     <?php else: ?>
 
-    
     <form action="<?php echo e(route('teacher.scores.store')); ?>" method="POST">
         <?php echo csrf_field(); ?>
 
@@ -97,13 +83,6 @@
                 </thead>
 
                 <tbody>
-                    <?php
-                    function nota($n) {
-                        return $n !== null 
-                            ? rtrim(rtrim(number_format($n, 2, '.', ''), '0'), '.') 
-                            : '';
-                    }
-                    ?>
 
                     <?php $__empty_1 = true; $__currentLoopData = $ranking; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
@@ -117,54 +96,49 @@
 
                             <td><?php echo e($student->full_name); ?></td>
 
-                            
                             <td>
                                 <input type="number"
-                                    step="0.01"
+                                    step="0.1"
                                     min="1"
                                     max="5"
                                     class="form-control nota"
                                     data-id="<?php echo e($student->id); ?>"
                                     data-type="saber"
                                     name="scores[<?php echo e($student->id); ?>][saber]"
-                                    value="<?php echo e(isset($score->saber) ? number_format($score->saber, 2, '.', '') : ''); ?>">
+                                    value="<?php echo e(isset($score->saber) ? number_format(floor($score->saber * 10) / 10, 1, '.', '') : ''); ?>">
                             </td>
 
-                            
                             <td>
                                 <input type="number"
-                                    step="0.01"
+                                    step="0.1"
                                     min="1"
                                     max="5"
                                     class="form-control nota"
                                     data-id="<?php echo e($student->id); ?>"
                                     data-type="hacer"
                                     name="scores[<?php echo e($student->id); ?>][hacer]"
-                                    value="<?php echo e(isset($score->hacer) ? number_format($score->hacer, 2, '.', '') : ''); ?>">
+                                    value="<?php echo e(isset($score->hacer) ? number_format(floor($score->hacer * 10) / 10, 1, '.', '') : ''); ?>">
                             </td>
 
-                            
                             <td>
                                 <input type="number"
-                                    step="0.01"
+                                    step="0.1"
                                     min="1"
                                     max="5"
                                     class="form-control nota"
                                     data-id="<?php echo e($student->id); ?>"
                                     data-type="ser"
                                     name="scores[<?php echo e($student->id); ?>][ser]"
-                                    value="<?php echo e(isset($score->ser) ? number_format($score->ser, 2, '.', '') : ''); ?>">
+                                    value="<?php echo e(isset($score->ser) ? number_format(floor($score->ser * 10) / 10, 1, '.', '') : ''); ?>">
                             </td>
 
-                            
                             <td class="text-center">
                                 <strong id="total-<?php echo e($student->id); ?>">
-                                    <?php echo e(isset($score->total) ? number_format($score->total, 2, '.', '') : '-'); ?>
+                                    <?php echo e(isset($score->total) ? number_format(floor($score->total * 10) / 10, 1, '.', '') : '-'); ?>
 
                                 </strong>
                             </td>
 
-                            
                             <td class="text-center">
                                 <span class="badge bg-warning text-dark">
                                     <?php echo e($item['position']); ?>
@@ -189,7 +163,6 @@
             </table>
         </div>
 
-        
         <div class="mt-3 text-end">
             <button class="btn btn-primary">
                 💾 Guardar Notas
@@ -201,7 +174,6 @@
     <?php endif; ?>
 
 </div>
-
 
 <script>
 function truncateDecimals(num, decimals) {
@@ -224,9 +196,9 @@ document.querySelectorAll('.nota').forEach(input => {
         if (!isNaN(saber) && !isNaN(hacer) && !isNaN(ser)) {
 
             let total = (saber + hacer + ser) / 3;
-            let totalTruncado = truncateDecimals(total, 2);
+            let totalTruncado = truncateDecimals(total, 1);
 
-            totalCell.innerText = totalTruncado.toFixed(2);
+            totalCell.innerText = totalTruncado.toFixed(1);
 
         } else {
             totalCell.innerText = '-';
@@ -238,5 +210,4 @@ document.querySelectorAll('.nota').forEach(input => {
 </script>
 
 <?php $__env->stopSection(); ?>
- 
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\SGA\resources\views/teacher/scores/index.blade.php ENDPATH**/ ?>

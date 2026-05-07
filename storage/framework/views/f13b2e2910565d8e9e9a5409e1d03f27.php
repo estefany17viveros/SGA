@@ -59,7 +59,15 @@
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </select>
 
-    <br><br>
+   <br><br>
+
+<label>Horas por semana</label>
+<div style="display:flex; align-items:center; gap:5px;">
+    <input type="number" name="weekly_hours" min="1" max="40" required
+           placeholder="Ej: 4"
+           style="width:80px;">
+    <span><strong>HS</strong></span>
+</div>
 
     <button type="submit">Guardar</button>
 

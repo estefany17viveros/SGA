@@ -86,10 +86,13 @@ public function export($teacherSubjectId)
             return back()->with('error', 'No hay periodo activo');
         }
 
-        $students = Student::whereHas('enrollments', function ($q) use ($assignment, $year) {
-            $q->where('grade_id', $assignment->grade_id)
-              ->where('academic_year_id', $year->id);
-        })->get();
+      $students = Student::whereHas('enrollments', function ($q) use ($assignment, $year) {
+    $q->where('grade_id', $assignment->grade_id)
+      ->where('academic_year_id', $year->id);
+})
+->orderByRaw('LOWER(last_name) ASC')   // 🔥 APELLIDO primero
+->orderByRaw('LOWER(first_name) ASC')  // 🔥 luego nombre
+->get();
 
         $scores = Score::where('teacher_subject_id', $assignment->id)
             ->where('period_id', $period->id)

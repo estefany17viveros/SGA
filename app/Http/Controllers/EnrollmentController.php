@@ -26,8 +26,13 @@ class EnrollmentController extends Controller
         if($request->grade_id){
             $query->where('grade_id',$request->grade_id);
         }
+$enrollments = $query
+    ->join('students', 'students.id', '=', 'enrollments.student_id')
+    ->orderByRaw('LOWER(students.last_name) ASC')
+    ->orderByRaw('LOWER(students.first_name) ASC')
+    ->select('enrollments.*')
+    ->get();
 
-        $enrollments = $query->get();
         $grades = Grade::orderBy('level')->get();
 
         return view('admin.enrollments.index',compact('enrollments','grades','currentYear'));
@@ -56,8 +61,9 @@ class EnrollmentController extends Controller
 
         $students = null;
         if (!$student) {
-            $students = Student::orderBy('first_name')->get();
-        }
+            $students = Student::orderByRaw('LOWER(last_name) ASC')
+    ->orderByRaw('LOWER(first_name) ASC')
+    ->get(); }
 
         return view('admin.enrollments.create', compact(
             'student',
@@ -127,9 +133,10 @@ class EnrollmentController extends Controller
         if ($enrollment->status == 'graduado') {
             return back()->with('error','❌ No se puede editar un graduado.');
         }
-
-        $students = Student::orderBy('first_name')->get();
-        $grades = Grade::orderBy('level')->get();
+$students = Student::orderByRaw('LOWER(last_name) ASC')
+    ->orderByRaw('LOWER(first_name) ASC')
+    ->get();
+    $grades = Grade::orderBy('level')->get();
         $groups = Group::where('grade_id', $enrollment->grade_id)->get();
 
         return view('admin.enrollments.edit', compact('enrollment', 'students', 'grades', 'groups'));
@@ -291,39 +298,144 @@ public function promoteStudents()
             return back()->with('error','Error');
         }
     }
+   /* =========================
+        📌 EGRESADOS
+    ========================= */
+
+    public function createGraduate()
+    {
+        return view('admin.enrollments.create_graduate');
+    }
+
+    public function storeGraduate(Request $request)
+    {
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'year' => 'required'
+        ]);
+
+        /* =========================
+            👤 CREAR ESTUDIANTE (PROTEGIDO)
+        ========================= */
+        $student = Student::firstOrCreate(
+            ['identification_number' => $request->identification_number],
+            [
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'address' => $request->address ?? 'N/A',
+                'phone' => $request->phone ?? 'N/A',
+                'birth_date' => $request->birth_date ?? now(),
+
+                // 🔥 FIX TODOS LOS CAMPOS OBLIGATORIOS
+                'expedition_date' => now(),
+                'identification_type' => 'cedula_ciudadania',
+                'gender' => 'masculino',
+                'eps' => 'N/A',
+                'blood_type' => 'O+',
+                'expedition_department' => 'N/A',
+                'expedition_municipality' => 'N/A',
+            ]
+        );
+
+        /* =========================
+            🔥 GRADO SEGURIDAD
+        ========================= */
+        $grade = Grade::orderBy('level','desc')->first();
+
+        if(!$grade){
+            return back()->with('error','No hay grados registrados');
+        }
+
+        /* =========================
+            🔥 AÑO ACADÉMICO PROTEGIDO
+        ========================= */
+        $yearAcademic = AcademicYear::first();
+
+        if(!$yearAcademic){
+            $yearAcademic = AcademicYear::create([
+                'year' => date('Y'),
+                'status' => 'inactivo',
+
+                // 🔥 FIX TODOS LOS ERRORES QUE TE SALEN
+                'start_date' => now(),
+                'end_date' => now()->addYear(),
+                'periods' => 1
+            ]);
+        }
+
+        /* =========================
+            🎓 CREAR EGRESADO
+        ========================= */
+        Enrollment::create([
+            'student_id' => $student->id,
+
+            // 🔥 NUNCA NULL (evita errores SQL)
+            'grade_id' => $grade->id,
+            'group_id' => null,
+            'academic_year_id' => $yearAcademic->id,
+
+            'status' => 'graduado',
+            'graduation_year' => $request->year
+        ]);
+
+        return redirect()->route('admin.enrollments.graduated')
+            ->with('success','Egresado creado correctamente');
+    }
+
+    /* =========================
+        📌 LISTADO EGRESADOS
+    ========================= */
+
     public function graduated(Request $request)
-{
-    $query = Enrollment::with(['student','grade','academicYear'])
-        ->where('status', 'graduado');
+    {
+        $query = Enrollment::with('student')
+            ->where('status','graduado');
 
-    if ($request->year) {
-        $query->whereHas('academicYear', function ($q) use ($request) {
-            $q->where('year', $request->year);
-        });
+        if($request->year){
+            $query->where('graduation_year',$request->year);
+        }
+
+        if($request->last_name){
+            $query->whereHas('student', function($q) use ($request){
+                $q->where('last_name','like','%'.$request->last_name.'%');
+            });
+        }
+
+        $enrollments = $query
+    ->join('students', 'students.id', '=', 'enrollments.student_id')
+    ->orderByRaw('LOWER(students.last_name) ASC')
+    ->orderByRaw('LOWER(students.first_name) ASC')
+    ->select('enrollments.*')
+    ->paginate(10)
+    ->withQueryString();
+
+        $years = Enrollment::where('status','graduado')
+            ->whereNotNull('graduation_year')
+            ->pluck('graduation_year')
+            ->unique()
+            ->sortDesc()
+            ->values();
+
+        return view('admin.enrollments.graduated', compact('enrollments','years'));
     }
 
-    // 🔥 AQUÍ EL CAMBIO
-   $enrollments = $query->paginate(10)->withQueryString();
-    $years = AcademicYear::orderBy('year', 'desc')->get();
+    /* =========================
+        📌 RETIRADOS
+    ========================= */
 
-    return view('admin.enrollments.graduated', compact('enrollments', 'years'));
-}
-public function retired(Request $request)
-{
-    $query = Enrollment::with(['student','grade','academicYear'])
-        ->where('status', 'retirado');
+    public function retired(Request $request)
+    {
+      $enrollments = Enrollment::with(['student','grade','academicYear'])
+    ->join('students', 'students.id', '=', 'enrollments.student_id')
+    ->where('status','retirado')
+    ->orderByRaw('LOWER(students.last_name) ASC')
+    ->orderByRaw('LOWER(students.first_name) ASC')
+    ->select('enrollments.*')
+    ->paginate(10);
+    
+        $years = AcademicYear::orderBy('year','desc')->get();
 
-    // filtro por año (opcional)
-    if ($request->year) {
-        $query->whereHas('academicYear', function ($q) use ($request) {
-            $q->where('year', $request->year);
-        });
+        return view('admin.enrollments.retired', compact('enrollments','years'));
     }
-
-    $enrollments = $query->paginate(10)->withQueryString();
-
-    $years = AcademicYear::orderBy('year', 'desc')->get();
-
-    return view('admin.enrollments.retired', compact('enrollments', 'years'));
-}
 }

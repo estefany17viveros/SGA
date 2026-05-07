@@ -51,6 +51,12 @@
                 {{ $assignment->academicYear->year }}
             </span>
         </div>
+        <div class="detail-row">
+    <span class="detail-label">Horas por semana</span>
+    <span class="detail-value">
+        {{ $assignment->weekly_hours }} HS
+    </span>
+        </div>
 
         {{-- Estado --}}
         <div class="detail-row">

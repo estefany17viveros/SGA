@@ -1,12 +1,10 @@
-@extends('layouts.app')
+<?php $__env->startSection('title', 'Detalle del Estudiante'); ?>
 
-@section('title', 'Detalle del Estudiante')
+<?php $__env->startPush('styles'); ?>
+<?php echo app('Illuminate\Foundation\Vite')('resources/css/admin/students/show.css'); ?>
+<?php $__env->stopPush(); ?>
 
-@push('styles')
-@vite('resources/css/admin/students/show.css')
-@endpush
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <div class="student-detail-container">
 
@@ -15,7 +13,7 @@
         <h3>📋 Detalle del Estudiante</h3>
     </div>
 
-    <a href="{{ route('admin.students.index') }}" class="btn-back">
+    <a href="<?php echo e(route('admin.students.index')); ?>" class="btn-back">
         ← Volver
     </a>
 </div>
@@ -29,18 +27,18 @@
             <!-- FOTO -->
             <div class="photo-section">
 
-                @if($student->photo)
+                <?php if($student->photo): ?>
                     <div class="photo-frame">
-                        <img src="{{ asset('storage/'.$student->photo) }}"
-                             alt="Foto de {{ $student->full_name }}"
+                        <img src="<?php echo e(asset('storage/'.$student->photo)); ?>"
+                             alt="Foto de <?php echo e($student->full_name); ?>"
                              class="student-photo">
                     </div>
-                @else
+                <?php else: ?>
                     <div class="photo-placeholder-large">
                         👤
                         <p>Sin foto</p>
                     </div>
-                @endif
+                <?php endif; ?>
 
             </div>
 
@@ -50,8 +48,8 @@
             <div class="info-section">
 
                 <div class="student-header">
-                    <h4 class="student-name">{{ $student->full_name }}</h4>
-                    <span class="age-badge">{{ $student->age }} años</span>
+                    <h4 class="student-name"><?php echo e($student->full_name); ?></h4>
+                    <span class="age-badge"><?php echo e($student->age); ?> años</span>
                 </div>
 
                 <div class="divider"></div>
@@ -66,23 +64,24 @@
 
                         <div class="info-item">
                             <span class="info-label">Nombre:</span>
-                            <span class="info-value">{{ $student->first_name }}</span>
+                            <span class="info-value"><?php echo e($student->first_name); ?></span>
                         </div>
 
                         <div class="info-item">
                             <span class="info-label">Apellido:</span>
-                            <span class="info-value">{{ $student->last_name }}</span>
+                            <span class="info-value"><?php echo e($student->last_name); ?></span>
                         </div>
 
                         <div class="info-item">
                             <span class="info-label">Género:</span>
-                            <span class="info-value">{{ ucfirst($student->gender) }}</span>
+                            <span class="info-value"><?php echo e(ucfirst($student->gender)); ?></span>
                         </div>
 
                         <div class="info-item">
                             <span class="info-label">Fecha Nacimiento:</span>
                             <span class="info-value">
-                                {{ $student->birth_date ? $student->birth_date->format('d/m/Y') : '-' }}
+                                <?php echo e($student->birth_date ? $student->birth_date->format('d/m/Y') : '-'); ?>
+
                             </span>
                         </div>
 
@@ -104,35 +103,40 @@
                         <div class="info-item">
                             <span class="info-label">Tipo Documento:</span>
                             <span class="info-value">
-                                {{ ucfirst(str_replace('_',' ',$student->identification_type)) }}
+                                <?php echo e(ucfirst(str_replace('_',' ',$student->identification_type))); ?>
+
                             </span>
                         </div>
 
                         <div class="info-item">
                             <span class="info-label">Número Documento:</span>
                             <span class="info-value">
-                                {{ $student->identification_number }}
+                                <?php echo e($student->identification_number); ?>
+
                             </span>
                         </div>
 
                         <div class="info-item">
                             <span class="info-label">Fecha Expedición:</span>
                             <span class="info-value">
-                                {{ $student->expedition_date ? $student->expedition_date->format('d/m/Y') : '-' }}
+                                <?php echo e($student->expedition_date ? $student->expedition_date->format('d/m/Y') : '-'); ?>
+
                             </span>
                         </div>
 
                         <div class="info-item">
                             <span class="info-label">Departamento:</span>
                             <span class="info-value">
-                                {{ $student->expedition_department }}
+                                <?php echo e($student->expedition_department); ?>
+
                             </span>
                         </div>
 
                         <div class="info-item">
                             <span class="info-label">Municipio:</span>
                             <span class="info-value">
-                                {{ $student->expedition_municipality }}
+                                <?php echo e($student->expedition_municipality); ?>
+
                             </span>
                         </div>
 
@@ -154,7 +158,8 @@
                         <div class="info-item full-width">
                             <span class="info-label">Dirección:</span>
                             <span class="info-value">
-                                {{ $student->address }}
+                                <?php echo e($student->address); ?>
+
                             </span>
                         </div>
 
@@ -175,18 +180,19 @@
 
                         <div class="info-item">
                             <span class="info-label">EPS:</span>
-                            <span class="info-value">{{ $student->eps }}</span>
+                            <span class="info-value"><?php echo e($student->eps); ?></span>
                         </div>
 
                         <div class="info-item">
                             <span class="info-label">Tipo Sangre:</span>
-                            <span class="info-value">{{ $student->blood_type }}</span>
+                            <span class="info-value"><?php echo e($student->blood_type); ?></span>
                         </div>
 
                         <div class="info-item full-width">
                             <span class="info-label">Condiciones Médicas:</span>
                             <span class="info-value">
-                                {{ $student->medical_conditions ?? 'Sin condiciones médicas registradas' }}
+                                <?php echo e($student->medical_conditions ?? 'Sin condiciones médicas registradas'); ?>
+
                             </span>
                         </div>
 
@@ -209,34 +215,35 @@
         <div class="info-item">
             <span class="info-label">Tipo:</span>
             <span class="info-value">
-                @if($student->population_type && $student->population_type != 'ninguno')
-                    {{ ucfirst($student->population_type) }}
-                @else
+                <?php if($student->population_type && $student->population_type != 'ninguno'): ?>
+                    <?php echo e(ucfirst($student->population_type)); ?>
+
+                <?php else: ?>
                     No aplica
-                @endif
+                <?php endif; ?>
             </span>
         </div>
 
         <div class="info-item full-width">
             <span class="info-label">Certificado:</span>
 
-            @if($student->population_certificate)
+            <?php if($student->population_certificate): ?>
 
-                <a href="{{ asset('storage/'.$student->population_certificate) }}"
+                <a href="<?php echo e(asset('storage/'.$student->population_certificate)); ?>"
                    target="_blank"
                    class="btn-certificate">
                     📄 Ver Certificado
                 </a>
 
-                <a href="{{ asset('storage/'.$student->population_certificate) }}"
+                <a href="<?php echo e(asset('storage/'.$student->population_certificate)); ?>"
                    download
                    class="btn-certificate">
                     ⬇ Descargar
                 </a>
 
-            @else
+            <?php else: ?>
                 <span class="info-value">No tiene certificado</span>
-            @endif
+            <?php endif; ?>
 
         </div>
 
@@ -252,7 +259,7 @@
 
             <h5 class="block-title">📚 Historial Académico</h5>
 
-            @if($student->enrollments->count() > 0)
+            <?php if($student->enrollments->count() > 0): ?>
 
             <table class="table table-bordered">
 
@@ -267,56 +274,59 @@
 
             <tbody>
 
-            @foreach($student->enrollments as $enrollment)
+            <?php $__currentLoopData = $student->enrollments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $enrollment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
             <tr>
 
             <td>
-                {{ $enrollment->graduation_year ?? $enrollment->academicYear->year ?? '-' }}
+                <?php echo e($enrollment->graduation_year ?? $enrollment->academicYear->year ?? '-'); ?>
+
             </td>
 
             <td>
-            {{ $enrollment->grade->name ?? '-' }}
+            <?php echo e($enrollment->grade->name ?? '-'); ?>
+
             </td>
 
             <td>
-            {{ $enrollment->group->name ?? 'Sin grupo' }}
+            <?php echo e($enrollment->group->name ?? 'Sin grupo'); ?>
+
             </td>
 
             <td>
-@if(
+<?php if(
     ($enrollment->status == 'aprobado' && $enrollment->grade->level == 11)
     || $enrollment->status == 'graduado'
-)
+): ?>
     <span class="badge bg-primary">🎓 Graduado</span>
 
-@elseif($enrollment->status == 'aprobado')
+<?php elseif($enrollment->status == 'aprobado'): ?>
     <span class="badge bg-success">Aprobado</span>
 
-@elseif($enrollment->status == 'reprobado')
+<?php elseif($enrollment->status == 'reprobado'): ?>
     <span class="badge bg-danger">Reprobado</span>
 
-@elseif($enrollment->status == 'matriculado')
+<?php elseif($enrollment->status == 'matriculado'): ?>
     <span class="badge bg-warning">Matriculado</span>
 
-@elseif($enrollment->status == 'retirado')
+<?php elseif($enrollment->status == 'retirado'): ?>
     <span class="badge bg-secondary">Retirado</span>
-@endif
+<?php endif; ?>
             </td>
 
             </tr>
 
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             </tbody>
 
             </table>
 
-            @else
+            <?php else: ?>
 
             <p>No existe historial académico.</p>
 
-            @endif
+            <?php endif; ?>
 
             </div>
                 <!-- OBSERVACIONES -->
@@ -325,7 +335,8 @@
                     <h5 class="block-title">Observaciones</h5>
 
                     <div class="observations-box">
-                        {{ $student->observations ?? 'No existen observaciones registradas.' }}
+                        <?php echo e($student->observations ?? 'No existen observaciones registradas.'); ?>
+
                     </div>
 
                 </div>
@@ -335,23 +346,23 @@
 
                     <h5 class="block-title">Certificado PDF</h5>
 
-                    @if($student->certificate_file)
+                    <?php if($student->certificate_file): ?>
 
-                        <a href="{{ asset('storage/'.$student->certificate_file) }}"
+                        <a href="<?php echo e(asset('storage/'.$student->certificate_file)); ?>"
                            target="_blank"
                            class="btn-certificate">
                             📄 Ver Certificado
                         </a>
 
-                        <a href="{{ asset('storage/'.$student->certificate_file) }}"
+                        <a href="<?php echo e(asset('storage/'.$student->certificate_file)); ?>"
                            download
                            class="btn-certificate">
                             ⬇ Descargar Certificado
                         </a>
 
-                    @else
+                    <?php else: ?>
                         <p>No se ha subido certificado.</p>
-                    @endif
+                    <?php endif; ?>
 
                 </div>
 
@@ -364,14 +375,14 @@
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                         <h5 class="block-title">Acudientes</h5>
 
-                        <a href="{{ route('admin.guardians.create', $student->id) }}"
+                        <a href="<?php echo e(route('admin.guardians.create', $student->id)); ?>"
                            class="btn btn-success btn-sm">
                            ➕ Agregar Acudiente
                         </a>
                     </div>
 
 
-                    @if($student->guardians->count() > 0)
+                    <?php if($student->guardians->count() > 0): ?>
 
                     <table class="table table-bordered">
 
@@ -387,21 +398,21 @@
 
                         <tbody>
 
-                            @foreach($student->guardians as $guardian)
+                            <?php $__currentLoopData = $student->guardians; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $guardian): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                             <tr>
 
-                                <td>{{ $guardian->first_name }}</td>
+                                <td><?php echo e($guardian->first_name); ?></td>
 
-                                <td>{{ $guardian->last_name }}</td>
+                                <td><?php echo e($guardian->last_name); ?></td>
 
-                                <td>{{ $guardian->relationship }}</td>
+                                <td><?php echo e($guardian->relationship); ?></td>
 
-                                <td>{{ $guardian->phone }}</td>
+                                <td><?php echo e($guardian->phone); ?></td>
 
                                 <td>
 
-                                    <a href="{{ route('admin.guardians.show',$guardian->id) }}"
+                                    <a href="<?php echo e(route('admin.guardians.show',$guardian->id)); ?>"
                                        class="btn btn-primary btn-sm">
                                        👁️ Ver datos
                                     </a>
@@ -410,17 +421,17 @@
 
                             </tr>
 
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                         </tbody>
 
                     </table>
 
-                    @else
+                    <?php else: ?>
 
                         <p>No hay acudientes registrados.</p>
 
-                    @endif
+                    <?php endif; ?>
 
                 </div>
 
@@ -434,4 +445,6 @@
 
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\SGA\resources\views/admin/students/show.blade.php ENDPATH**/ ?>

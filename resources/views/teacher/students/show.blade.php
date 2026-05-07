@@ -99,64 +99,69 @@
             </div>
 
         </div>
+{{-- ===================== COLUMNA DERECHA ===================== --}}
+<div class="student-col-right">
 
-        {{-- ===================== COLUMNA DERECHA ===================== --}}
-        <div class="student-col-right">
+    {{-- OBSERVADOR --}}
+    <div class="card">
+        <h5>📘 Observador</h5>
 
-            {{-- OBSERVADOR --}}
-            <div class="card">
-                <h5>📘 Observador</h5>
+        @if($isDirector ?? false)
 
-                <div class="obs-texto">
-                    {{ $student->observations ?? 'Sin observaciones registradas' }}
-                </div>
-
-                @if($student->certificate_file)
-                    <a href="{{ asset('storage/' . $student->certificate_file) }}"
-                       target="_blank"
-                       class="btn-pdf">
-                        📄 Ver PDF
-                    </a>
-                @endif
-
-                @if($isDirector ?? false)
-
-                    <hr>
-
-                    <form action="{{ route('teacher.students.observer.update', $student->id) }}"
-                          method="POST"
-                          enctype="multipart/form-data">
-
-                        @csrf
-                        @method('PUT')
-
-                        <div class="mb-2">
-                            <label>Editar observación</label>
-                            <textarea name="observations"
-                                      class="form-control"
-                                      rows="4">{{ $student->observations }}</textarea>
-                        </div>
-
-                        <div class="mb-2">
-                            <label>Subir archivo PDF</label>
-                            <input type="file" name="certificate_file" class="form-control">
-                        </div>
-
-                        <button type="submit" class="btn-guardar">
-                            💾 Guardar cambios
-                        </button>
-
-                    </form>
-
-                @else
-                    <p class="aviso-director">
-                        🔒 Solo el director del grupo puede editar el observador
-                    </p>
-                @endif
-
+            {{-- VER OBSERVACIÓN --}}
+            <div class="obs-texto">
+                {{ $student->observations ?? 'Sin observaciones registradas' }}
             </div>
 
-        </div>
+            {{-- PDF --}}
+            @if($student->certificate_file)
+                <a href="{{ asset('storage/' . $student->certificate_file) }}"
+                   target="_blank"
+                   class="btn-pdf">
+                    📄 Ver PDF
+                </a>
+            @endif
+
+            <hr>
+
+            {{-- EDITAR --}}
+            <form action="{{ route('teacher.students.observer.update', $student->id) }}"
+                  method="POST"
+                  enctype="multipart/form-data">
+
+                @csrf
+                @method('PUT')
+
+                <div class="mb-2">
+                    <label>Editar observación</label>
+                    <textarea name="observations"
+                              class="form-control"
+                              rows="4">{{ $student->observations }}</textarea>
+                </div>
+
+                <div class="mb-2">
+                    <label>Subir archivo PDF</label>
+                    <input type="file" name="certificate_file" class="form-control">
+                </div>
+
+                <button type="submit" class="btn-guardar">
+                    💾 Guardar cambios
+                </button>
+
+            </form>
+
+        @else
+
+            {{-- BLOQUEADO --}}
+            <p class="aviso-director">
+                🔒 No tienes permiso para ver el observador de este estudiante
+            </p>
+
+        @endif
+
+    </div>
+
+</div>
 
     </div>{{-- /student-layout --}}
 

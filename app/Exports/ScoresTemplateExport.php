@@ -2,11 +2,18 @@
 
 namespace App\Exports;
 
-use App\Models\Student;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ScoresTemplateExport implements FromCollection, WithHeadings
+class ScoresTemplateExport implements
+    FromCollection,
+    WithHeadings,
+    WithStyles,
+    ShouldAutoSize
 {
     protected $students;
 
@@ -15,27 +22,78 @@ class ScoresTemplateExport implements FromCollection, WithHeadings
         $this->students = $students;
     }
 
-    public function collection()
-    {
-        return $this->students->map(function ($student) {
-            return [
-                'student_id' => $student->id,
-                'estudiante' => $student->full_name,
-                'saber' => '',
-                'hacer' => '',
-                'ser' => ''
-            ];
-        });
-    }
-
     public function headings(): array
     {
         return [
-            'student_id',
-            'estudiante',
-            'saber',
-            'hacer',
-            'ser'
+            'ID',
+            'NOMBRES',
+            'APELLIDOS',
+            'SABER',
+            'HACER',
+            'SER',
+            'PROMEDIO'
         ];
+    }
+
+   public function collection()
+{
+    return collect($this->students)
+        ->values()
+        ->map(function ($student, $index) {
+
+            $row = $index + 2;
+
+            return [
+                'id' => $student->id,
+
+                'nombres' => $student->first_name,
+
+                'apellidos' => $student->last_name,
+
+                'saber' => '',
+
+                'hacer' => '',
+
+                'ser' => '',
+
+                'promedio' => "=TRUNC((D{$row}+E{$row}+F{$row})/3,1)"
+            ];
+        });
+}
+
+    public function styles(Worksheet $sheet)
+    {
+        // 🔥 ENCABEZADOS
+        $sheet->getStyle('A1:G1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'size' => 12,
+                'color' => [
+                    'rgb' => 'FFFFFF'
+                ]
+            ],
+
+            'fill' => [
+                'fillType' => 'solid',
+                'startColor' => [
+                    'rgb' => '1F4E78'
+                ]
+            ]
+        ]);
+
+        // 🔥 CENTRAR
+        $sheet->getStyle('A:G')->getAlignment()->setHorizontal('center');
+
+        // 🔥 BORDES
+        $sheet->getStyle('A1:G' . ($this->students->count() + 1))
+            ->applyFromArray([
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ]);
+
+        return [];
     }
 }

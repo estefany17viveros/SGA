@@ -81,8 +81,12 @@ Route::middleware(['auth', 'role:admin'])
     Route::get('login-logs', [LoginLogController::class, 'index'])
         ->name('login-logs.index');
 
+     Route::get('/enrollments/graduates/create', [EnrollmentController::class, 'createGraduate'])
+    ->name('enrollments.create_graduate');
 
-   // 🔥 PANEL BOLETINES
+Route::post('/enrollments/graduates/store', [EnrollmentController::class, 'storeGraduate'])
+    ->name('enrollments.store_graduate');
+  // 🔥 PANEL BOLETINES
 Route::get('/boletin', [BoletinController::class,'index'])
     ->name('boletin.index');
 
@@ -230,7 +234,8 @@ Route::middleware(['auth', 'role:teacher'])
   // 📚 Dashboard
         Route::get('dashboard', [TeacherDashboardController::class, 'index'])
             ->name('dashboard');
-
+Route::post('director/note', [TeacherDashboardController::class, 'storeDisciplinary'])
+    ->name('director.note.store');
         // 🎓 Grados por materia
         Route::get('subject/{subject}/grades', [TeacherDashboardController::class, 'grades'])
             ->name('subject.grades');

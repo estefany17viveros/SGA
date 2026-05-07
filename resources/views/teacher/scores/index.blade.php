@@ -9,7 +9,6 @@
 
 <div class="container">
 
-    {{-- 🔥 HEADER --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2>📊 Registro de Notas</h2>
@@ -25,16 +24,13 @@
         </a>
     </div>
 
-    {{-- 🔥 BOTONES EXCEL --}}
     @if(isset($period))
     <div class="mb-3 d-flex gap-2">
 
-        {{-- 📥 Descargar --}}
         <a href="{{ route('teacher.scores.export', $assignment->id) }}" class="btn btn-success">
             📥 Descargar Plantilla Excel
         </a>
 
-        {{-- 📤 Subir --}}
         <form action="{{ route('teacher.scores.import') }}" method="POST" enctype="multipart/form-data" class="d-flex gap-2">
             @csrf
 
@@ -51,28 +47,20 @@
     </div>
     @endif
 
-    {{-- 🚨 ERROR --}}
     @if(session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
+        <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-    {{-- ✅ SUCCESS --}}
     @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    {{-- ❌ SIN PERIODO --}}
     @if(!isset($period))
         <div class="alert alert-warning">
             ⚠ No hay periodo activo. Contacta al administrador.
         </div>
     @else
 
-    {{-- 📥 FORM --}}
     <form action="{{ route('teacher.scores.store') }}" method="POST">
         @csrf
 
@@ -95,13 +83,6 @@
                 </thead>
 
                 <tbody>
-                    @php
-                    function nota($n) {
-                        return $n !== null 
-                            ? rtrim(rtrim(number_format($n, 2, '.', ''), '0'), '.') 
-                            : '';
-                    }
-                    @endphp
 
                     @forelse($ranking as $item)
 
@@ -115,53 +96,48 @@
 
                             <td>{{ $student->full_name }}</td>
 
-                            {{-- SABER --}}
                             <td>
                                 <input type="number"
-                                    step="0.01"
+                                    step="0.1"
                                     min="1"
                                     max="5"
                                     class="form-control nota"
                                     data-id="{{ $student->id }}"
                                     data-type="saber"
                                     name="scores[{{ $student->id }}][saber]"
-                                    value="{{ isset($score->saber) ? number_format($score->saber, 2, '.', '') : '' }}">
+                                    value="{{ isset($score->saber) ? number_format(floor($score->saber * 10) / 10, 1, '.', '') : '' }}">
                             </td>
 
-                            {{-- HACER --}}
                             <td>
                                 <input type="number"
-                                    step="0.01"
+                                    step="0.1"
                                     min="1"
                                     max="5"
                                     class="form-control nota"
                                     data-id="{{ $student->id }}"
                                     data-type="hacer"
                                     name="scores[{{ $student->id }}][hacer]"
-                                    value="{{ isset($score->hacer) ? number_format($score->hacer, 2, '.', '') : '' }}">
+                                    value="{{ isset($score->hacer) ? number_format(floor($score->hacer * 10) / 10, 1, '.', '') : '' }}">
                             </td>
 
-                            {{-- SER --}}
                             <td>
                                 <input type="number"
-                                    step="0.01"
+                                    step="0.1"
                                     min="1"
                                     max="5"
                                     class="form-control nota"
                                     data-id="{{ $student->id }}"
                                     data-type="ser"
                                     name="scores[{{ $student->id }}][ser]"
-                                    value="{{ isset($score->ser) ? number_format($score->ser, 2, '.', '') : '' }}">
+                                    value="{{ isset($score->ser) ? number_format(floor($score->ser * 10) / 10, 1, '.', '') : '' }}">
                             </td>
 
-                            {{-- PROMEDIO --}}
                             <td class="text-center">
                                 <strong id="total-{{ $student->id }}">
-                                    {{ isset($score->total) ? number_format($score->total, 2, '.', '') : '-' }}
+                                    {{ isset($score->total) ? number_format(floor($score->total * 10) / 10, 1, '.', '') : '-' }}
                                 </strong>
                             </td>
 
-                            {{-- PUESTO --}}
                             <td class="text-center">
                                 <span class="badge bg-warning text-dark">
                                     {{ $item['position'] }}
@@ -185,7 +161,6 @@
             </table>
         </div>
 
-        {{-- BOTÓN --}}
         <div class="mt-3 text-end">
             <button class="btn btn-primary">
                 💾 Guardar Notas
@@ -198,7 +173,6 @@
 
 </div>
 
-{{-- 🔥 SCRIPT --}}
 <script>
 function truncateDecimals(num, decimals) {
     let factor = Math.pow(10, decimals);
@@ -220,9 +194,9 @@ document.querySelectorAll('.nota').forEach(input => {
         if (!isNaN(saber) && !isNaN(hacer) && !isNaN(ser)) {
 
             let total = (saber + hacer + ser) / 3;
-            let totalTruncado = truncateDecimals(total, 2);
+            let totalTruncado = truncateDecimals(total, 1);
 
-            totalCell.innerText = totalTruncado.toFixed(2);
+            totalCell.innerText = totalTruncado.toFixed(1);
 
         } else {
             totalCell.innerText = '-';
@@ -234,4 +208,3 @@ document.querySelectorAll('.nota').forEach(input => {
 </script>
 
 @endsection
- 
