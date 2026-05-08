@@ -15,18 +15,18 @@ php artisan config:clear >nul 2>&1
 php artisan cache:clear >nul 2>&1
 php artisan route:clear >nul 2>&1
 
-:: 🔥 INICIAR VITE DEV OCULTO (LA CLAVE)
+:: 🔥 INICIAR VITE
 start "" /min cmd /c "cd /d %PROYECTO% && npm run dev"
 
 :: ESPERAR VITE
 timeout /t 8 >nul
 
-:: LARAVEL OCULTO
+:: 🔥 INICIAR LARAVEL
 start "" /min cmd /c "cd /d %PROYECTO% && php artisan serve --host=0.0.0.0 --port=8000"
 
 timeout /t 5 >nul
 
-:: ABRIR
-start http://localhost:8000
+:: 🔥 ABRIR SISTEMA
+start http://192.168.10.10:8000
 
 exit
