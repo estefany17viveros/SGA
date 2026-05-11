@@ -8,7 +8,27 @@
 <div class="container">
 
     <h3>📝 Comentarios por Dimensión</h3>
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul style="margin:0;padding-left:18px;">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     {{-- ===== FILTROS ===== --}}
     <form method="GET" action="{{ route('teacher.dimension_comments.index') }}" class="filtros-form">
 
