@@ -12,7 +12,9 @@ class Score extends Model
         'saber',
         'hacer',
         'ser',
-        'total'
+        'total',
+        'justified_absences',
+'unjustified_absences',
     ];
 
     // 👇 IMPORTANTE para poder usarlo directo en las vistas

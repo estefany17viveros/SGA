@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -22,7 +21,7 @@ return new class extends Migration
                   ->constrained()
                   ->cascadeOnDelete();
 
-            // 📅 PERIODO (CLAVE)
+            // 📅 PERIODO
             $table->foreignId('period_id')
                   ->constrained()
                   ->cascadeOnDelete();
@@ -32,7 +31,11 @@ return new class extends Migration
             $table->decimal('hacer', 5, 4)->nullable();
             $table->decimal('ser', 5, 4)->nullable();
 
-            // 🔥 TOTAL (PROMEDIO)
+            // 🔥 INASISTENCIAS
+            $table->integer('justified_absences')->default(0);
+            $table->integer('unjustified_absences')->default(0);
+
+            // 🔥 TOTAL
             $table->decimal('total', 5, 4)->nullable();
 
             $table->timestamps();

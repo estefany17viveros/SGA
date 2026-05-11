@@ -113,12 +113,27 @@ public function export($teacherSubjectId)
         }
 
        
-        // 🔥 Sacar solo los totales y ordenarlos aparte
-$totals = collect($ranking)->pluck('total')->sortDesc()->values();
+// 🔥 CLONAR Y ORDENAR POR PROMEDIO
+$sortedRanking = collect($ranking)
+    ->sortByDesc('total')
+    ->values();
 
-// 🔥 Asignar posición sin cambiar orden visual
+// 🔥 ASIGNAR PUESTOS ÚNICOS
+$positions = [];
+
+foreach ($sortedRanking as $index => $item) {
+
+    $studentId = $item['student']->id;
+
+    $positions[$studentId] = $index + 1;
+}
+
+// 🔥 AGREGAR POSICIÓN AL RANKING ORIGINAL
 foreach ($ranking as &$item) {
-    $item['position'] = $totals->search($item['total']) + 1;
+
+    $studentId = $item['student']->id;
+
+    $item['position'] = $positions[$studentId] ?? 0;
 }
 
         return view('teacher.scores.index', compact(
@@ -133,6 +148,7 @@ foreach ($ranking as &$item) {
      */
     public function store(Request $request)
     {
+        
         $request->validate([
             'teacher_subject_id' => 'required|exists:teacher_subjects,id',
             'period_id' => 'required|exists:periods,id',
@@ -144,6 +160,8 @@ foreach ($ranking as &$item) {
             $saber = $data['saber'] ?? null;
             $hacer = $data['hacer'] ?? null;
             $ser   = $data['ser'] ?? null;
+            $fj = intval($data['justified_absences'] ?? 0);
+$fi = intval($data['unjustified_absences'] ?? 0);
 
             if (
                 is_null($saber) || $saber === '' ||
@@ -181,11 +199,13 @@ $total = floor($total * 100) / 100;
                     'period_id' => $request->period_id
                 ],
                 [
-                    'saber' => $saber,
-                    'hacer' => $hacer,
-                    'ser'   => $ser,
-                    'total' => $total
-                ]
+    'saber' => $saber,
+    'hacer' => $hacer,
+    'ser'   => $ser,
+    'justified_absences' => $fj,
+    'unjustified_absences' => $fi,
+    'total' => $total
+]
             );
         }
 
@@ -203,7 +223,9 @@ $total = floor($total * 100) / 100;
             'saber' => 'nullable|numeric|min:1|max:5',
             'hacer' => 'nullable|numeric|min:1|max:5',
             'ser'   => 'nullable|numeric|min:1|max:5',
-        ]);
+        'justified_absences' => 'nullable|integer|min:0',
+'unjustified_absences' => 'nullable|integer|min:0',
+            ]);
 
         $saber = $request->saber;
         $hacer = $request->hacer;
@@ -223,6 +245,8 @@ $total = floor($total * 100) / 100;
             'saber' => $saber,
             'hacer' => $hacer,
             'ser'   => $ser,
+            'justified_absences' => $request->justified_absences,
+            'unjustified_absences' => $request->unjustified_absences,
             'total' => $total
         ]);
 

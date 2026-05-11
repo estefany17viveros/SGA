@@ -46,6 +46,8 @@ class ScoresImport implements ToCollection, WithHeadingRow
             $saber = $row['saber'] ?? null;
             $hacer = $row['hacer'] ?? null;
             $ser   = $row['ser'] ?? null;
+            $fj = $row['fj'] ?? 0;
+$fi = $row['fi'] ?? 0;
 
             // 🔥 SI NO HAY ID -> IGNORAR
             if (!$studentId) {
@@ -94,6 +96,8 @@ class ScoresImport implements ToCollection, WithHeadingRow
                     'saber' => $saber,
                     'hacer' => $hacer,
                     'ser'   => $ser,
+                    'justified_absences' => $fj,
+                    'unjustified_absences' => $fi,
                     'total' => $total,
                 ]
             );

@@ -177,6 +177,245 @@
                 @endif
             </div>
 
+            {{-- ═══════════════════════════════════════════════════════════
+                 📊 SECCIÓN: ESTADÍSTICAS DE EDADES Y GÉNERO
+                 Filtros: Grado | Rango de edad | Año | Género
+            ═══════════════════════════════════════════════════════════ --}}
+            <div class="card card--charts">
+                <div class="card-head">
+                    <div class="card-head-left">
+                        <span class="card-icon card-icon--blue">👥</span>
+                        <div>
+                            <h2 class="card-title">Estadísticas de Edades y Género</h2>
+                            <p class="card-desc">Distribución de estudiantes por rango de edad y sexo</p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Filtros --}}
+                <form method="GET" class="filters-bar" id="ageFiltersForm">
+                    {{-- Mantener filtros de otras secciones --}}
+                    @if($period)
+                        <input type="hidden" name="period" value="{{ $period }}">
+                    @endif
+
+                    <div class="filter-group">
+                        <label class="filter-label">Grado</label>
+                        <select name="grade_id" class="filter-select" onchange="document.getElementById('ageFiltersForm').submit()">
+                            <option value="">Todos los grados</option>
+                            @foreach($grades as $g)
+                                <option value="{{ $g->id }}" {{ $gradeId == $g->id ? 'selected' : '' }}>
+                                    {{ $g->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label">Rango de edad</label>
+                        <select name="age_range" class="filter-select" onchange="document.getElementById('ageFiltersForm').submit()">
+                            <option value="">Todos</option>
+                            <option value="9-12"  {{ ($ageRange ?? '') === '9-12'  ? 'selected' : '' }}>9 – 12 años</option>
+                            <option value="13-15" {{ ($ageRange ?? '') === '13-15' ? 'selected' : '' }}>13 – 15 años</option>
+                            <option value="16-19" {{ ($ageRange ?? '') === '16-19' ? 'selected' : '' }}>16 – 19 años</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label">Año</label>
+                        <select name="year" class="filter-select" onchange="document.getElementById('ageFiltersForm').submit()">
+                            <option value="">Todos los años</option>
+                            @foreach($years as $y)
+                                <option value="{{ $y }}" {{ ($year ?? '') == $y ? 'selected' : '' }}>{{ $y }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label">Género</label>
+                        <select name="gender" class="filter-select" onchange="document.getElementById('ageFiltersForm').submit()">
+                            <option value="">Todos</option>
+                            <option value="masculino" {{ ($genderFilter ?? '') === 'masculino' ? 'selected' : '' }}>
+    Masculino
+</option>
+
+<option value="femenino" {{ ($genderFilter ?? '') === 'femenino' ? 'selected' : '' }}>
+    Femenino
+</option>
+</select>
+                    </div>
+
+                    @if($gradeId || $ageRange || $year || $genderFilter)
+                        <a href="{{ route('dashboard') }}" class="filter-clear">✕ Limpiar</a>
+                    @endif
+                </form>
+
+                {{-- Tarjetas de resumen por rango --}}
+                <div class="age-summary-grid">
+                    @foreach($ageDistribution as $dist)
+                        <div class="age-summary-card">
+                            <span class="age-summary-range">{{ $dist['label'] }}</span>
+                            <span class="age-summary-count">{{ $dist['count'] }}</span>
+                            <span class="age-summary-text">estudiantes</span>
+                        </div>
+                    @endforeach
+                </div>
+
+                {{-- Gráficas --}}
+                <div class="charts-grid">
+                    {{-- Gráfica 1: Estudiantes por rango de edad --}}
+                    <div class="chart-box">
+                        <p class="chart-label chart-label--blue">📊 Estudiantes por rango de edad</p>
+                        <canvas id="ageRangeChart"></canvas>
+                    </div>
+
+                    {{-- Gráfica 2: Distribución por género --}}
+                    <div class="chart-box">
+                        <p class="chart-label chart-label--teal">⚧ Distribución por género</p>
+                        <canvas id="genderChart"></canvas>
+                    </div>
+
+                    {{-- Gráfica 3: Género por rango de edad --}}
+                    <div class="chart-box chart-box--full">
+                        <p class="chart-label chart-label--indigo">📊 Género por rango de edad</p>
+                        <canvas id="genderAgeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ═══════════════════════════════════════════════════════════
+                 🏆 DESEMPEÑO ACADÉMICO
+                 Superior / Alto / Básico / Bajo
+            ═══════════════════════════════════════════════════════════ --}}
+            <div class="card card--charts">
+                <div class="card-head">
+                    <div class="card-head-left">
+                        <span class="card-icon card-icon--indigo">🎯</span>
+                        <div>
+                            <h2 class="card-title">Desempeño Académico</h2>
+                            <p class="card-desc">Clasificación por niveles: Superior · Alto · Básico · Bajo</p>
+                        </div>
+                    </div>
+                    <form method="GET" class="period-form" id="perfFilterForm">
+                        @if($gradeId) <input type="hidden" name="grade_id" value="{{ $gradeId }}"> @endif
+                        @if($year)    <input type="hidden" name="year"     value="{{ $year }}">     @endif
+                        @if($genderFilter) <input type="hidden" name="gender" value="{{ $genderFilter }}"> @endif
+
+                        <select name="period" onchange="document.getElementById('perfFilterForm').submit()" class="period-select">
+                            <option value="">Todos los periodos</option>
+                            <option value="1" {{ ($period ?? '') == 1 ? 'selected' : '' }}>Periodo 1</option>
+                            <option value="2" {{ ($period ?? '') == 2 ? 'selected' : '' }}>Periodo 2</option>
+                            <option value="3" {{ ($period ?? '') == 3 ? 'selected' : '' }}>Periodo 3</option>
+                        </select>
+
+                        <select name="grade_id" onchange="document.getElementById('perfFilterForm').submit()" class="period-select">
+                            <option value="">Todos los grados</option>
+                            @foreach($grades as $g)
+                                <option value="{{ $g->id }}" {{ $gradeId == $g->id ? 'selected' : '' }}>{{ $g->name }}</option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div>
+
+                {{-- Cards de nivel --}}
+                <div class="perf-level-cards">
+                    <div class="perf-card perf-card--superior">
+                        <span class="perf-icon">🌟</span>
+                        <span class="perf-count">{{ $studentsByLevel['superior'] }}</span>
+                        <span class="perf-label">Superior</span>
+                        <span class="perf-range">≥ 4.6</span>
+                    </div>
+                    <div class="perf-card perf-card--alto">
+                        <span class="perf-icon">📈</span>
+                        <span class="perf-count">{{ $studentsByLevel['alto'] }}</span>
+                        <span class="perf-label">Alto</span>
+                        <span class="perf-range">4.0 – 4.5</span>
+                    </div>
+                    <div class="perf-card perf-card--basico">
+                        <span class="perf-icon">📊</span>
+                        <span class="perf-count">{{ $studentsByLevel['basico'] }}</span>
+                        <span class="perf-label">Básico</span>
+                        <span class="perf-range">3.0 – 3.9</span>
+                    </div>
+                    <div class="perf-card perf-card--bajo">
+                        <span class="perf-icon">⚠️</span>
+                        <span class="perf-count">{{ $studentsByLevel['bajo'] }}</span>
+                        <span class="perf-label">Bajo</span>
+                        <span class="perf-range">< 3.0</span>
+                    </div>
+                </div>
+
+                {{-- Gráficas de desempeño --}}
+                <div class="charts-grid">
+                    {{-- Pie: estudiantes por nivel --}}
+                    <div class="chart-box">
+                        <p class="chart-label chart-label--indigo">🥧 Estudiantes por nivel</p>
+                        <canvas id="perfPieChart"></canvas>
+                    </div>
+
+                    {{-- Barras: áreas por nivel --}}
+                    <div class="chart-box">
+                        <p class="chart-label chart-label--blue">📚 Materias por nivel de desempeño</p>
+                        <canvas id="subjectLevelChart"></canvas>
+                    </div>
+
+                    {{-- Barras apiladas: desempeño por grado --}}
+                    <div class="chart-box chart-box--full">
+                        <p class="chart-label chart-label--teal">🏫 Distribución de desempeño por grado</p>
+                        <canvas id="gradePerformanceChart"></canvas>
+                    </div>
+                </div>
+
+                {{-- Tabla detalle: áreas por nivel --}}
+                <div class="perf-detail-tabs">
+                    @foreach($performanceLevels as $key => $level)
+                        @if(count($level['subjects']) > 0)
+                            <div class="perf-detail-block perf-detail--{{ $key }}">
+                                <h3 class="perf-detail-title">
+                                    @if($key === 'superior') 🌟
+                                    @elseif($key === 'alto') 📈
+                                    @elseif($key === 'basico') 📊
+                                    @else ⚠️
+                                    @endif
+                                    {{ $level['label'] }}
+                                    <span class="perf-detail-badge">{{ $level['count'] }} áreas</span>
+                                </h3>
+                                <div class="table-scroll">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Área / Materia</th>
+                                                <th>Grado</th>
+                                                <th>Promedio</th>
+                                                <th>Nivel</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($level['subjects'] as $subj)
+                                                <tr>
+                                                    <td>{{ $subj['subject'] }}</td>
+                                                    <td>{{ $subj['grade'] }}</td>
+                                                    <td>
+                                                        <span class="chip chip--{{ $key === 'superior' ? 'blue' : ($key === 'alto' ? 'teal' : ($key === 'basico' ? 'amber' : 'red')) }}">
+                                                            {{ $subj['promedio'] }}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="level-badge level-badge--{{ $key }}">
+                                                            {{ $level['label'] }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+
             {{-- ── Ranking por grado ─────────────────────── --}}
             <div class="card">
                 <div class="card-head">
@@ -238,7 +477,7 @@
                 @endif
             </div>
 
-            {{-- ── Análisis Académico (Gráficas) ────────────── --}}
+            {{-- ── Análisis Académico (Gráficas originales) ──── --}}
             <div class="card card--charts">
                 <div class="card-head">
                     <div class="card-head-left">
@@ -327,6 +566,35 @@
                 </div>
             </div>
 
+            {{-- Mini resumen de desempeño --}}
+            <div class="side-card">
+                <h3 class="side-title">
+                    <span class="side-icon">🎯</span>
+                    Resumen de desempeño
+                </h3>
+                @php
+                    $totalPerf = array_sum($studentsByLevel);
+                @endphp
+                @foreach([
+                    'superior' => ['color' => '#1e88e5', 'label' => 'Superior'],
+                    'alto'     => ['color' => '#26a69a', 'label' => 'Alto'],
+                    'basico'   => ['color' => '#f59e0b', 'label' => 'Básico'],
+                    'bajo'     => ['color' => '#ef5350', 'label' => 'Bajo'],
+                ] as $key => $info)
+                    @php
+                        $cnt = $studentsByLevel[$key] ?? 0;
+                        $pctLevel = $totalPerf > 0 ? round(($cnt / $totalPerf) * 100) : 0;
+                    @endphp
+                    <div class="perf-bar-row">
+                        <span class="perf-bar-label">{{ $info['label'] }}</span>
+                        <div class="perf-bar-track">
+                            <div class="perf-bar-fill" style="width:{{ $pctLevel }}%; background:{{ $info['color'] }}"></div>
+                        </div>
+                        <span class="perf-bar-pct">{{ $pctLevel }}%</span>
+                    </div>
+                @endforeach
+            </div>
+
             {{-- Resumen --}}
             <div class="side-card side-card--info">
                 <h3 class="side-title">
@@ -370,86 +638,595 @@
 
 </div>{{-- /dash-root --}}
 
-{{-- ── Chart.js ──────────────────────────────────────────── --}}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    const low    = @json($lowSubjects ?? []);
-    const top    = @json($topSubjects ?? []);
-    const grades = @json($topGrades ?? []);
+{{-- ══════════════════════════════════════════════════════
+     ESTILOS ADICIONALES (inline para las nuevas secciones)
+══════════════════════════════════════════════════════ --}}
+<style>
+/* ── Barra de filtros ──────────────────────────────────── */
+.filters-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    align-items: flex-end;
+    padding: 1rem 1.5rem 1.25rem;
+    background: rgba(30,136,229,.04);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(30,136,229,.12);
+}
 
-    const baseOpts = {
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+}
+
+.filter-label {
+    font-size: .7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #78909c;
+}
+
+.filter-select {
+    padding: .45rem .85rem;
+    border-radius: 8px;
+    border: 1px solid rgba(84,110,122,.2);
+    background: #fff;
+    font-size: .85rem;
+    color: #263238;
+    cursor: pointer;
+    outline: none;
+    transition: border-color .2s;
+}
+
+.filter-select:focus { border-color: #1e88e5; }
+
+.filter-clear {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    padding: .45rem .85rem;
+    border-radius: 8px;
+    background: rgba(239,83,80,.1);
+    color: #ef5350;
+    font-size: .82rem;
+    font-weight: 600;
+    text-decoration: none;
+    align-self: flex-end;
+    transition: background .2s;
+}
+
+.filter-clear:hover { background: rgba(239,83,80,.2); }
+
+/* ── Resumen de rangos de edad ─────────────────────────── */
+.age-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.age-summary-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .2rem;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, rgba(30,136,229,.07), rgba(38,166,154,.05));
+    border-radius: 14px;
+    border: 1px solid rgba(30,136,229,.12);
+    text-align: center;
+}
+
+.age-summary-range {
+    font-size: .78rem;
+    font-weight: 600;
+    color: #546e7a;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.age-summary-count {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1e88e5;
+    line-height: 1;
+}
+
+.age-summary-text {
+    font-size: .75rem;
+    color: #90a4ae;
+}
+
+/* ── Cards de nivel de desempeño ──────────────────────── */
+.perf-level-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.perf-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .25rem;
+    padding: 1.5rem 1rem;
+    border-radius: 14px;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: transform .2s;
+}
+
+.perf-card:hover { transform: translateY(-2px); }
+
+.perf-card--superior { background: rgba(30,136,229,.08);  border-color: rgba(30,136,229,.2); }
+.perf-card--alto     { background: rgba(38,166,154,.08);  border-color: rgba(38,166,154,.2); }
+.perf-card--basico   { background: rgba(245,158,11,.08);  border-color: rgba(245,158,11,.2); }
+.perf-card--bajo     { background: rgba(239,83,80,.08);   border-color: rgba(239,83,80,.2);  }
+
+.perf-icon  { font-size: 1.5rem; }
+
+.perf-count {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.perf-card--superior .perf-count { color: #1e88e5; }
+.perf-card--alto     .perf-count { color: #26a69a; }
+.perf-card--basico   .perf-count { color: #f59e0b; }
+.perf-card--bajo     .perf-count { color: #ef5350; }
+
+.perf-label { font-size: .85rem; font-weight: 700; color: #37474f; }
+.perf-range { font-size: .72rem; color: #90a4ae; }
+
+/* ── Detalle de áreas por nivel ───────────────────────── */
+.perf-detail-tabs { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1.5rem; }
+
+.perf-detail-block { border-radius: 12px; overflow: hidden; border: 1px solid transparent; }
+.perf-detail--superior { border-color: rgba(30,136,229,.15);  }
+.perf-detail--alto     { border-color: rgba(38,166,154,.15);  }
+.perf-detail--basico   { border-color: rgba(245,158,11,.15);  }
+.perf-detail--bajo     { border-color: rgba(239,83,80,.15);   }
+
+.perf-detail-title {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .75rem 1rem;
+    font-size: .9rem;
+    font-weight: 700;
+    color: #37474f;
+}
+
+.perf-detail--superior .perf-detail-title { background: rgba(30,136,229,.06); }
+.perf-detail--alto     .perf-detail-title { background: rgba(38,166,154,.06); }
+.perf-detail--basico   .perf-detail-title { background: rgba(245,158,11,.06); }
+.perf-detail--bajo     .perf-detail-title { background: rgba(239,83,80,.06);  }
+
+.perf-detail-badge {
+    margin-left: auto;
+    font-size: .72rem;
+    padding: .2rem .6rem;
+    border-radius: 20px;
+    background: rgba(84,110,122,.1);
+    color: #546e7a;
+    font-weight: 600;
+}
+
+/* ── Level badges ─────────────────────────────────────── */
+.level-badge {
+    display: inline-block;
+    padding: .2rem .65rem;
+    border-radius: 20px;
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.level-badge--superior { background: rgba(30,136,229,.12); color: #1e88e5; }
+.level-badge--alto     { background: rgba(38,166,154,.12); color: #26a69a; }
+.level-badge--basico   { background: rgba(245,158,11,.12); color: #d97706; }
+.level-badge--bajo     { background: rgba(239,83,80,.12);  color: #ef5350; }
+
+/* ── Barras de desempeño (sidebar) ───────────────────── */
+.perf-bar-row {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-bottom: .6rem;
+}
+
+.perf-bar-label { font-size: .78rem; font-weight: 600; color: #546e7a; width: 60px; }
+
+.perf-bar-track {
+    flex: 1;
+    height: 7px;
+    background: rgba(84,110,122,.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.perf-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width .6s ease;
+}
+
+.perf-bar-pct { font-size: .75rem; font-weight: 700; color: #546e7a; width: 32px; text-align: right; }
+
+/* ── Responsive ───────────────────────────────────────── */
+@media (max-width: 768px) {
+    .age-summary-grid     { grid-template-columns: 1fr; }
+    .perf-level-cards     { grid-template-columns: repeat(2, 1fr); }
+    .filters-bar          { flex-direction: column; }
+}
+</style>
+
+{{-- ── Chart.js ──────────────────────────────────────────── --}}
+{{-- ═══════════════════════════════════════════════════════
+     CHART JS
+═══════════════════════════════════════════════════════ --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // ═══════════════════════════════════════════════════════
+    // DATOS
+    // ═══════════════════════════════════════════════════════
+
+    const lowSubjects = @json($lowSubjects ?? []);
+    const topSubjects = @json($topSubjects ?? []);
+    const topGrades = @json($topGrades ?? []);
+
+    const ageDistribution = @json($ageDistribution ?? []);
+    const genderDistribution = @json($genderDistribution ?? []);
+    const genderByAgeRange = @json($genderByAgeRange ?? []);
+
+    const studentsByLevel = @json($studentsByLevel ?? []);
+    const performanceLevels = @json($performanceLevels ?? []);
+    const performanceByGrade = @json($performanceByGrade ?? []);
+
+    // ═══════════════════════════════════════════════════════
+    // CONFIG BASE
+    // ═══════════════════════════════════════════════════════
+
+    Chart.defaults.font.family = "'DM Sans', sans-serif";
+
+    const baseOptions = {
         responsive: true,
-        plugins: { legend: { display: false } },
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: {
+                    color: '#546e7a'
+                }
+            }
+        },
         scales: {
             x: {
-                grid: { display: false },
-                ticks: { font: { family: "'DM Sans', sans-serif", size: 11 }, color: '#546e7a' }
+                ticks: {
+                    color: '#546e7a'
+                },
+                grid: {
+                    display: false
+                }
             },
             y: {
-                grid: { color: 'rgba(38,50,56,.06)' },
-                ticks: { font: { family: "'DM Sans', sans-serif", size: 11 }, color: '#546e7a' }
+                ticks: {
+                    color: '#546e7a'
+                },
+                grid: {
+                    color: 'rgba(0,0,0,.05)'
+                },
+                beginAtZero: true
             }
         }
     };
 
-    new Chart(document.getElementById('lowChart'), {
-        type: 'bar',
-        data: {
-            labels: low.map(i => i.name),
-            datasets: [{
-                label: 'Promedio',
-                data: low.map(i => i.promedio),
-                backgroundColor: 'rgba(239,83,80,.15)',
-                borderColor: '#ef5350',
-                borderWidth: 2,
-                borderRadius: 8
-            }]
-        },
-        options: baseOpts
-    });
+    // ═══════════════════════════════════════════════════════
+    // GRÁFICA EDADES
+    // ═══════════════════════════════════════════════════════
 
-    new Chart(document.getElementById('topChart'), {
-        type: 'bar',
-        data: {
-            labels: top.map(i => i.name),
-            datasets: [{
-                label: 'Promedio',
-                data: top.map(i => i.promedio),
-                backgroundColor: 'rgba(38,166,154,.15)',
-                borderColor: '#26a69a',
-                borderWidth: 2,
-                borderRadius: 8
-            }]
-        },
-        options: baseOpts
-    });
+    const ageChart = document.getElementById('ageRangeChart');
 
-    new Chart(document.getElementById('gradeChart'), {
-        type: 'doughnut',
-        data: {
-            labels: grades.map(i => i.name),
-            datasets: [{
-                data: grades.map(i => i.promedio),
-                backgroundColor: ['#1e88e5','#26a69a','#f59e0b','#ef5350','#5c6bc0','#80cbc4'],
-                borderWidth: 0,
-                hoverOffset: 8
-            }]
-        },
-        options: {
-            responsive: true,
-            cutout: '62%',
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        font: { family: "'DM Sans', sans-serif", size: 11 },
-                        color: '#546e7a',
-                        padding: 16
+    if (ageChart) {
+
+        new Chart(ageChart, {
+            type: 'bar',
+            data: {
+                labels: ageDistribution.map(i => i.label),
+                datasets: [{
+                    label: 'Estudiantes',
+                    data: ageDistribution.map(i => i.count),
+                    backgroundColor: [
+                        'rgba(30,136,229,.6)',
+                        'rgba(38,166,154,.6)',
+                        'rgba(92,107,192,.6)'
+                    ],
+                    borderRadius: 10
+                }]
+            },
+            options: baseOptions
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // GÉNERO
+    // ═══════════════════════════════════════════════════════
+
+    const genderChart = document.getElementById('genderChart');
+
+    if (genderChart) {
+
+        new Chart(genderChart, {
+            type: 'doughnut',
+            data: {
+                labels: ['Masculino', 'Femenino'],
+                datasets: [{
+                    data: [
+                        genderDistribution.masculino?.count ?? 0,
+                        genderDistribution.femenino?.count ?? 0
+                    ],
+                    backgroundColor: [
+                        'rgba(30,136,229,.8)',
+                        'rgba(239,83,80,.8)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%'
+            }
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // GÉNERO POR EDAD
+    // ═══════════════════════════════════════════════════════
+
+    const genderAgeChart = document.getElementById('genderAgeChart');
+
+    if (genderAgeChart) {
+
+        new Chart(genderAgeChart, {
+            type: 'bar',
+            data: {
+                labels: genderByAgeRange.map(i => i.range),
+                datasets: [
+                    {
+                        label: 'Masculino',
+                        data: genderByAgeRange.map(i => i.masculino),
+                        backgroundColor: 'rgba(30,136,229,.7)',
+                        borderRadius: 8
+                    },
+                    {
+                        label: 'Femenino',
+                        data: genderByAgeRange.map(i => i.femenino),
+                        backgroundColor: 'rgba(239,83,80,.7)',
+                        borderRadius: 8
+                    }
+                ]
+            },
+            options: baseOptions
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // PIE DESEMPEÑO
+    // ═══════════════════════════════════════════════════════
+
+    const perfPieChart = document.getElementById('perfPieChart');
+
+    if (perfPieChart) {
+
+        new Chart(perfPieChart, {
+            type: 'doughnut',
+            data: {
+                labels: ['Superior', 'Alto', 'Básico', 'Bajo'],
+                datasets: [{
+                    data: [
+                        studentsByLevel.superior ?? 0,
+                        studentsByLevel.alto ?? 0,
+                        studentsByLevel.basico ?? 0,
+                        studentsByLevel.bajo ?? 0
+                    ],
+                    backgroundColor: [
+                        'rgba(30,136,229,.8)',
+                        'rgba(38,166,154,.8)',
+                        'rgba(245,158,11,.8)',
+                        'rgba(239,83,80,.8)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%'
+            }
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // MATERIAS POR NIVEL
+    // ═══════════════════════════════════════════════════════
+
+    const subjectLevelChart = document.getElementById('subjectLevelChart');
+
+    if (subjectLevelChart) {
+
+        new Chart(subjectLevelChart, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(performanceLevels).map(k => performanceLevels[k].label),
+                datasets: [{
+                    label: 'Materias',
+                    data: Object.keys(performanceLevels).map(k => performanceLevels[k].count),
+                    backgroundColor: [
+                        'rgba(30,136,229,.7)',
+                        'rgba(38,166,154,.7)',
+                        'rgba(245,158,11,.7)',
+                        'rgba(239,83,80,.7)'
+                    ],
+                    borderRadius: 8
+                }]
+            },
+            options: baseOptions
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // DESEMPEÑO POR GRADO
+    // ═══════════════════════════════════════════════════════
+
+    const gradePerformanceChart = document.getElementById('gradePerformanceChart');
+
+    if (gradePerformanceChart) {
+
+        new Chart(gradePerformanceChart, {
+            type: 'bar',
+            data: {
+                labels: performanceByGrade.map(i => i.grade),
+                datasets: [
+                    {
+                        label: 'Superior',
+                        data: performanceByGrade.map(i => i.superior),
+                        backgroundColor: 'rgba(30,136,229,.8)'
+                    },
+                    {
+                        label: 'Alto',
+                        data: performanceByGrade.map(i => i.alto),
+                        backgroundColor: 'rgba(38,166,154,.8)'
+                    },
+                    {
+                        label: 'Básico',
+                        data: performanceByGrade.map(i => i.basico),
+                        backgroundColor: 'rgba(245,158,11,.8)'
+                    },
+                    {
+                        label: 'Bajo',
+                        data: performanceByGrade.map(i => i.bajo),
+                        backgroundColor: 'rgba(239,83,80,.8)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        stacked: true
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true
                     }
                 }
             }
-        }
-    });
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // BAJO RENDIMIENTO
+    // ═══════════════════════════════════════════════════════
+
+    const lowChart = document.getElementById('lowChart');
+
+    if (lowChart) {
+
+        new Chart(lowChart, {
+            type: 'bar',
+            data: {
+                labels: lowSubjects.map(i => i.name),
+                datasets: [{
+                    label: 'Promedio',
+                    data: lowSubjects.map(i => i.promedio),
+                    backgroundColor: 'rgba(239,83,80,.7)',
+                    borderRadius: 8
+                }]
+            },
+            options: baseOptions
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // MEJORES MATERIAS
+    // ═══════════════════════════════════════════════════════
+
+    const topChart = document.getElementById('topChart');
+
+    if (topChart) {
+
+        new Chart(topChart, {
+            type: 'bar',
+            data: {
+                labels: topSubjects.map(i => i.name),
+                datasets: [{
+                    label: 'Promedio',
+                    data: topSubjects.map(i => i.promedio),
+                    backgroundColor: 'rgba(38,166,154,.7)',
+                    borderRadius: 8
+                }]
+            },
+            options: baseOptions
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // PROMEDIO POR GRADO
+    // ═══════════════════════════════════════════════════════
+
+    const gradeChart = document.getElementById('gradeChart');
+
+    if (gradeChart) {
+
+        new Chart(gradeChart, {
+            type: 'doughnut',
+            data: {
+                labels: topGrades.map(i => i.name),
+                datasets: [{
+                    data: topGrades.map(i => i.promedio),
+                    backgroundColor: [
+                        '#1e88e5',
+                        '#26a69a',
+                        '#f59e0b',
+                        '#ef5350',
+                        '#7e57c2',
+                        '#42a5f5',
+                        '#66bb6a'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%'
+            }
+        });
+    }
+
+});
 </script>
+
+<style>
+.chart-box{
+    position: relative;
+    min-height: 340px;
+}
+
+.chart-box canvas{
+    width: 100% !important;
+    height: 320px !important;
+}
+</style>
 
 </x-app-layout>

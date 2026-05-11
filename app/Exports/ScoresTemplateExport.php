@@ -31,7 +31,9 @@ class ScoresTemplateExport implements
             'SABER',
             'HACER',
             'SER',
-            'PROMEDIO'
+            'PROMEDIO',
+            'FI',
+            'FJ'
         ];
     }
 
@@ -56,15 +58,18 @@ class ScoresTemplateExport implements
 
                 'ser' => '',
 
-                'promedio' => "=TRUNC((D{$row}+E{$row}+F{$row})/3,1)"
-            ];
+                'promedio' => "=TRUNC((D{$row}+E{$row}+F{$row})/3,1)",
+                'fj' => '',
+                'fi' => '',
+
+                ];
         });
 }
 
     public function styles(Worksheet $sheet)
     {
         // 🔥 ENCABEZADOS
-        $sheet->getStyle('A1:G1')->applyFromArray([
+        $sheet->getStyle('A1:I1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'size' => 12,
@@ -82,10 +87,10 @@ class ScoresTemplateExport implements
         ]);
 
         // 🔥 CENTRAR
-        $sheet->getStyle('A:G')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('A:I')->getAlignment()->setHorizontal('center');
 
         // 🔥 BORDES
-        $sheet->getStyle('A1:G' . ($this->students->count() + 1))
+        $sheet->getStyle('A1:I' . ($this->students->count() + 1))
             ->applyFromArray([
                 'borders' => [
                     'allBorders' => [
