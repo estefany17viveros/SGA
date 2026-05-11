@@ -5,9 +5,7 @@
 <x-app-layout>
 <div class="dash-root">
 
-    {{-- ══════════════════════════════════════════════════════
-         HERO SECTION
-    ══════════════════════════════════════════════════════ --}}
+    {{-- ══ HERO ══════════════════════════════════════════════════ --}}
     <section class="hero">
         <div class="hero-orb hero-orb-1"></div>
         <div class="hero-orb hero-orb-2"></div>
@@ -15,22 +13,13 @@
 
         <div class="hero-content">
             <div class="hero-pills">
-                <span class="pill pill-status">
-                    <span class="pill-dot"></span>
-                    Sistema Activo
-                </span>
-                <span class="pill pill-role">
-                    🎓 {{ ucfirst(Auth::user()->role) }}
-                </span>
+                <span class="pill pill-status"><span class="pill-dot"></span>Sistema Activo</span>
+                <span class="pill pill-role">🎓 {{ ucfirst(Auth::user()->role) }}</span>
             </div>
-
-            <h1 class="hero-title">
-                Hola, <em>{{ Auth::user()->name }}</em>
-            </h1>
+            <h1 class="hero-title">Hola, <em>{{ Auth::user()->name }}</em></h1>
             <p class="hero-sub">Panel de control académico · Vista general del sistema</p>
         </div>
 
-        {{-- Métricas hero --}}
         <div class="hero-stats">
             <div class="hstat">
                 <span class="hstat-num">{{ $totalStudents ?? 0 }}</span>
@@ -54,15 +43,13 @@
         </div>
     </section>
 
-    {{-- ══════════════════════════════════════════════════════
-         CUERPO PRINCIPAL: 2 columnas
-    ══════════════════════════════════════════════════════ --}}
+    {{-- ══ CUERPO PRINCIPAL ════════════════════════════════════════ --}}
     <div class="dash-body">
 
-        {{-- ── Columna principal ──────────────────────────── --}}
+        {{-- ════════════════ COLUMNA PRINCIPAL ════════════════ --}}
         <div class="dash-main">
 
-            {{-- ── Mayores de edad ──────────────────────────── --}}
+            {{-- ── Mayores de edad ───────────────────── --}}
             <div class="card">
                 <div class="card-head">
                     <div class="card-head-left">
@@ -72,57 +59,36 @@
                             <p class="card-desc">Alumnos con 18 años cumplidos o más</p>
                         </div>
                     </div>
-                    @if(isset($adultStudents))
-                        <span class="badge badge--red">{{ $adultStudentsCount ?? 0 }} registros</span>
-                    @endif
+                    <span class="badge badge--red">{{ $adultStudentsCount ?? 0 }} registros</span>
                 </div>
 
                 @if(isset($adultStudents) && $adultStudents->count())
                     <div class="table-scroll">
                         <table class="table">
                             <thead>
-                                <tr>
-                                    <th class="col-num">#</th>
-                                    <th>Nombre</th>
-                                    <th>Edad</th>
-                                    <th>Estado</th>
-                                </tr>
+                                <tr><th>#</th><th>Nombre</th><th>Edad</th><th>Estado</th></tr>
                             </thead>
                             <tbody>
                                 @foreach($adultStudents as $index => $student)
-                                    <tr>
-                                        <td class="col-num">{{ $index + 1 }}</td>
-                                        <td class="col-name">
-                                            <div class="avatar avatar--blue">
-                                                {{ strtoupper(substr($student->first_name, 0, 1)) }}{{ strtoupper(substr($student->last_name, 0, 1)) }}
-                                            </div>
-                                            <span>{{ $student->first_name }} {{ $student->last_name }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="chip chip--red">
-                                                {{ \Carbon\Carbon::parse($student->birth_date)->age }} años
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="chip chip--green">
-                                                <span class="chip-dot"></span>
-                                                Activo
-                                            </span>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td class="col-num">{{ $index + 1 }}</td>
+                                    <td class="col-name">
+                                        <div class="avatar avatar--blue">{{ strtoupper(substr($student->first_name,0,1)) }}{{ strtoupper(substr($student->last_name,0,1)) }}</div>
+                                        <span>{{ $student->first_name }} {{ $student->last_name }}</span>
+                                    </td>
+                                    <td><span class="chip chip--red">{{ \Carbon\Carbon::parse($student->birth_date)->age }} años</span></td>
+                                    <td><span class="chip chip--green"><span class="chip-dot"></span>Activo</span></td>
+                                </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                 @else
-                    <div class="empty-state">
-                        <span class="empty-icon">🎓</span>
-                        <p>No hay estudiantes mayores de edad registrados.</p>
-                    </div>
+                    <div class="empty-state"><span class="empty-icon">🎓</span><p>No hay estudiantes mayores de edad.</p></div>
                 @endif
             </div>
 
-            {{-- ── Próximos a los 18 ─────────────────────── --}}
+            {{-- ── Próximos a los 18 ─────────────────── --}}
             <div class="card">
                 <div class="card-head">
                     <div class="card-head-left">
@@ -139,48 +105,29 @@
                     <div class="table-scroll">
                         <table class="table">
                             <thead>
-                                <tr>
-                                    <th class="col-num">#</th>
-                                    <th>Nombre</th>
-                                    <th>Días faltantes</th>
-                                    <th>Alerta</th>
-                                </tr>
+                                <tr><th>#</th><th>Nombre</th><th>Días faltantes</th><th>Alerta</th></tr>
                             </thead>
                             <tbody>
                                 @foreach($upcomingStudents as $index => $student)
-                                    <tr>
-                                        <td class="col-num">{{ $index + 1 }}</td>
-                                        <td class="col-name">
-                                            <div class="avatar avatar--amber">
-                                                {{ strtoupper(substr($student->first_name, 0, 1)) }}{{ strtoupper(substr($student->last_name, 0, 1)) }}
-                                            </div>
-                                            <span>{{ $student->first_name }} {{ $student->last_name }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="chip chip--amber">
-                                                {{ $student->dias_faltantes }} días
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="alert-label">{{ $student->alerta }}</span>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td class="col-num">{{ $index + 1 }}</td>
+                                    <td class="col-name">
+                                        <div class="avatar avatar--amber">{{ strtoupper(substr($student->first_name,0,1)) }}{{ strtoupper(substr($student->last_name,0,1)) }}</div>
+                                        <span>{{ $student->first_name }} {{ $student->last_name }}</span>
+                                    </td>
+                                    <td><span class="chip chip--amber">{{ $student->dias_faltantes }} días</span></td>
+                                    <td><span class="alert-label">{{ $student->alerta }}</span></td>
+                                </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                 @else
-                    <div class="empty-state">
-                        <span class="empty-icon">⏳</span>
-                        <p>No hay estudiantes próximos a cumplir 18 años.</p>
-                    </div>
+                    <div class="empty-state"><span class="empty-icon">⏳</span><p>No hay estudiantes próximos a cumplir 18 años.</p></div>
                 @endif
             </div>
 
-            {{-- ═══════════════════════════════════════════════════════════
-                 📊 SECCIÓN: ESTADÍSTICAS DE EDADES Y GÉNERO
-                 Filtros: Grado | Rango de edad | Año | Género
-            ═══════════════════════════════════════════════════════════ --}}
+            {{-- ══ ESTADÍSTICAS EDADES Y GÉNERO ════════════════════ --}}
             <div class="card card--charts">
                 <div class="card-head">
                     <div class="card-head-left">
@@ -194,26 +141,21 @@
 
                 {{-- Filtros --}}
                 <form method="GET" class="filters-bar" id="ageFiltersForm">
-                    {{-- Mantener filtros de otras secciones --}}
-                    @if($period)
-                        <input type="hidden" name="period" value="{{ $period }}">
-                    @endif
+                    @if($period)<input type="hidden" name="period" value="{{ $period }}">@endif
 
                     <div class="filter-group">
                         <label class="filter-label">Grado</label>
-                        <select name="grade_id" class="filter-select" onchange="document.getElementById('ageFiltersForm').submit()">
+                        <select name="grade_id" class="filter-select" onchange="this.form.submit()">
                             <option value="">Todos los grados</option>
                             @foreach($grades as $g)
-                                <option value="{{ $g->id }}" {{ $gradeId == $g->id ? 'selected' : '' }}>
-                                    {{ $g->name }}
-                                </option>
+                                <option value="{{ $g->id }}" {{ $gradeId == $g->id ? 'selected' : '' }}>{{ $g->name }}</option>
                             @endforeach
                         </select>
                     </div>
 
                     <div class="filter-group">
                         <label class="filter-label">Rango de edad</label>
-                        <select name="age_range" class="filter-select" onchange="document.getElementById('ageFiltersForm').submit()">
+                        <select name="age_range" class="filter-select" onchange="this.form.submit()">
                             <option value="">Todos</option>
                             <option value="9-12"  {{ ($ageRange ?? '') === '9-12'  ? 'selected' : '' }}>9 – 12 años</option>
                             <option value="13-15" {{ ($ageRange ?? '') === '13-15' ? 'selected' : '' }}>13 – 15 años</option>
@@ -223,7 +165,7 @@
 
                     <div class="filter-group">
                         <label class="filter-label">Año</label>
-                        <select name="year" class="filter-select" onchange="document.getElementById('ageFiltersForm').submit()">
+                        <select name="year" class="filter-select" onchange="this.form.submit()">
                             <option value="">Todos los años</option>
                             @foreach($years as $y)
                                 <option value="{{ $y }}" {{ ($year ?? '') == $y ? 'selected' : '' }}>{{ $y }}</option>
@@ -233,16 +175,11 @@
 
                     <div class="filter-group">
                         <label class="filter-label">Género</label>
-                        <select name="gender" class="filter-select" onchange="document.getElementById('ageFiltersForm').submit()">
+                        <select name="gender" class="filter-select" onchange="this.form.submit()">
                             <option value="">Todos</option>
-                            <option value="masculino" {{ ($genderFilter ?? '') === 'masculino' ? 'selected' : '' }}>
-    Masculino
-</option>
-
-<option value="femenino" {{ ($genderFilter ?? '') === 'femenino' ? 'selected' : '' }}>
-    Femenino
-</option>
-</select>
+                            <option value="masculino" {{ ($genderFilter ?? '') === 'masculino' ? 'selected' : '' }}>Masculino</option>
+                            <option value="femenino"  {{ ($genderFilter ?? '') === 'femenino'  ? 'selected' : '' }}>Femenino</option>
+                        </select>
                     </div>
 
                     @if($gradeId || $ageRange || $year || $genderFilter)
@@ -250,32 +187,27 @@
                     @endif
                 </form>
 
-                {{-- Tarjetas de resumen por rango --}}
+                {{-- Resumen --}}
                 <div class="age-summary-grid">
                     @foreach($ageDistribution as $dist)
-                        <div class="age-summary-card">
-                            <span class="age-summary-range">{{ $dist['label'] }}</span>
-                            <span class="age-summary-count">{{ $dist['count'] }}</span>
-                            <span class="age-summary-text">estudiantes</span>
-                        </div>
+                    <div class="age-summary-card">
+                        <span class="age-summary-range">{{ $dist['label'] }}</span>
+                        <span class="age-summary-count">{{ $dist['count'] }}</span>
+                        <span class="age-summary-text">estudiantes</span>
+                    </div>
                     @endforeach
                 </div>
 
                 {{-- Gráficas --}}
                 <div class="charts-grid">
-                    {{-- Gráfica 1: Estudiantes por rango de edad --}}
                     <div class="chart-box">
-                        <p class="chart-label chart-label--blue">📊 Estudiantes por rango de edad</p>
+                        <p class="chart-label chart-label--blue">📊 Por rango de edad</p>
                         <canvas id="ageRangeChart"></canvas>
                     </div>
-
-                    {{-- Gráfica 2: Distribución por género --}}
                     <div class="chart-box">
-                        <p class="chart-label chart-label--teal">⚧ Distribución por género</p>
+                        <p class="chart-label chart-label--teal">⚧ Por género</p>
                         <canvas id="genderChart"></canvas>
                     </div>
-
-                    {{-- Gráfica 3: Género por rango de edad --}}
                     <div class="chart-box chart-box--full">
                         <p class="chart-label chart-label--indigo">📊 Género por rango de edad</p>
                         <canvas id="genderAgeChart"></canvas>
@@ -283,10 +215,7 @@
                 </div>
             </div>
 
-            {{-- ═══════════════════════════════════════════════════════════
-                 🏆 DESEMPEÑO ACADÉMICO
-                 Superior / Alto / Básico / Bajo
-            ═══════════════════════════════════════════════════════════ --}}
+            {{-- ══ DESEMPEÑO ACADÉMICO ═══════════════════════════════ --}}
             <div class="card card--charts">
                 <div class="card-head">
                     <div class="card-head-left">
@@ -297,18 +226,18 @@
                         </div>
                     </div>
                     <form method="GET" class="period-form" id="perfFilterForm">
-                        @if($gradeId) <input type="hidden" name="grade_id" value="{{ $gradeId }}"> @endif
-                        @if($year)    <input type="hidden" name="year"     value="{{ $year }}">     @endif
-                        @if($genderFilter) <input type="hidden" name="gender" value="{{ $genderFilter }}"> @endif
+                        @if($gradeId)<input type="hidden" name="grade_id" value="{{ $gradeId }}">@endif
+                        @if($year)<input type="hidden" name="year" value="{{ $year }}">@endif
+                        @if($genderFilter)<input type="hidden" name="gender" value="{{ $genderFilter }}">@endif
 
-                        <select name="period" onchange="document.getElementById('perfFilterForm').submit()" class="period-select">
+                        <select name="period" onchange="this.form.submit()" class="period-select">
                             <option value="">Todos los periodos</option>
                             <option value="1" {{ ($period ?? '') == 1 ? 'selected' : '' }}>Periodo 1</option>
                             <option value="2" {{ ($period ?? '') == 2 ? 'selected' : '' }}>Periodo 2</option>
                             <option value="3" {{ ($period ?? '') == 3 ? 'selected' : '' }}>Periodo 3</option>
                         </select>
 
-                        <select name="grade_id" onchange="document.getElementById('perfFilterForm').submit()" class="period-select">
+                        <select name="grade_id" onchange="this.form.submit()" class="period-select">
                             <option value="">Todos los grados</option>
                             @foreach($grades as $g)
                                 <option value="{{ $g->id }}" {{ $gradeId == $g->id ? 'selected' : '' }}>{{ $g->name }}</option>
@@ -347,167 +276,147 @@
 
                 {{-- Gráficas de desempeño --}}
                 <div class="charts-grid">
-                    {{-- Pie: estudiantes por nivel --}}
                     <div class="chart-box">
-                        <p class="chart-label chart-label--indigo">🥧 Estudiantes por nivel</p>
+                        <p class="chart-label chart-label--indigo">🥧 Notas por nivel</p>
                         <canvas id="perfPieChart"></canvas>
                     </div>
-
-                    {{-- Barras: áreas por nivel --}}
                     <div class="chart-box">
-                        <p class="chart-label chart-label--blue">📚 Materias por nivel de desempeño</p>
+                        <p class="chart-label chart-label--blue">📚 Áreas por nivel</p>
                         <canvas id="subjectLevelChart"></canvas>
                     </div>
-
-                    {{-- Barras apiladas: desempeño por grado --}}
                     <div class="chart-box chart-box--full">
-                        <p class="chart-label chart-label--teal">🏫 Distribución de desempeño por grado</p>
+                        <p class="chart-label chart-label--teal">🏫 Desempeño por grado</p>
                         <canvas id="gradePerformanceChart"></canvas>
                     </div>
                 </div>
 
-                {{-- Tabla detalle: áreas por nivel --}}
+                {{-- ══ TABLA RESUMEN POR ÁREA (un registro por materia) ══ --}}
                 <div class="perf-detail-tabs">
                     @foreach($performanceLevels as $key => $level)
                         @if(count($level['subjects']) > 0)
-                            <div class="perf-detail-block perf-detail--{{ $key }}">
-                                <h3 class="perf-detail-title">
-                                    @if($key === 'superior') 🌟
-                                    @elseif($key === 'alto') 📈
-                                    @elseif($key === 'basico') 📊
-                                    @else ⚠️
-                                    @endif
-                                    {{ $level['label'] }}
-                                    <span class="perf-detail-badge">{{ $level['count'] }} áreas</span>
-                                </h3>
-                                <div class="table-scroll">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Área / Materia</th>
-                                                <th>Grado</th>
-                                                <th>Promedio</th>
-                                                <th>Nivel</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($level['subjects'] as $subj)
-                                                <tr>
-                                                    <td>{{ $subj['subject'] }}</td>
-                                                    <td>{{ $subj['grade'] }}</td>
-                                                    <td>
-                                                        <span class="chip chip--{{ $key === 'superior' ? 'blue' : ($key === 'alto' ? 'teal' : ($key === 'basico' ? 'amber' : 'red')) }}">
-                                                            {{ $subj['promedio'] }}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span class="level-badge level-badge--{{ $key }}">
-                                                            {{ $level['label'] }}
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <div class="perf-detail-block perf-detail--{{ $key }}">
+                            <h3 class="perf-detail-title">
+                                @if($key==='superior')🌟@elseif($key==='alto')📈@elseif($key==='basico')📊@else⚠️@endif
+                                {{ $level['label'] }}
+                                <span class="perf-detail-badge">{{ $level['count'] }} áreas</span>
+                            </h3>
+                            <div class="table-scroll">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Área / Materia</th>
+                                            <th>Grado</th>
+                                            <th>Promedio</th>
+                                            <th>Nivel</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($level['subjects'] as $subj)
+                                        <tr>
+                                            <td>{{ $subj['subject'] }}</td>
+                                            <td>{{ $subj['grade'] }}</td>
+                                            <td>
+                                                <span class="chip chip--{{ $key==='superior'?'blue':($key==='alto'?'teal':($key==='basico'?'amber':'red')) }}">
+                                                    {{ $subj['promedio'] }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="level-badge level-badge--{{ $key }}">{{ $level['label'] }}</span>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
+                        </div>
                         @endif
                     @endforeach
                 </div>
             </div>
 
-            {{-- ── Ranking por grado ─────────────────────── --}}
+            {{-- ══ RANKING ════════════════════════════════════════════ --}}
             <div class="card">
                 <div class="card-head">
                     <div class="card-head-left">
                         <span class="card-icon card-icon--teal">🏆</span>
                         <div>
                             <h2 class="card-title">Ranking de estudiantes por grado</h2>
-                            <p class="card-desc">Top 5 estudiantes según promedio académico</p>
+                            <p class="card-desc">Top 5 según promedio académico</p>
                         </div>
                     </div>
                 </div>
 
                 @if(isset($rankingStudents) && count($rankingStudents))
-                    @foreach($rankingStudents as $grade => $students)
+                    <div class="ranking-grid">
+                        @foreach($rankingStudents as $grade => $students)
                         <div class="ranking-block">
                             <h3 class="ranking-grade-title">🎓 {{ $grade }}</h3>
-                            <div class="table-scroll">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Estudiante</th>
-                                            <th>Promedio</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($students->take(5) as $index => $student)
-                                            <tr>
-                                                <td class="col-medal">
-                                                    @if($index === 0) 🥇
-                                                    @elseif($index === 1) 🥈
-                                                    @elseif($index === 2) 🥉
-                                                    @else <span class="medal-num">{{ $index + 1 }}</span>
-                                                    @endif
-                                                </td>
-                                                <td class="col-name">
-                                                    <div class="avatar avatar--teal">
-                                                        {{ strtoupper(substr($student->first_name, 0, 1)) }}{{ strtoupper(substr($student->last_name, 0, 1)) }}
-                                                    </div>
-                                                    <span>{{ $student->first_name }} {{ $student->last_name }}</span>
-                                                </td>
-                                                <td>
-                                                    <span class="chip chip--blue">
-                                                        {{ number_format($student->promedio, 2) }}
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                            <table class="table">
+                                <thead><tr><th>#</th><th>Estudiante</th><th>Promedio</th></tr></thead>
+                                <tbody>
+                                    @foreach($students->take(5) as $index => $student)
+                                    <tr>
+                                        <td class="col-medal">
+                                            @if($index===0)🥇@elseif($index===1)🥈@elseif($index===2)🥉@else<span class="medal-num">{{ $index+1 }}</span>@endif
+                                        </td>
+                                        <td class="col-name">
+                                            <div class="avatar avatar--teal">{{ strtoupper(substr($student->first_name,0,1)) }}{{ strtoupper(substr($student->last_name,0,1)) }}</div>
+                                            <span>{{ $student->first_name }} {{ $student->last_name }}</span>
+                                        </td>
+                                        <td><span class="chip chip--blue">{{ number_format($student->promedio,2) }}</span></td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
-                    @endforeach
-                @else
-                    <div class="empty-state">
-                        <span class="empty-icon">🏆</span>
-                        <p>No hay datos de ranking disponibles.</p>
+                        @endforeach
                     </div>
+                @else
+                    <div class="empty-state"><span class="empty-icon">🏆</span><p>No hay datos de ranking.</p></div>
                 @endif
             </div>
 
-            {{-- ── Análisis Académico (Gráficas originales) ──── --}}
+            {{-- ══ ANÁLISIS ACADÉMICO ═══════════════════════════════════
+                 Bajo rendimiento vs Mejor rendimiento (promedios reales)
+            ══════════════════════════════════════════════════════════ --}}
             <div class="card card--charts">
                 <div class="card-head">
                     <div class="card-head-left">
                         <span class="card-icon card-icon--indigo">📊</span>
                         <div>
                             <h2 class="card-title">Análisis Académico</h2>
-                            <p class="card-desc">Rendimiento por materias y grados</p>
+                            <p class="card-desc">Promedio por materias · las 5 con menor y mayor rendimiento</p>
                         </div>
                     </div>
                     <form method="GET" class="period-form">
+                        @if($gradeId)<input type="hidden" name="grade_id" value="{{ $gradeId }}">@endif
+                        @if($genderFilter)<input type="hidden" name="gender" value="{{ $genderFilter }}">@endif
                         <select name="period" onchange="this.form.submit()" class="period-select">
                             <option value="">Todos los periodos</option>
-                            <option value="1" {{ ($period ?? '') == 1 ? 'selected' : '' }}>Periodo 1</option>
-                            <option value="2" {{ ($period ?? '') == 2 ? 'selected' : '' }}>Periodo 2</option>
-                            <option value="3" {{ ($period ?? '') == 3 ? 'selected' : '' }}>Periodo 3</option>
+                            <option value="1" {{ ($period??'')==1?'selected':'' }}>Periodo 1</option>
+                            <option value="2" {{ ($period??'')==2?'selected':'' }}>Periodo 2</option>
+                            <option value="3" {{ ($period??'')==3?'selected':'' }}>Periodo 3</option>
                         </select>
                     </form>
                 </div>
 
+                {{-- Explicación de lectura --}}
+                <div class="chart-reading-note">
+                    <span class="note-icon">ℹ️</span>
+                    <span>Las gráficas muestran el <strong>promedio de notas</strong> por materia. Las barras rojas son las materias con menor promedio; las verdes, las de mejor rendimiento. Una misma materia puede aparecer en ambas si su promedio está en el rango medio, o solo en una si está en los extremos.</span>
+                </div>
+
                 <div class="charts-grid">
                     <div class="chart-box">
-                        <p class="chart-label chart-label--red">📉 Bajo rendimiento</p>
+                        <p class="chart-label chart-label--red">📉 Menor promedio (Top 5)</p>
                         <canvas id="lowChart"></canvas>
                     </div>
                     <div class="chart-box">
-                        <p class="chart-label chart-label--teal">📈 Mejor rendimiento</p>
+                        <p class="chart-label chart-label--teal">📈 Mayor promedio (Top 5)</p>
                         <canvas id="topChart"></canvas>
                     </div>
                     <div class="chart-box chart-box--full">
-                        <p class="chart-label chart-label--blue">🏫 Distribución por grado</p>
+                        <p class="chart-label chart-label--blue">🏫 Promedio por grado</p>
                         <canvas id="gradeChart"></canvas>
                     </div>
                 </div>
@@ -515,10 +424,10 @@
 
         </div>{{-- /dash-main --}}
 
-        {{-- ── Sidebar derecha ─────────────────────────────── --}}
+        {{-- ════════════════ SIDEBAR ════════════════ --}}
         <aside class="dash-side">
 
-            {{-- Estado del sistema --}}
+            {{-- Estado sistema --}}
             <div class="side-card side-card--status">
                 <div class="side-status-row">
                     <span class="status-dot-pulse"></span>
@@ -529,11 +438,7 @@
 
             {{-- Donut distribución --}}
             <div class="side-card">
-                <h3 class="side-title">
-                    <span class="side-icon">🍩</span>
-                    Distribución por edad
-                </h3>
-
+                <h3 class="side-title"><span class="side-icon">🍩</span> Distribución por edad</h3>
                 @php
                     $total  = $totalStudents ?? 1;
                     $adults = $adultStudentsCount ?? 0;
@@ -542,7 +447,6 @@
                     $circ   = 282;
                     $dash   = round(($pct / 100) * $circ);
                 @endphp
-
                 <div class="donut-wrap">
                     <svg class="donut-svg" viewBox="0 0 100 100">
                         <circle class="donut-track" cx="50" cy="50" r="45"/>
@@ -553,78 +457,56 @@
                         <text x="50" y="58" class="donut-sub">adultos</text>
                     </svg>
                 </div>
-
                 <div class="donut-legend">
-                    <span class="leg-item">
-                        <span class="leg-dot leg-dot--red"></span>
-                        Mayores: <strong>{{ $adults }}</strong>
-                    </span>
-                    <span class="leg-item">
-                        <span class="leg-dot leg-dot--amber"></span>
-                        Menores: <strong>{{ $minors }}</strong>
-                    </span>
+                    <span class="leg-item"><span class="leg-dot leg-dot--red"></span>Mayores: <strong>{{ $adults }}</strong></span>
+                    <span class="leg-item"><span class="leg-dot leg-dot--amber"></span>Menores: <strong>{{ $minors }}</strong></span>
                 </div>
             </div>
 
-            {{-- Mini resumen de desempeño --}}
+            {{-- Resumen desempeño --}}
             <div class="side-card">
-                <h3 class="side-title">
-                    <span class="side-icon">🎯</span>
-                    Resumen de desempeño
-                </h3>
-                @php
-                    $totalPerf = array_sum($studentsByLevel);
-                @endphp
-                @foreach([
-                    'superior' => ['color' => '#1e88e5', 'label' => 'Superior'],
-                    'alto'     => ['color' => '#26a69a', 'label' => 'Alto'],
-                    'basico'   => ['color' => '#f59e0b', 'label' => 'Básico'],
-                    'bajo'     => ['color' => '#ef5350', 'label' => 'Bajo'],
-                ] as $key => $info)
-                    @php
-                        $cnt = $studentsByLevel[$key] ?? 0;
-                        $pctLevel = $totalPerf > 0 ? round(($cnt / $totalPerf) * 100) : 0;
-                    @endphp
+                <h3 class="side-title"><span class="side-icon">🎯</span> Resumen de desempeño</h3>
+                @php $totalPerf = array_sum($studentsByLevel); @endphp
+                @foreach(['superior'=>['color'=>'#1e88e5','label'=>'Superior'],'alto'=>['color'=>'#26a69a','label'=>'Alto'],'basico'=>['color'=>'#f59e0b','label'=>'Básico'],'bajo'=>['color'=>'#ef5350','label'=>'Bajo']] as $key => $info)
+                    @php $cnt = $studentsByLevel[$key] ?? 0; $pctLevel = $totalPerf > 0 ? round(($cnt/$totalPerf)*100) : 0; @endphp
                     <div class="perf-bar-row">
                         <span class="perf-bar-label">{{ $info['label'] }}</span>
                         <div class="perf-bar-track">
-                            <div class="perf-bar-fill" style="width:{{ $pctLevel }}%; background:{{ $info['color'] }}"></div>
+                            <div class="perf-bar-fill" style="width:{{ $pctLevel }}%;background:{{ $info['color'] }}"></div>
                         </div>
                         <span class="perf-bar-pct">{{ $pctLevel }}%</span>
                     </div>
                 @endforeach
             </div>
 
+            {{-- Mejores materias rápido --}}
+            <div class="side-card">
+                <h3 class="side-title"><span class="side-icon">📚</span> Top áreas</h3>
+                @forelse($topSubjects->take(5) as $sub)
+                <div class="side-subject-row">
+                    <span class="side-subject-name">{{ $sub->name }}</span>
+                    <span class="chip chip--teal">{{ $sub->promedio }}</span>
+                </div>
+                @empty
+                <p class="side-empty">Sin datos</p>
+                @endforelse
+            </div>
+
             {{-- Resumen --}}
             <div class="side-card side-card--info">
-                <h3 class="side-title">
-                    <span class="side-icon">📋</span>
-                    Resumen
-                </h3>
-                <p class="side-body">
-                    Este panel permite visualizar rápidamente el estado de los estudiantes,
-                    identificar mayores de edad y mantener control general del sistema académico.
-                </p>
+                <h3 class="side-title"><span class="side-icon">📋</span> Resumen</h3>
+                <p class="side-body">Este panel permite visualizar el estado de los estudiantes, identificar mayores de edad y mantener control del sistema académico.</p>
             </div>
 
             {{-- Recomendación --}}
             <div class="side-card side-card--tip">
-                <h3 class="side-title">
-                    <span class="side-icon">💡</span>
-                    Recomendación
-                </h3>
-                <p class="side-body">
-                    Se recomienda hacer seguimiento especial a estudiantes mayores de edad
-                    para procesos administrativos, documentación y validaciones legales.
-                </p>
+                <h3 class="side-title"><span class="side-icon">💡</span> Recomendación</h3>
+                <p class="side-body">Se recomienda hacer seguimiento a estudiantes mayores de edad para procesos administrativos y validaciones legales.</p>
             </div>
 
             {{-- Accesos rápidos --}}
             <div class="side-card">
-                <h3 class="side-title">
-                    <span class="side-icon">⚡</span>
-                    Accesos rápidos
-                </h3>
+                <h3 class="side-title"><span class="side-icon">⚡</span> Accesos rápidos</h3>
                 <div class="quick-links">
                     <a href="#" class="qlink qlink--blue">👥 Estudiantes</a>
                     <a href="#" class="qlink qlink--teal">📚 Materias</a>
@@ -638,595 +520,79 @@
 
 </div>{{-- /dash-root --}}
 
-{{-- ══════════════════════════════════════════════════════
-     ESTILOS ADICIONALES (inline para las nuevas secciones)
-══════════════════════════════════════════════════════ --}}
-<style>
-/* ── Barra de filtros ──────────────────────────────────── */
-.filters-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .75rem;
-    align-items: flex-end;
-    padding: 1rem 1.5rem 1.25rem;
-    background: rgba(30,136,229,.04);
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
-    border: 1px solid rgba(30,136,229,.12);
-}
-
-.filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: .3rem;
-}
-
-.filter-label {
-    font-size: .7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    color: #78909c;
-}
-
-.filter-select {
-    padding: .45rem .85rem;
-    border-radius: 8px;
-    border: 1px solid rgba(84,110,122,.2);
-    background: #fff;
-    font-size: .85rem;
-    color: #263238;
-    cursor: pointer;
-    outline: none;
-    transition: border-color .2s;
-}
-
-.filter-select:focus { border-color: #1e88e5; }
-
-.filter-clear {
-    display: inline-flex;
-    align-items: center;
-    gap: .3rem;
-    padding: .45rem .85rem;
-    border-radius: 8px;
-    background: rgba(239,83,80,.1);
-    color: #ef5350;
-    font-size: .82rem;
-    font-weight: 600;
-    text-decoration: none;
-    align-self: flex-end;
-    transition: background .2s;
-}
-
-.filter-clear:hover { background: rgba(239,83,80,.2); }
-
-/* ── Resumen de rangos de edad ─────────────────────────── */
-.age-summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.age-summary-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: .2rem;
-    padding: 1.25rem;
-    background: linear-gradient(135deg, rgba(30,136,229,.07), rgba(38,166,154,.05));
-    border-radius: 14px;
-    border: 1px solid rgba(30,136,229,.12);
-    text-align: center;
-}
-
-.age-summary-range {
-    font-size: .78rem;
-    font-weight: 600;
-    color: #546e7a;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-}
-
-.age-summary-count {
-    font-size: 2.2rem;
-    font-weight: 800;
-    color: #1e88e5;
-    line-height: 1;
-}
-
-.age-summary-text {
-    font-size: .75rem;
-    color: #90a4ae;
-}
-
-/* ── Cards de nivel de desempeño ──────────────────────── */
-.perf-level-cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.perf-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: .25rem;
-    padding: 1.5rem 1rem;
-    border-radius: 14px;
-    text-align: center;
-    border: 2px solid transparent;
-    transition: transform .2s;
-}
-
-.perf-card:hover { transform: translateY(-2px); }
-
-.perf-card--superior { background: rgba(30,136,229,.08);  border-color: rgba(30,136,229,.2); }
-.perf-card--alto     { background: rgba(38,166,154,.08);  border-color: rgba(38,166,154,.2); }
-.perf-card--basico   { background: rgba(245,158,11,.08);  border-color: rgba(245,158,11,.2); }
-.perf-card--bajo     { background: rgba(239,83,80,.08);   border-color: rgba(239,83,80,.2);  }
-
-.perf-icon  { font-size: 1.5rem; }
-
-.perf-count {
-    font-size: 2rem;
-    font-weight: 800;
-    line-height: 1;
-}
-
-.perf-card--superior .perf-count { color: #1e88e5; }
-.perf-card--alto     .perf-count { color: #26a69a; }
-.perf-card--basico   .perf-count { color: #f59e0b; }
-.perf-card--bajo     .perf-count { color: #ef5350; }
-
-.perf-label { font-size: .85rem; font-weight: 700; color: #37474f; }
-.perf-range { font-size: .72rem; color: #90a4ae; }
-
-/* ── Detalle de áreas por nivel ───────────────────────── */
-.perf-detail-tabs { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1.5rem; }
-
-.perf-detail-block { border-radius: 12px; overflow: hidden; border: 1px solid transparent; }
-.perf-detail--superior { border-color: rgba(30,136,229,.15);  }
-.perf-detail--alto     { border-color: rgba(38,166,154,.15);  }
-.perf-detail--basico   { border-color: rgba(245,158,11,.15);  }
-.perf-detail--bajo     { border-color: rgba(239,83,80,.15);   }
-
-.perf-detail-title {
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-    padding: .75rem 1rem;
-    font-size: .9rem;
-    font-weight: 700;
-    color: #37474f;
-}
-
-.perf-detail--superior .perf-detail-title { background: rgba(30,136,229,.06); }
-.perf-detail--alto     .perf-detail-title { background: rgba(38,166,154,.06); }
-.perf-detail--basico   .perf-detail-title { background: rgba(245,158,11,.06); }
-.perf-detail--bajo     .perf-detail-title { background: rgba(239,83,80,.06);  }
-
-.perf-detail-badge {
-    margin-left: auto;
-    font-size: .72rem;
-    padding: .2rem .6rem;
-    border-radius: 20px;
-    background: rgba(84,110,122,.1);
-    color: #546e7a;
-    font-weight: 600;
-}
-
-/* ── Level badges ─────────────────────────────────────── */
-.level-badge {
-    display: inline-block;
-    padding: .2rem .65rem;
-    border-radius: 20px;
-    font-size: .72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-}
-
-.level-badge--superior { background: rgba(30,136,229,.12); color: #1e88e5; }
-.level-badge--alto     { background: rgba(38,166,154,.12); color: #26a69a; }
-.level-badge--basico   { background: rgba(245,158,11,.12); color: #d97706; }
-.level-badge--bajo     { background: rgba(239,83,80,.12);  color: #ef5350; }
-
-/* ── Barras de desempeño (sidebar) ───────────────────── */
-.perf-bar-row {
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-    margin-bottom: .6rem;
-}
-
-.perf-bar-label { font-size: .78rem; font-weight: 600; color: #546e7a; width: 60px; }
-
-.perf-bar-track {
-    flex: 1;
-    height: 7px;
-    background: rgba(84,110,122,.1);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.perf-bar-fill {
-    height: 100%;
-    border-radius: 10px;
-    transition: width .6s ease;
-}
-
-.perf-bar-pct { font-size: .75rem; font-weight: 700; color: #546e7a; width: 32px; text-align: right; }
-
-/* ── Responsive ───────────────────────────────────────── */
-@media (max-width: 768px) {
-    .age-summary-grid     { grid-template-columns: 1fr; }
-    .perf-level-cards     { grid-template-columns: repeat(2, 1fr); }
-    .filters-bar          { flex-direction: column; }
-}
-</style>
-
-{{-- ── Chart.js ──────────────────────────────────────────── --}}
-{{-- ═══════════════════════════════════════════════════════
-     CHART JS
-═══════════════════════════════════════════════════════ --}}
+{{-- ══ CHART JS ═══════════════════════════════════════════════════ --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ═══════════════════════════════════════════════════════
-    // DATOS
-    // ═══════════════════════════════════════════════════════
-
-    const lowSubjects = @json($lowSubjects ?? []);
-    const topSubjects = @json($topSubjects ?? []);
-    const topGrades = @json($topGrades ?? []);
-
-    const ageDistribution = @json($ageDistribution ?? []);
+    const lowSubjects        = @json($lowSubjects ?? []);
+    const topSubjects        = @json($topSubjects ?? []);
+    const topGrades          = @json($topGrades ?? []);
+    const ageDistribution    = @json($ageDistribution ?? []);
     const genderDistribution = @json($genderDistribution ?? []);
-    const genderByAgeRange = @json($genderByAgeRange ?? []);
-
-    const studentsByLevel = @json($studentsByLevel ?? []);
-    const performanceLevels = @json($performanceLevels ?? []);
+    const genderByAgeRange   = @json($genderByAgeRange ?? []);
+    const studentsByLevel    = @json($studentsByLevel ?? []);
+    const performanceLevels  = @json($performanceLevels ?? []);
     const performanceByGrade = @json($performanceByGrade ?? []);
 
-    // ═══════════════════════════════════════════════════════
-    // CONFIG BASE
-    // ═══════════════════════════════════════════════════════
+    // Eliminar duplicados por nombre
+    function unique(arr) {
+        const seen = new Set();
+        return arr.filter(i => { const k = (i.name||'').trim().toLowerCase(); if(seen.has(k)) return false; seen.add(k); return true; });
+    }
+
+    const lowFiltered = unique(lowSubjects);
+    const topFiltered = unique(topSubjects);
 
     Chart.defaults.font.family = "'DM Sans', sans-serif";
 
-    const baseOptions = {
+    const base = {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                labels: {
-                    color: '#546e7a'
-                }
-            }
-        },
+        plugins: { legend: { labels: { color: '#546e7a' } } },
         scales: {
-            x: {
-                ticks: {
-                    color: '#546e7a'
-                },
-                grid: {
-                    display: false
-                }
-            },
-            y: {
-                ticks: {
-                    color: '#546e7a'
-                },
-                grid: {
-                    color: 'rgba(0,0,0,.05)'
-                },
-                beginAtZero: true
-            }
+            x: { ticks: { color: '#546e7a' }, grid: { display: false } },
+            y: { ticks: { color: '#546e7a' }, grid: { color: 'rgba(0,0,0,.05)' }, beginAtZero: true }
         }
     };
 
-    // ═══════════════════════════════════════════════════════
-    // GRÁFICA EDADES
-    // ═══════════════════════════════════════════════════════
+    // Edad
+    const ageCtx = document.getElementById('ageRangeChart');
+    if (ageCtx) new Chart(ageCtx, { type:'bar', data:{ labels: ageDistribution.map(i=>i.label), datasets:[{ label:'Estudiantes', data: ageDistribution.map(i=>i.count), backgroundColor:['rgba(30,136,229,.6)','rgba(38,166,154,.6)','rgba(92,107,192,.6)'], borderRadius:10 }] }, options: base });
 
-    const ageChart = document.getElementById('ageRangeChart');
+    // Género donut
+    const genCtx = document.getElementById('genderChart');
+    if (genCtx) new Chart(genCtx, { type:'doughnut', data:{ labels:['Masculino','Femenino'], datasets:[{ data:[genderDistribution.M?.count??0, genderDistribution.F?.count??0], backgroundColor:['rgba(30,136,229,.8)','rgba(239,83,80,.8)'], borderWidth:0 }] }, options:{ responsive:true, maintainAspectRatio:false, cutout:'60%' } });
 
-    if (ageChart) {
+    // Género por edad
+    const gaCtx = document.getElementById('genderAgeChart');
+    if (gaCtx) new Chart(gaCtx, { type:'bar', data:{ labels: genderByAgeRange.map(i=>i.range), datasets:[{ label:'Masculino', data: genderByAgeRange.map(i=>i.masculino), backgroundColor:'rgba(30,136,229,.7)', borderRadius:8 },{ label:'Femenino', data: genderByAgeRange.map(i=>i.femenino), backgroundColor:'rgba(239,83,80,.7)', borderRadius:8 }] }, options: base });
 
-        new Chart(ageChart, {
-            type: 'bar',
-            data: {
-                labels: ageDistribution.map(i => i.label),
-                datasets: [{
-                    label: 'Estudiantes',
-                    data: ageDistribution.map(i => i.count),
-                    backgroundColor: [
-                        'rgba(30,136,229,.6)',
-                        'rgba(38,166,154,.6)',
-                        'rgba(92,107,192,.6)'
-                    ],
-                    borderRadius: 10
-                }]
-            },
-            options: baseOptions
-        });
-    }
+    // Pie desempeño
+    const pieCtx = document.getElementById('perfPieChart');
+    if (pieCtx) new Chart(pieCtx, { type:'doughnut', data:{ labels:['Superior','Alto','Básico','Bajo'], datasets:[{ data:[studentsByLevel.superior??0,studentsByLevel.alto??0,studentsByLevel.basico??0,studentsByLevel.bajo??0], backgroundColor:['rgba(30,136,229,.8)','rgba(38,166,154,.8)','rgba(245,158,11,.8)','rgba(239,83,80,.8)'], borderWidth:0 }] }, options:{ responsive:true, maintainAspectRatio:false, cutout:'60%' } });
 
-    // ═══════════════════════════════════════════════════════
-    // GÉNERO
-    // ═══════════════════════════════════════════════════════
+    // Áreas por nivel
+    const slCtx = document.getElementById('subjectLevelChart');
+    if (slCtx) new Chart(slCtx, { type:'bar', data:{ labels: Object.keys(performanceLevels).map(k=>performanceLevels[k].label), datasets:[{ label:'Áreas', data: Object.keys(performanceLevels).map(k=>performanceLevels[k].count), backgroundColor:['rgba(30,136,229,.7)','rgba(38,166,154,.7)','rgba(245,158,11,.7)','rgba(239,83,80,.7)'], borderRadius:8 }] }, options: base });
 
-    const genderChart = document.getElementById('genderChart');
+    // Desempeño por grado (apilado)
+    const gpCtx = document.getElementById('gradePerformanceChart');
+    if (gpCtx) new Chart(gpCtx, { type:'bar', data:{ labels: performanceByGrade.map(i=>i.grade), datasets:[{ label:'Superior', data: performanceByGrade.map(i=>i.superior), backgroundColor:'rgba(30,136,229,.8)' },{ label:'Alto', data: performanceByGrade.map(i=>i.alto), backgroundColor:'rgba(38,166,154,.8)' },{ label:'Básico', data: performanceByGrade.map(i=>i.basico), backgroundColor:'rgba(245,158,11,.8)' },{ label:'Bajo', data: performanceByGrade.map(i=>i.bajo), backgroundColor:'rgba(239,83,80,.8)' }] }, options:{ responsive:true, maintainAspectRatio:false, scales:{ x:{ stacked:true }, y:{ stacked:true, beginAtZero:true } } } });
 
-    if (genderChart) {
+    // Bajo rendimiento
+    const lowCtx = document.getElementById('lowChart');
+    if (lowCtx) new Chart(lowCtx, { type:'bar', data:{ labels: lowFiltered.map(i=>i.name), datasets:[{ label:'Promedio', data: lowFiltered.map(i=>i.promedio), backgroundColor:'rgba(239,83,80,.7)', borderRadius:8 }] }, options:{ ...base, scales:{ ...base.scales, y:{ ...base.scales.y, min: 0, max: 5, ticks:{ stepSize:.5, color:'#546e7a' } } } } });
 
-        new Chart(genderChart, {
-            type: 'doughnut',
-            data: {
-                labels: ['Masculino', 'Femenino'],
-                datasets: [{
-                    data: [
-                        genderDistribution.masculino?.count ?? 0,
-                        genderDistribution.femenino?.count ?? 0
-                    ],
-                    backgroundColor: [
-                        'rgba(30,136,229,.8)',
-                        'rgba(239,83,80,.8)'
-                    ],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '60%'
-            }
-        });
-    }
+    // Mejor rendimiento
+    const topCtx = document.getElementById('topChart');
+    if (topCtx) new Chart(topCtx, { type:'bar', data:{ labels: topFiltered.map(i=>i.name), datasets:[{ label:'Promedio', data: topFiltered.map(i=>i.promedio), backgroundColor:'rgba(38,166,154,.7)', borderRadius:8 }] }, options:{ ...base, scales:{ ...base.scales, y:{ ...base.scales.y, min: 0, max: 5, ticks:{ stepSize:.5, color:'#546e7a' } } } } });
 
-    // ═══════════════════════════════════════════════════════
-    // GÉNERO POR EDAD
-    // ═══════════════════════════════════════════════════════
-
-    const genderAgeChart = document.getElementById('genderAgeChart');
-
-    if (genderAgeChart) {
-
-        new Chart(genderAgeChart, {
-            type: 'bar',
-            data: {
-                labels: genderByAgeRange.map(i => i.range),
-                datasets: [
-                    {
-                        label: 'Masculino',
-                        data: genderByAgeRange.map(i => i.masculino),
-                        backgroundColor: 'rgba(30,136,229,.7)',
-                        borderRadius: 8
-                    },
-                    {
-                        label: 'Femenino',
-                        data: genderByAgeRange.map(i => i.femenino),
-                        backgroundColor: 'rgba(239,83,80,.7)',
-                        borderRadius: 8
-                    }
-                ]
-            },
-            options: baseOptions
-        });
-    }
-
-    // ═══════════════════════════════════════════════════════
-    // PIE DESEMPEÑO
-    // ═══════════════════════════════════════════════════════
-
-    const perfPieChart = document.getElementById('perfPieChart');
-
-    if (perfPieChart) {
-
-        new Chart(perfPieChart, {
-            type: 'doughnut',
-            data: {
-                labels: ['Superior', 'Alto', 'Básico', 'Bajo'],
-                datasets: [{
-                    data: [
-                        studentsByLevel.superior ?? 0,
-                        studentsByLevel.alto ?? 0,
-                        studentsByLevel.basico ?? 0,
-                        studentsByLevel.bajo ?? 0
-                    ],
-                    backgroundColor: [
-                        'rgba(30,136,229,.8)',
-                        'rgba(38,166,154,.8)',
-                        'rgba(245,158,11,.8)',
-                        'rgba(239,83,80,.8)'
-                    ],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '60%'
-            }
-        });
-    }
-
-    // ═══════════════════════════════════════════════════════
-    // MATERIAS POR NIVEL
-    // ═══════════════════════════════════════════════════════
-
-    const subjectLevelChart = document.getElementById('subjectLevelChart');
-
-    if (subjectLevelChart) {
-
-        new Chart(subjectLevelChart, {
-            type: 'bar',
-            data: {
-                labels: Object.keys(performanceLevels).map(k => performanceLevels[k].label),
-                datasets: [{
-                    label: 'Materias',
-                    data: Object.keys(performanceLevels).map(k => performanceLevels[k].count),
-                    backgroundColor: [
-                        'rgba(30,136,229,.7)',
-                        'rgba(38,166,154,.7)',
-                        'rgba(245,158,11,.7)',
-                        'rgba(239,83,80,.7)'
-                    ],
-                    borderRadius: 8
-                }]
-            },
-            options: baseOptions
-        });
-    }
-
-    // ═══════════════════════════════════════════════════════
-    // DESEMPEÑO POR GRADO
-    // ═══════════════════════════════════════════════════════
-
-    const gradePerformanceChart = document.getElementById('gradePerformanceChart');
-
-    if (gradePerformanceChart) {
-
-        new Chart(gradePerformanceChart, {
-            type: 'bar',
-            data: {
-                labels: performanceByGrade.map(i => i.grade),
-                datasets: [
-                    {
-                        label: 'Superior',
-                        data: performanceByGrade.map(i => i.superior),
-                        backgroundColor: 'rgba(30,136,229,.8)'
-                    },
-                    {
-                        label: 'Alto',
-                        data: performanceByGrade.map(i => i.alto),
-                        backgroundColor: 'rgba(38,166,154,.8)'
-                    },
-                    {
-                        label: 'Básico',
-                        data: performanceByGrade.map(i => i.basico),
-                        backgroundColor: 'rgba(245,158,11,.8)'
-                    },
-                    {
-                        label: 'Bajo',
-                        data: performanceByGrade.map(i => i.bajo),
-                        backgroundColor: 'rgba(239,83,80,.8)'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        stacked: true
-                    },
-                    y: {
-                        stacked: true,
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-
-    // ═══════════════════════════════════════════════════════
-    // BAJO RENDIMIENTO
-    // ═══════════════════════════════════════════════════════
-
-    const lowChart = document.getElementById('lowChart');
-
-    if (lowChart) {
-
-        new Chart(lowChart, {
-            type: 'bar',
-            data: {
-                labels: lowSubjects.map(i => i.name),
-                datasets: [{
-                    label: 'Promedio',
-                    data: lowSubjects.map(i => i.promedio),
-                    backgroundColor: 'rgba(239,83,80,.7)',
-                    borderRadius: 8
-                }]
-            },
-            options: baseOptions
-        });
-    }
-
-    // ═══════════════════════════════════════════════════════
-    // MEJORES MATERIAS
-    // ═══════════════════════════════════════════════════════
-
-    const topChart = document.getElementById('topChart');
-
-    if (topChart) {
-
-        new Chart(topChart, {
-            type: 'bar',
-            data: {
-                labels: topSubjects.map(i => i.name),
-                datasets: [{
-                    label: 'Promedio',
-                    data: topSubjects.map(i => i.promedio),
-                    backgroundColor: 'rgba(38,166,154,.7)',
-                    borderRadius: 8
-                }]
-            },
-            options: baseOptions
-        });
-    }
-
-    // ═══════════════════════════════════════════════════════
-    // PROMEDIO POR GRADO
-    // ═══════════════════════════════════════════════════════
-
-    const gradeChart = document.getElementById('gradeChart');
-
-    if (gradeChart) {
-
-        new Chart(gradeChart, {
-            type: 'doughnut',
-            data: {
-                labels: topGrades.map(i => i.name),
-                datasets: [{
-                    data: topGrades.map(i => i.promedio),
-                    backgroundColor: [
-                        '#1e88e5',
-                        '#26a69a',
-                        '#f59e0b',
-                        '#ef5350',
-                        '#7e57c2',
-                        '#42a5f5',
-                        '#66bb6a'
-                    ],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '60%'
-            }
-        });
-    }
+    // Promedio por grado (donut)
+    const gcCtx = document.getElementById('gradeChart');
+    if (gcCtx) new Chart(gcCtx, { type:'doughnut', data:{ labels: topGrades.map(i=>i.name), datasets:[{ data: topGrades.map(i=>i.promedio), backgroundColor:['#1e88e5','#26a69a','#f59e0b','#ef5350','#7e57c2','#42a5f5','#66bb6a'], borderWidth:0 }] }, options:{ responsive:true, maintainAspectRatio:false, cutout:'60%' } });
 
 });
 </script>
-
-<style>
-.chart-box{
-    position: relative;
-    min-height: 340px;
-}
-
-.chart-box canvas{
-    width: 100% !important;
-    height: 320px !important;
-}
-</style>
 
 </x-app-layout>
